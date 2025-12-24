@@ -1,0 +1,12 @@
+/* Login component styles */
+
+.bg-pattern {
+  background-color: #ffffff;
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Material Symbols styling */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}

@@ -8,12 +8,12 @@ interface PasswordStrength {
 }
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-enable-access',
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './enable-access.html',
+  styleUrl: './enable-access.css',
 })
-export class LoginComponent {
+export class EnableAccess {
   protected verificationCode = signal('FPF-2024-GL');
   protected password = signal('');
   protected confirmPassword = signal('');
@@ -23,11 +23,11 @@ export class LoginComponent {
   protected passwordsMatch = signal(true);
 
   protected togglePasswordVisibility(): void {
-    this.showPassword.update(val => !val);
+    this.showPassword.update((val) => !val);
   }
 
   protected toggleConfirmPasswordVisibility(): void {
-    this.showConfirmPassword.update(val => !val);
+    this.showConfirmPassword.update((val) => !val);
   }
 
   protected onPasswordChange(value: string): void {
@@ -43,7 +43,7 @@ export class LoginComponent {
 
   private calculatePasswordStrength(password: string): void {
     let level = 0;
-    
+
     if (password.length >= 8) level++;
     if (password.length >= 12) level++;
     if (/[a-z]/.test(password) && /[A-Z]/.test(password)) level++;
@@ -51,7 +51,7 @@ export class LoginComponent {
     if (/[^a-zA-Z0-9]/.test(password)) level++;
 
     const isValid = password.length >= 8;
-    
+
     this.passwordStrength.set({ level, isValid });
   }
 
@@ -71,9 +71,11 @@ export class LoginComponent {
   }
 
   protected isFormValid(): boolean {
-    return this.verificationCode().length > 0 && 
-           this.passwordStrength().isValid && 
-           this.passwordsMatch() &&
-           this.confirmPassword().length > 0;
+    return (
+      this.verificationCode().length > 0 &&
+      this.passwordStrength().isValid &&
+      this.passwordsMatch() &&
+      this.confirmPassword().length > 0
+    );
   }
 }
