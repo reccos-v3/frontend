@@ -29,10 +29,51 @@
     box-sizing: border-box;
   }
 
+  html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
   body {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
     font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+  }
+
+  app-root {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  router-outlet {
+    display: contents;
+  }
+
+  router-outlet + * {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Permite scroll em componentes específicos que precisam */
+  router-outlet + app-enable-access {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
   }
 }
 

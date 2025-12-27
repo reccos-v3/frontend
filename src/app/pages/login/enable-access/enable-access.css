@@ -1,4 +1,37 @@
-/* Login component styles */
+/* Enable Access component styles */
+
+/* Component wrapper - permite scroll na página toda */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  height: auto !important; /* Sobrescreve altura fixa do global */
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container principal - permite scroll */
+:host > div {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Painel esquerdo - sticky mas sem scroll próprio */
+:host > div > div:first-child {
+  overflow: visible !important; /* Remove overflow hidden do painel esquerdo */
+}
+
+@media (min-width: 1024px) {
+  /* Em desktop, o painel esquerdo fica sticky */
+  :host > div > div:first-child {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start; /* Alinha ao topo */
+  }
+}
 
 .bg-pattern {
   background-color: #ffffff;
