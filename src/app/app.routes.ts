@@ -11,6 +11,11 @@ export const routes: Routes = [
       import('./pages/login/enable-access/enable-access').then((m) => m.EnableAccess),
   },
   {
+    path: 'refresh-token',
+    loadComponent: () =>
+      import('./pages/login/refresh-token/refresh-token').then((m) => m.RefreshToken),
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full',

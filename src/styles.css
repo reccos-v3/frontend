@@ -75,6 +75,13 @@
     overflow-y: auto !important;
     overflow-x: hidden;
   }
+
+  router-outlet + app-refresh-token {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+  }
 }
 
 @layer components {
