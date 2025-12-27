@@ -33,6 +33,45 @@
   }
 }
 
+/* Redução sutil de fontes no card de informações */
+:host > div > div:first-child > div.relative.z-10:last-child > div p.text-xs {
+  font-size: 0.6875rem !important; /* Reduzido de 0.75rem */
+  line-height: 1.4;
+}
+
+/* Reduz textos principais (text-lg e text-xl) */
+:host > div > div:first-child > div.relative.z-10:last-child > div p.font-bold.text-lg {
+  font-size: 0.9375rem !important; /* Reduzido de 1.125rem */
+  line-height: 1.4;
+}
+
+:host > div > div:first-child > div.relative.z-10:last-child > div p.font-bold.text-lg.lg\:text-xl {
+  font-size: 1rem !important; /* Reduzido de 1.25rem */
+  line-height: 1.4;
+}
+
+@media (min-width: 1024px) {
+  :host > div > div:first-child > div.relative.z-10:last-child > div p.font-bold.text-lg.lg\:text-xl {
+    font-size: 1.0625rem !important; /* Reduzido de 1.25rem */
+  }
+}
+
+/* Centraliza ícones nas divs - usando seletores mais específicos */
+:host > div > div:first-child > div.relative.z-10:last-child > div > div.flex.items-start > div.flex-shrink-0,
+:host > div > div:first-child > div.relative.z-10:last-child > div > div.flex.items-center > div.flex-shrink-0 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:host > div > div:first-child > div.relative.z-10:last-child > div > div.flex > div.flex-shrink-0 .material-symbols-outlined {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 .bg-pattern {
   background-color: #ffffff;
   background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
