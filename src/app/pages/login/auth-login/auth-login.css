@@ -95,19 +95,22 @@
 /* Hero Panel (Left Side) */
 .hero-panel {
   position: relative;
-  display: none;
+  display: flex; /* Sempre visível */
   flex: 1;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 3rem;
+  padding: 2rem; /* Padding menor em mobile */
   background-color: var(--color-secondary);
   overflow: hidden;
+  min-height: 300px; /* Altura mínima reduzida */
+  max-height: 50vh; /* Máximo 50% da altura da viewport em mobile */
 }
 
 @media (min-width: 1024px) {
   .hero-panel {
-    display: flex;
     padding: 5rem;
+    min-height: auto;
+    max-height: none; /* Sem limite em desktop */
   }
 }
 
@@ -146,6 +149,13 @@
   max-width: 32rem;
 }
 
+/* Ocultar avatares em telas muito pequenas */
+@media (max-width: 768px) {
+  .leagues-indicator {
+    display: none;
+  }
+}
+
 .secure-badge {
   display: inline-flex;
   align-items: center;
@@ -173,18 +183,45 @@
 
 .hero-title {
   color: white;
-  font-size: 3rem;
+  font-size: 1.5rem; /* Ainda menor em mobile */
   font-weight: 900;
   line-height: 1.2;
   letter-spacing: -0.025em;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: 3rem; /* Tamanho original em desktop */
+    margin-bottom: 1rem;
+  }
 }
 
 .hero-description {
   color: #d1d5db;
-  font-size: 1.125rem;
-  line-height: 1.625;
-  margin-bottom: 2rem;
+  font-size: 0.75rem; /* Ainda menor em mobile */
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .hero-description {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-description {
+    font-size: 1.125rem; /* Tamanho original em desktop */
+    line-height: 1.625;
+    margin-bottom: 2rem;
+  }
 }
 
 .leagues-indicator {
