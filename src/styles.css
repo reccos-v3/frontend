@@ -14,6 +14,46 @@
   --color-text-dark: #1f2937;
   --color-text-light: #9ca3af;
 
+  /* Cores auxiliares */
+  --color-border-light: #e5e7eb;
+  --color-border-lighter: #e9f2ed;
+  --color-border-divider: #f3f4f6;
+  --color-input-bg: #f9fafb;
+  --color-white: #ffffff;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+
+  /* Cores intermediárias específicas */
+  --color-primary-light: #568f73;
+  --color-primary-lighter: #8abea6;
+  --color-secondary-dark: #131f18;
+  --color-secondary-darker: #1a2c22;
+  --color-secondary-border: #1e2e25;
+  --color-secondary-border-dark: #2a4536;
+
+  /* Cores de alerta */
+  --color-alert-yellow-bg: #fefce8;
+  --color-alert-yellow-border: #fde047;
+  --color-alert-yellow-text: #ca8a04;
+  --color-alert-yellow-text-dark: #854d0e;
+  --color-alert-yellow-text-darker: #a16207;
+
+  /* Opacidades para overlays */
+  --overlay-dark: rgba(15, 31, 45, 0.8);
+  --overlay-primary-light: rgba(30, 128, 79, 0.2);
+  --overlay-primary-medium: rgba(30, 128, 79, 0.3);
+  --overlay-primary-strong: rgba(30, 128, 79, 0.5);
+  --overlay-white-light: rgba(255, 255, 255, 0.1);
+  --overlay-white-medium: rgba(255, 255, 255, 0.2);
+  --overlay-white-text: rgba(255, 255, 255, 0.8);
+  --overlay-white-text-light: rgba(255, 255, 255, 0.6);
+  --overlay-white-text-lighter: rgba(255, 255, 255, 0.5);
+
   --font-display: 'Lexend', sans-serif;
 
   --radius-sm: 0.5rem;
@@ -86,8 +126,8 @@
 
 @layer components {
   .bg-pattern {
-    background-color: #0f1f2d;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-color: var(--color-secondary);
+    background-image: radial-gradient(var(--overlay-white-light) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 }
