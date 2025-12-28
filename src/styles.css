@@ -76,7 +76,7 @@
     overflow-x: hidden;
   }
 
-  router-outlet + app-refresh-token {
+  router-outlet + app-reset-password {
     height: auto !important;
     min-height: 100vh;
     overflow-y: auto !important;
