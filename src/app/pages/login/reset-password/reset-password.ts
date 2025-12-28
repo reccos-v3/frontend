@@ -1,6 +1,6 @@
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 interface PasswordStrength {
@@ -53,6 +53,8 @@ export class ResetPassword implements OnInit, OnDestroy {
     },
   ];
 
+  private platformId = inject(PLATFORM_ID);
+
   constructor(private fb: FormBuilder) {
     this.resetForm = this.fb.group(
       {
@@ -64,8 +66,10 @@ export class ResetPassword implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Auto-play do carrossel a cada 5 segundos
-    this.startCarousel();
+    // Auto-play do carrossel a cada 5 segundos (apenas no browser)
+    if (isPlatformBrowser(this.platformId)) {
+      this.startCarousel();
+    }
   }
 
   ngOnDestroy(): void {
@@ -73,9 +77,11 @@ export class ResetPassword implements OnInit, OnDestroy {
   }
 
   startCarousel(): void {
-    this.carouselInterval = window.setInterval(() => {
-      this.nextSlide();
-    }, 5000);
+    if (isPlatformBrowser(this.platformId)) {
+      this.carouselInterval = window.setInterval(() => {
+        this.nextSlide();
+      }, 5000);
+    }
   }
 
   stopCarousel(): void {
@@ -92,8 +98,10 @@ export class ResetPassword implements OnInit, OnDestroy {
   goToSlide(index: number): void {
     this.currentSlide.set(index);
     // Reinicia o auto-play quando o usuário interage manualmente
-    this.stopCarousel();
-    this.startCarousel();
+    if (isPlatformBrowser(this.platformId)) {
+      this.stopCarousel();
+      this.startCarousel();
+    }
   }
 
   getCurrentMessage(): HeroMessage {
