@@ -1,21 +1,85 @@
 /* Enable Access component styles */
 
+/* Ocultar título em mobile - regra global com alta especificidade */
+@media (max-width: 767px) {
+  h2.text-3xl.lg\:text-5xl {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+  }
+}
+
 /* Component wrapper - permite scroll na página toda */
 :host {
-  display: block;
-  width: 100%;
-  min-height: 100vh;
+  display: block !important;
+  width: 100% !important;
+  min-height: 100vh !important;
   height: auto !important; /* Sobrescreve altura fixa do global */
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  max-height: none !important;
 }
 
 /* Container principal - permite scroll */
 :host > div {
   min-height: 100vh;
   width: 100%;
+  position: relative;
+  overflow: visible;
+  height: auto;
+}
+
+/* Mobile: garantir scroll funcionando */
+@media (max-width: 767px) {
+  :host {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important; /* Scroll suave no iOS */
+    height: 100vh !important;
+    max-height: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  :host > div {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 2rem; /* Espaço extra no final para scroll */
+  }
+}
+
+/* Tablet: garantir scroll funcionando */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :host {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important; /* Scroll suave no iOS */
+    height: 100vh !important;
+    max-height: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  :host > div {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 2rem; /* Espaço extra no final para scroll */
+  }
 }
 
 /* Painel esquerdo - sticky mas sem scroll próprio */
@@ -51,25 +115,111 @@
 }
 
 @media (min-width: 1024px) {
-  :host > div > div:first-child > div.relative.z-10:last-child > div p.font-bold.text-lg.lg\:text-xl {
+  :host
+    > div
+    > div:first-child
+    > div.relative.z-10:last-child
+    > div
+    p.font-bold.text-lg.lg\:text-xl {
     font-size: 1.0625rem !important; /* Reduzido de 1.25rem */
   }
 }
 
 /* Centraliza ícones nas divs - usando seletores mais específicos */
-:host > div > div:first-child > div.relative.z-10:last-child > div > div.flex.items-start > div.flex-shrink-0,
-:host > div > div:first-child > div.relative.z-10:last-child > div > div.flex.items-center > div.flex-shrink-0 {
+:host
+  > div
+  > div:first-child
+  > div.relative.z-10:last-child
+  > div
+  > div.flex.items-start
+  > div.flex-shrink-0,
+:host
+  > div
+  > div:first-child
+  > div.relative.z-10:last-child
+  > div
+  > div.flex.items-center
+  > div.flex-shrink-0 {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 
-:host > div > div:first-child > div.relative.z-10:last-child > div > div.flex > div.flex-shrink-0 .material-symbols-outlined {
+:host
+  > div
+  > div:first-child
+  > div.relative.z-10:last-child
+  > div
+  > div.flex
+  > div.flex-shrink-0
+  .material-symbols-outlined {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+
+.bg-pattern {
+  background-color: var(--color-white);
+  background-image: radial-gradient(var(--color-gray-300) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Ocultar título e descrição em tablet e menores */
+@media (max-width: 1023px) {
+  /* Ocultar o h2 "Você foi convocado!" */
+  :host > div > div:first-child > div.relative.z-10:first-child > h2 {
+    display: none !important;
+  }
+
+  /* Ocultar o parágrafo descritivo */
+  :host > div > div:first-child > div.relative.z-10:first-child > p {
+    display: none !important;
+  }
+}
+
+/* Ocultar card de informações em mobile */
+@media (max-width: 767px) {
+  /* Ocultar o card com informações da organização */
+  :host > div > div:first-child > div.relative.z-10:last-child {
+    display: none !important;
+  }
+
+  /* Garantir que o header (logo e badge) apareça em mobile */
+  :host > div > div:first-child > div.relative.z-10:first-child {
+    display: block !important;
+  }
+
+  :host
+    > div
+    > div:first-child
+    > div.relative.z-10:first-child
+    > div.flex.items-center.justify-between {
+    display: flex !important;
+  }
+
+  /* Ocultar o título h2 "Você foi convocado!" em mobile - seletor mais específico */
+  :host > div > div:first-child > div.relative.z-10:first-child > h2.text-3xl {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Ocultar o parágrafo descritivo em mobile */
+  :host > div > div:first-child > div.relative.z-10:first-child > p.text-gray-400 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
 }
 
 .bg-pattern {

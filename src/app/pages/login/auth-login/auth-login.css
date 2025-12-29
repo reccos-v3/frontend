@@ -97,6 +97,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 }
 
 @media (min-width: 1024px) {
@@ -120,12 +121,113 @@
   min-width: 0;
 }
 
+/* Mobile: mostrar apenas o formulário (painel direito), ocultar painel esquerdo */
+@media (max-width: 767px) {
+  .hero-panel {
+    display: none !important;
+  }
+
+  .form-panel {
+    height: 100vh;
+    width: 100%;
+  }
+}
+
+/* Tablet: hero-panel como background, ocultar conteúdo */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-panel {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 0;
+    padding: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    flex: none !important;
+  }
+
+  .hero-content {
+    display: none !important;
+  }
+
+  .hero-background {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 0;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+
+  .hero-overlay-multiply {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1 !important;
+    display: block !important;
+  }
+
+  .hero-overlay-gradient {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1 !important;
+    display: block !important;
+  }
+
+  .hero-image {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    opacity: 0.6 !important;
+    z-index: 0 !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+}
+
 @media (min-width: 1024px) {
   .hero-panel {
+    position: relative !important;
+    display: flex !important;
     flex: 0 0 50%;
     width: 50%;
     height: 100vh;
     padding: 5rem;
+  }
+
+  .hero-content {
+    display: block !important;
+  }
+
+  .hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-image {
+    position: static;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.6;
   }
 }
 
@@ -320,11 +422,21 @@
   min-width: 0;
   overflow: hidden;
   width: 100%;
+  position: relative;
+  z-index: 20;
 }
 
 @media (min-width: 640px) {
   .form-panel {
     padding: 3rem;
+  }
+}
+
+/* Tablet: formulário com fundo transparente sobre imagem */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .form-panel {
+    background-color: transparent;
+    padding: 3rem 2rem;
   }
 }
 
@@ -334,6 +446,7 @@
     width: 50%;
     height: 100vh;
     padding: 6rem;
+    background-color: var(--color-background-light);
   }
 }
 
@@ -345,6 +458,18 @@
   flex-direction: column;
   gap: 2rem; /* Gap fixo */
   padding: 0; /* Sem padding lateral extra */
+}
+
+/* Tablet: container com fundo branco/semi-transparente para melhor legibilidade */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .form-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 480px;
+  }
 }
 
 /* Form Header */
@@ -362,10 +487,24 @@
   word-wrap: break-word; /* Quebra palavras longas se necessário */
 }
 
+/* Tablet: garantir contraste adequado */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .form-title {
+    color: var(--color-secondary);
+  }
+}
+
 .form-subtitle {
   color: var(--color-neutral-gray);
   font-size: clamp(0.875rem, 1rem, 1rem); /* Tamanho fixo com proteção mínima */
   word-wrap: break-word; /* Quebra palavras longas se necessário */
+}
+
+/* Tablet: garantir contraste adequado */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .form-subtitle {
+    color: var(--color-neutral-gray);
+  }
 }
 
 /* Alert Box */
