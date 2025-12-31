@@ -130,4 +130,86 @@
     background-image: radial-gradient(var(--overlay-white-light) 1px, transparent 1px);
     background-size: 32px 32px;
   }
+
+  /* Form Input - Reutilizável em todos os componentes de login */
+  .form-input {
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .form-input::placeholder {
+    color: var(--color-text-light);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--overlay-primary-strong);
+  }
+
+  /* Input Icon - Estado focus-within específico */
+  .input-icon {
+    transition: color 0.2s;
+  }
+
+  .relative:has(input:focus) .input-icon,
+  .relative:focus-within .input-icon {
+    color: var(--color-primary);
+  }
+
+  /* Form Title - Reutilizável */
+  .form-title {
+    color: var(--color-secondary);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  /* Form Subtitle - Reutilizável */
+  .form-subtitle {
+    color: var(--color-neutral-gray);
+    line-height: 1.625;
+  }
+
+  /* Submit Button - Estados específicos reutilizáveis */
+  .submit-button {
+    box-shadow: 0 10px 15px -3px var(--overlay-primary-light);
+  }
+
+  .submit-button:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+  }
+
+  .submit-button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Dark mode support para classes reutilizáveis */
+  @media (prefers-color-scheme: dark) {
+    .form-title {
+      color: white;
+    }
+
+    .form-subtitle {
+      color: var(--color-text-light);
+    }
+
+    .form-input {
+      background-color: var(--color-secondary-darker);
+      border-color: var(--color-gray-700);
+      color: white;
+    }
+
+    .form-input::placeholder {
+      color: var(--color-text-light);
+    }
+
+    .input-icon {
+      color: var(--color-text-light);
+    }
+  }
 }
