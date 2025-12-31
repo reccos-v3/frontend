@@ -151,7 +151,29 @@
   }
 
   .hero-content {
+    position: relative !important;
+    z-index: 10 !important;
+    height: 100% !important;
+    width: 100% !important;
+    display: block !important;
+  }
+
+  /* Ocultar todo o conteúdo exceto o logo */
+  .hero-content > .secure-badge,
+  .hero-content > .hero-title,
+  .hero-content > .hero-description,
+  .hero-content > .leagues-indicator {
     display: none !important;
+  }
+
+  /* Manter logo do hero-panel visível em tablet - posicionado no topo à esquerda */
+  .hero-content > div.flex.items-center.gap-3 {
+    display: flex !important;
+    position: absolute !important;
+    top: 2rem !important;
+    left: 2rem !important;
+    z-index: 20 !important;
+    margin-bottom: 0 !important;
   }
 
   .hero-background {
@@ -472,6 +494,32 @@
   }
 }
 
+/* Mobile Logo */
+.mobile-logo {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+}
+
+/* Mostrar em mobile e tablet */
+@media (max-width: 1023px) {
+  .mobile-logo {
+    display: flex;
+  }
+}
+
+.mobile-logo-icon {
+  font-size: 1.875rem;
+}
+
+.mobile-logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
 /* Form Header */
 .form-header {
   display: flex;
@@ -742,6 +790,10 @@
 
   .input-label {
     color: var(--color-gray-200);
+  }
+
+  .mobile-logo-text {
+    color: white;
   }
 
   .form-footer {
