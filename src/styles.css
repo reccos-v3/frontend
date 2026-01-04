@@ -4,9 +4,14 @@
 
 @theme {
   --color-primary: #1e7f4f;
-  --color-primary-hover: #166339;
+  --color-primary-hover: #2FA36B;
   --color-secondary: #0f1f2d;
   --color-background-light: #f6f8f7;
+  --color-background-dark: #131f19;
+  --color-info: #1F3A5F;
+  --color-warning: #F2C94C;
+  --color-danger: #D64545;
+  --color-neutral-border: #E5E7EB;
   --color-accent-green: #4ade80;
   --color-neutral-gray: #6b7280;
   --color-alert-yellow: #facc15;
@@ -117,6 +122,13 @@
   }
 
   router-outlet + app-reset-password {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+  }
+
+  router-outlet + app-federation-dashboard {
     height: auto !important;
     min-height: 100vh;
     overflow-y: auto !important;

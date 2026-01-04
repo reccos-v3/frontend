@@ -21,6 +21,13 @@ export const routes: Routes = [
       import('./pages/login/reset-password/reset-password').then((m) => m.ResetPassword),
   },
   {
+    path: 'federation-dashboard',
+    loadComponent: () =>
+      import('./pages/federations/components/federation-dashboard').then(
+        (m) => m.FederationDashboard
+      ),
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full',
