@@ -1,0 +1,110 @@
+/* Enable Access Component - Classes específicas que não podem ser substituídas por Tailwind */
+
+/* Component wrapper - permite scroll na página toda */
+:host {
+  display: block !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  max-height: none !important;
+}
+
+/* Container principal - permite scroll */
+:host > div {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: visible;
+  height: auto;
+}
+
+/* Mobile e Tablet: garantir scroll funcionando */
+@media (max-width: 1023px) {
+  :host {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: 100vh !important;
+    max-height: none !important;
+    position: fixed !important;
+    inset: 0;
+  }
+
+  :host > div {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Painel esquerdo - sticky mas sem scroll próprio */
+:host > div > div:first-child {
+  overflow: visible !important;
+}
+
+@media (min-width: 1024px) {
+  :host > div > div:first-child {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start;
+  }
+}
+
+/* Ocultar título e descrição em tablet e menores */
+@media (max-width: 1023px) {
+  :host > div > div:first-child > div.relative.z-10:first-child > h2 {
+    display: none !important;
+  }
+
+  :host > div > div:first-child > div.relative.z-10:first-child > p {
+    display: none !important;
+  }
+}
+
+/* Ocultar card de informações em mobile */
+@media (max-width: 767px) {
+  :host > div > div:first-child > div.relative.z-10:last-child {
+    display: none !important;
+  }
+
+  :host > div > div:first-child > div.relative.z-10:first-child {
+    display: block !important;
+  }
+
+  :host > div > div:first-child > div.relative.z-10:first-child > div.flex.items-center.justify-between {
+    display: flex !important;
+  }
+
+  :host > div > div:first-child > div.relative.z-10:first-child > h2.text-3xl {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  :host > div > div:first-child > div.relative.z-10:first-child > p.text-gray-400 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Background pattern - Usa variáveis CSS */
+.bg-pattern {
+  background-color: var(--color-white);
+  background-image: radial-gradient(var(--color-gray-300) 1px, transparent 1px);
+  background-size: 32px 32px;
+}

@@ -1,0 +1,24 @@
+/* Federation Dashboard Component Styles */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Usar variáveis CSS para cores customizadas quando necessário */
+:host {
+  --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
+  --secondary: var(--color-secondary);
+  --background-light: var(--color-background-light);
+  --background-dark: var(--color-background-dark);
+  --neutral-border: var(--color-neutral-border);
+  --info: var(--color-info);
+  --warning: var(--color-warning);
+  --danger: var(--color-danger);
+}
+

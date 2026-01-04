@@ -1,23 +1,66 @@
 /* Global styles */
 
-@import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/tabler-icons.min.css');
+@import 'tailwindcss';
 
 @theme {
   --color-primary: #1e7f4f;
-  --color-primary-hover: #166339;
+  --color-primary-hover: #2FA36B;
   --color-secondary: #0f1f2d;
   --color-background-light: #f6f8f7;
+  --color-background-dark: #131f19;
+  --color-info: #1F3A5F;
+  --color-warning: #F2C94C;
+  --color-danger: #D64545;
+  --color-neutral-border: #E5E7EB;
   --color-accent-green: #4ade80;
   --color-neutral-gray: #6b7280;
   --color-alert-yellow: #facc15;
   --color-alert-red: #dc2626;
   --color-text-dark: #1f2937;
   --color-text-light: #9ca3af;
-  
+
+  /* Cores auxiliares */
+  --color-border-light: #e5e7eb;
+  --color-border-lighter: #e9f2ed;
+  --color-border-divider: #f3f4f6;
+  --color-input-bg: #f9fafb;
+  --color-white: #ffffff;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+
+  /* Cores intermediárias específicas */
+  --color-primary-light: #568f73;
+  --color-primary-lighter: #8abea6;
+  --color-secondary-dark: #131f18;
+  --color-secondary-darker: #1a2c22;
+  --color-secondary-border: #1e2e25;
+  --color-secondary-border-dark: #2a4536;
+
+  /* Cores de alerta */
+  --color-alert-yellow-bg: #fefce8;
+  --color-alert-yellow-border: #fde047;
+  --color-alert-yellow-text: #ca8a04;
+  --color-alert-yellow-text-dark: #854d0e;
+  --color-alert-yellow-text-darker: #a16207;
+
+  /* Opacidades para overlays */
+  --overlay-dark: rgba(15, 31, 45, 0.8);
+  --overlay-primary-light: rgba(30, 128, 79, 0.2);
+  --overlay-primary-medium: rgba(30, 128, 79, 0.3);
+  --overlay-primary-strong: rgba(30, 128, 79, 0.5);
+  --overlay-white-light: rgba(255, 255, 255, 0.1);
+  --overlay-white-medium: rgba(255, 255, 255, 0.2);
+  --overlay-white-text: rgba(255, 255, 255, 0.8);
+  --overlay-white-text-light: rgba(255, 255, 255, 0.6);
+  --overlay-white-text-lighter: rgba(255, 255, 255, 0.5);
+
   --font-display: 'Lexend', sans-serif;
-  
+
   --radius-sm: 0.5rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
@@ -31,17 +74,154 @@
     box-sizing: border-box;
   }
 
+  html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
   body {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
     font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+  }
+
+  app-root {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  router-outlet {
+    display: contents;
+  }
+
+  router-outlet + * {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Permite scroll em componentes específicos que precisam */
+  router-outlet + app-enable-access {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+  }
+
+  router-outlet + app-reset-password {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+  }
+
+  router-outlet + app-federation-dashboard {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
   .bg-pattern {
-    background-color: #0f1f2d;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-color: var(--color-secondary);
+    background-image: radial-gradient(var(--overlay-white-light) 1px, transparent 1px);
     background-size: 32px 32px;
+  }
+
+  /* Form Input - Reutilizável em todos os componentes de login */
+  .form-input {
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .form-input::placeholder {
+    color: var(--color-text-light);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--overlay-primary-strong);
+  }
+
+  /* Input Icon - Estado focus-within específico */
+  .input-icon {
+    transition: color 0.2s;
+  }
+
+  .relative:has(input:focus) .input-icon,
+  .relative:focus-within .input-icon {
+    color: var(--color-primary);
+  }
+
+  /* Form Title - Reutilizável */
+  .form-title {
+    color: var(--color-secondary);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  /* Form Subtitle - Reutilizável */
+  .form-subtitle {
+    color: var(--color-neutral-gray);
+    line-height: 1.625;
+  }
+
+  /* Submit Button - Estados específicos reutilizáveis */
+  .submit-button {
+    box-shadow: 0 10px 15px -3px var(--overlay-primary-light);
+  }
+
+  .submit-button:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+  }
+
+  .submit-button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Dark mode support para classes reutilizáveis */
+  @media (prefers-color-scheme: dark) {
+    .form-title {
+      color: white;
+    }
+
+    .form-subtitle {
+      color: var(--color-text-light);
+    }
+
+    .form-input {
+      background-color: var(--color-secondary-darker);
+      border-color: var(--color-gray-700);
+      color: white;
+    }
+
+    .form-input::placeholder {
+      color: var(--color-text-light);
+    }
+
+    .input-icon {
+      color: var(--color-text-light);
+    }
   }
 }

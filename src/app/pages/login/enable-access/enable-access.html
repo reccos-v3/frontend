@@ -1,0 +1,256 @@
+<div class="min-h-screen flex flex-col lg:flex-row w-full">
+  <!-- Left Panel - Branding -->
+  <div
+    class="w-full lg:w-5/12 xl:w-2/5 bg-secondary text-white relative flex flex-col justify-between p-8 lg:p-12 xl:p-16 overflow-hidden order-1 lg:order-1 lg:h-screen lg:sticky lg:top-0"
+  >
+    <div
+      class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"
+    ></div>
+    <div
+      class="absolute top-[-20%] right-[-20%] w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] bg-primary/20 rounded-full blur-[80px] lg:blur-[100px] pointer-events-none"
+    ></div>
+    <div
+      class="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] bg-blue-500/10 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none"
+    ></div>
+
+    <div class="relative z-10">
+      <div
+        class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 mb-0 lg:mb-12"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
+          >
+            <span class="material-symbols-outlined text-2xl">sports_soccer</span>
+          </div>
+          <h1 class="text-xl font-bold tracking-tight text-white">ArenaManager</h1>
+        </div>
+
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-xs font-medium backdrop-blur-md"
+        >
+          <span class="relative flex h-2 w-2">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-alert-yellow opacity-75"
+            ></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-alert-yellow"></span>
+          </span>
+          <span>Convite Exclusivo</span>
+        </div>
+      </div>
+
+      <h2
+        class="text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 lg:mb-6 mt-8 lg:mt-24"
+      >
+        Você foi <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400"
+          >convocado!</span
+        >
+      </h2>
+
+      <p class="text-gray-400 text-sm lg:text-base leading-relaxed max-w-md hidden md:block mb-4">
+        Bem-vindo à elite da gestão esportiva. Confirme seus dados para integrar a equipe oficial do
+        campeonato com acesso privilegiado.
+      </p>
+    </div>
+
+    <div class="relative z-10 mt-8 lg:mt-auto">
+      <div
+        class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-2xl relative overflow-hidden group hover:bg-white/10 transition-colors duration-500"
+      >
+        <div
+          class="absolute top-0 right-0 p-16 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl -mr-10 -mt-10"
+        ></div>
+
+        <div class="flex items-start gap-4 mb-5 relative">
+          <div class="p-3 bg-white/10 rounded-xl flex-shrink-0">
+            <span class="material-symbols-outlined text-green-400">verified_user</span>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">
+              Organização Responsável
+            </p>
+            <p class="font-bold text-lg lg:text-xl text-white">Federação Paulista de Futebol</p>
+          </div>
+        </div>
+
+        <div class="h-px w-full bg-gradient-to-r from-white/5 via-white/20 to-white/5 my-4"></div>
+
+        <div class="flex items-center gap-4 relative">
+          <div
+            class="p-3 bg-primary/20 rounded-xl text-primary border border-primary/20 flex-shrink-0"
+          >
+            <span class="material-symbols-outlined">badge</span>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">
+              Papel Atribuído
+            </p>
+            <p class="font-bold text-lg text-green-400">Gestor de Liga</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel - Activation Form -->
+  <div
+    class="flex-1 bg-white relative flex flex-col justify-center order-2 lg:order-2 overflow-y-auto"
+  >
+    <div class="absolute inset-0 bg-pattern opacity-40 pointer-events-none"></div>
+
+    <div class="w-full max-w-lg mx-auto px-6 py-12 lg:px-10 relative z-10">
+      <div class="mb-8 lg:mb-10">
+        <h3 class="text-2xl lg:text-3xl font-bold text-secondary mb-3">Ativar Acesso</h3>
+        <p class="text-gray-500">Preencha as credenciais de segurança para validar seu convite.</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+        <!-- Verification Code -->
+        <div class="space-y-2">
+          <label class="block text-secondary text-sm font-bold" for="invite-code">
+            Código de Verificação
+          </label>
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors"
+            >
+              <span class="material-symbols-outlined">key</span>
+            </div>
+            <input
+              type="text"
+              id="invite-code"
+              [value]="verificationCode()"
+              readonly
+              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono text-lg tracking-widest uppercase"
+              placeholder="XXXX-XXXX"
+            />
+            <div
+              class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-green-600"
+            >
+              <span class="material-symbols-outlined">check_circle</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Name Field -->
+        <div class="space-y-2">
+          <label class="block text-secondary text-sm font-bold" for="full-name">
+            Nome completo
+          </label>
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors"
+            >
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <input
+              type="text"
+              id="full-name"
+              placeholder="Digite seu nome completo"
+              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="grid grid-cols-1 gap-6">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="block text-secondary text-sm font-bold" for="new-password">
+                Definir Senha
+              </label>
+            </div>
+            <div class="relative group">
+              <div
+                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined">lock</span>
+              </div>
+              <input
+                [type]="showPassword() ? 'text' : 'password'"
+                id="new-password"
+                [value]="password()"
+                (input)="onPasswordChange($any($event.target).value)"
+                placeholder="••••••••"
+                class="w-full pl-12 pr-12 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              />
+              <button
+                type="button"
+                (click)="togglePasswordVisibility()"
+                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-secondary cursor-pointer transition-colors"
+              >
+                <span class="material-symbols-outlined">{{
+                  showPassword() ? 'visibility' : 'visibility_off'
+                }}</span>
+              </button>
+            </div>
+
+            <!-- Password Strength Indicator -->
+            <div class="flex gap-1.5 pt-1">
+              @for (i of [1, 2, 3, 4]; track i) {
+              <div
+                class="h-1.5 flex-1 rounded-full transition-colors"
+                [class.bg-green-500]="i <= passwordStrength().level"
+                [class.bg-gray-200]="i > passwordStrength().level"
+              ></div>
+              }
+            </div>
+            <p class="text-xs text-gray-500 mt-1">A senha deve ter no mínimo 8 caracteres.</p>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="space-y-2">
+            <label class="block text-secondary text-sm font-bold" for="confirm-password">
+              Confirmar Senha
+            </label>
+            <div class="relative group">
+              <div
+                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined">lock_reset</span>
+              </div>
+              <input
+                [type]="showConfirmPassword() ? 'text' : 'password'"
+                id="confirm-password"
+                [value]="confirmPassword()"
+                (input)="onConfirmPasswordChange($any($event.target).value)"
+                placeholder="••••••••"
+                class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              />
+            </div>
+            @if (!passwordsMatch() && confirmPassword().length > 0) {
+            <p class="text-xs text-alert-red mt-1">As senhas não coincidem</p>
+            }
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+          <button
+            type="submit"
+            [disabled]="!isFormValid()"
+            class="w-full h-14 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 text-lg group disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
+          >
+            <span>Ativar acesso</span>
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform"
+              >arrow_forward</span
+            >
+          </button>
+        </div>
+
+        <!-- Terms Notice -->
+        <p class="text-center text-xs text-gray-400 mt-6 leading-relaxed">
+          Ao clicar em ativar, você aceita os
+          <a class="text-primary hover:underline font-medium" href="#">Termos de Serviço</a> e a
+          <a class="text-primary hover:underline font-medium" href="#">Política de Privacidade</a>
+          do ArenaManager.
+        </p>
+      </form>
+    </div>
+
+    <div class="absolute bottom-6 right-6 pointer-events-none hidden lg:block">
+      <p class="text-gray-300 text-xs font-medium uppercase tracking-widest">Powered by LeagueOS</p>
+    </div>
+  </div>
+</div>

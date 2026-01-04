@@ -1,0 +1,138 @@
+<!-- Main Content Area -->
+<main class="w-full h-screen m-0 p-0 flex flex-col lg:flex-row overflow-hidden relative">
+  <!-- Left Side: Hero Image & Branding -->
+  <div class="hero-panel">
+    <!-- Background Image with Overlay -->
+    <div class="hero-background">
+      <div class="hero-overlay-multiply"></div>
+      <div class="hero-overlay-gradient"></div>
+      <img alt="Estádio de futebol iluminado" class="hero-image" src="/images/logo-stadium.png" />
+    </div>
+
+    <div class="hero-content">
+      <div class="flex items-center gap-3 mb-8 lg:mb-12">
+        <div
+          class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
+        >
+          <span class="material-symbols-outlined text-2xl">sports_soccer</span>
+        </div>
+        <h1 class="text-xl font-bold tracking-tight text-white">ArenaManager</h1>
+      </div>
+      <div class="secure-badge">
+        <span class="material-symbols-outlined badge-icon">verified_user</span>
+        <span class="badge-text">AMBIENTE SEGURO</span>
+      </div>
+
+      <h1 class="hero-title">Gerenciamento de Alta Performance</h1>
+
+      <p class="hero-description">
+        Plataforma oficial para administradores de ligas, treinadores e gestores de campeonatos.
+        Otimize resultados dentro e fora de campo.
+      </p>
+
+      <div class="flex gap-4 items-center flex-wrap md:hidden lg:flex">
+        <div class="flex -space-x-3">
+          <img
+            alt="User 1"
+            class="w-10 h-10 rounded-full border-2 border-secondary object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZnmTMEgD5VpXKFHsN1J52RNq8NRHufzePUMCXmLIQ1Hd65v1cJ4H93JM0xaXrW-i2AJ026nCKx3MD9brapwzpiIk3FXqYUUGfw00pFjIjgqzqge13Z2QMhYstLZwZp4v4gH1BtI-AuT0YVF-nG6UYiUG6-zQ42Zw8l00CkMpOLTSyDRrciexcsZqyMNUq1BOg2JrMEPMIf69Y8jIxie6Z5Zpf36i4MotVnL0HpJmTvikmgFdhztClaYbEpSxjOPCqHhLNIglC9Hs"
+          />
+          <img
+            alt="User 2"
+            class="w-10 h-10 rounded-full border-2 border-secondary object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkxIJHbl-CmTuILokpvCUHP-xIWtEdBWY9JLBrt5CUO1dUMt9-Yw5vyAGsPaQABafEn3-Pp8mjhtUtcEo8rx2JMZhsmTBF68HBRkv4p0hJwgBK3ldhmnZPVmrfWq1yF0Q8y3eJ6SGWqiXkGhYaA62lAdXakf1Cn8_Pe9sANiYbv3E284ZQvfH7NptxAMjG7T3JqLcC6DzkKpxWf_NfScSup8I3miu-2c4PdcPfu4zEiN9YH7kzZdmQ0SMmlkxN9qtCqr1EQ3nyXOk"
+          />
+          <img
+            alt="User 3"
+            class="w-10 h-10 rounded-full border-2 border-secondary object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNI0dLC9P1huwJ_dqJmHZcu3dO_XxJTyqQMU0TA7OLbYvHrEfkjQ3-eOl7f92m743ybv7AvDulLS38UdslzJe37tUgm46YB2k8VL3Av9hjfQDLF_wc2aFPblu35mfEseqEut3MLIA3XdN17ad7TNCjRtlihPeFe0_9gmCyHGzBf7TJ_y4AEec8neL5sFoE3W_3ztyQkihvXmStrBft7hMJCe_-UXNEJRFhUHOJgG_dJ3NAIzGBM83rUUpVnYpvbx5Wdt8uXfHBOOI"
+          />
+          <div
+            class="w-10 h-10 rounded-full border-2 border-secondary bg-primary flex items-center justify-center text-white text-xs font-bold"
+          >
+            +2k
+          </div>
+        </div>
+        <div class="flex flex-col justify-center">
+          <span class="text-sm font-bold text-white">Ligas Ativas</span>
+          <span class="text-xs text-gray-400">Atualizado hoje</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Login Form -->
+  <div class="form-panel">
+    <div class="w-full max-w-[420px] min-w-0 flex flex-col gap-8 p-0">
+      <!-- Form Header -->
+      <div class="flex flex-col gap-2">
+        <h1 class="form-title">Bem-vindo de volta</h1>
+        <p class="form-subtitle">Faça login para acessar o painel administrativo.</p>
+      </div>
+
+      <!-- Login Form -->
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        class="flex flex-col gap-5 w-full min-w-0"
+      >
+        <!-- Email Input -->
+        <label class="flex flex-col gap-2">
+          <span class="text-sm font-semibold text-secondary">E-mail corporativo</span>
+          <div class="relative w-full min-w-0">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-[1]">
+              <span class="material-symbols-outlined input-icon">mail</span>
+            </div>
+            <input
+              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              placeholder="gestor@ligamaster.com"
+              type="email"
+              formControlName="email"
+            />
+          </div>
+        </label>
+
+        <!-- Password Input -->
+        <label class="flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-semibold text-secondary">Senha</span>
+            <a
+              class="text-xs font-semibold text-primary hover:text-primary-hover transition-colors"
+              routerLink="/reset-password"
+              >Esqueceu a senha?</a
+            >
+          </div>
+          <div class="relative w-full min-w-0">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-[1]">
+              <span class="material-symbols-outlined input-icon">lock</span>
+            </div>
+            <input
+              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              placeholder="••••••••"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+            />
+          </div>
+        </label>
+
+        <!-- Submit Button -->
+        <button class="submit-button" type="submit" [disabled]="loginForm.invalid">
+          <span>Entrar na Plataforma</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+      </form>
+
+      <!-- Footer Note -->
+      <div class="border-t border-gray-200 pt-6 mt-2 text-center">
+        <p class="text-xs text-gray-400">
+          Problemas com o acesso?
+          <a
+            class="text-secondary font-medium underline underline-offset-4 decoration-gray-300 hover:decoration-primary transition-all"
+            href="#"
+            >Contate o administrador da liga</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
