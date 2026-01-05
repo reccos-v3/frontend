@@ -104,7 +104,7 @@
   </div>
 
   <!-- Right Panel - Activation Form -->
-  <div class="flex-1 bg-white relative flex flex-col justify-center order-2 lg:order-2">
+  <div class="lg:h-screen lg:overflow-y-auto flex-1 bg-white relative flex flex-col justify-start order-2 lg:order-2">
     <div class="absolute inset-0 bg-pattern opacity-40 pointer-events-none"></div>
 
     <div class="w-full max-w-lg mx-auto px-6 py-12 lg:px-10 relative z-10">
@@ -248,51 +248,38 @@
             </div>
 
             <!-- Password Requirements Alert -->
-            <div class="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-lg flex gap-3">
-              <span class="material-symbols-outlined text-blue-500 text-sm">info</span>
+            <div class="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
               <div class="space-y-1">
                 <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider">
                   Sua senha deve conter:
                 </p>
-                <ul class="text-[13px] space-y-1 pl-0">
+                <ul class="text-[11px] space-y-1 list-disc pl-6 ml-1">
                   <li
-                    class="flex items-center gap-2 transition-colors"
+                    class="transition-colors"
                     [class.text-green-600]="passwordStrength().hasMinLength"
                     [class.text-blue-600/80]="!passwordStrength().hasMinLength"
                   >
-                    <span class="material-symbols-outlined text-[12px]">
-                      {{ passwordStrength().hasMinLength ? 'check_circle' : 'circle' }}
-                    </span>
                     Mínimo de 8 caracteres
                   </li>
                   <li
-                    class="flex items-center gap-2 transition-colors"
+                    class="transition-colors"
                     [class.text-green-600]="passwordStrength().hasUpperCase"
                     [class.text-blue-600/80]="!passwordStrength().hasUpperCase"
                   >
-                    <span class="material-symbols-outlined text-[12px]">
-                      {{ passwordStrength().hasUpperCase ? 'check_circle' : 'circle' }}
-                    </span>
                     Pelo menos uma letra maiúscula
                   </li>
                   <li
-                    class="flex items-center gap-2 transition-colors"
+                    class="transition-colors"
                     [class.text-green-600]="passwordStrength().hasNumber"
                     [class.text-blue-600/80]="!passwordStrength().hasNumber"
                   >
-                    <span class="material-symbols-outlined text-[12px]">
-                      {{ passwordStrength().hasNumber ? 'check_circle' : 'circle' }}
-                    </span>
                     Pelo menos um número
                   </li>
                   <li
-                    class="flex items-center gap-2 transition-colors"
+                    class="transition-colors"
                     [class.text-green-600]="passwordStrength().hasSpecial"
                     [class.text-blue-600/80]="!passwordStrength().hasSpecial"
                   >
-                    <span class="material-symbols-outlined text-[12px]">
-                      {{ passwordStrength().hasSpecial ? 'check_circle' : 'circle' }}
-                    </span>
                     Um caractere especial (! @ # $ %)
                   </li>
                 </ul>
