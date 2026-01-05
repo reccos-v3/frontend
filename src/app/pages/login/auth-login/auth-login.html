@@ -107,18 +107,35 @@
               <span class="material-symbols-outlined input-icon">lock</span>
             </div>
             <input
-              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              class="w-full pl-12 pr-12 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
               placeholder="••••••••"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
             />
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-4 flex items-center z-[2] text-gray-400 hover:text-secondary transition-colors"
+              tabindex="-1"
+            >
+              <span class="material-symbols-outlined text-xl">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
           </div>
         </label>
 
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="p-4 bg-red-50 border border-red-200 rounded-xl">
+          <p class="text-sm text-red-600">{{ errorMessage }}</p>
+        </div>
+
         <!-- Submit Button -->
-        <button class="submit-button" type="submit" [disabled]="loginForm.invalid">
-          <span>Entrar na Plataforma</span>
-          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        <button class="submit-button" type="submit" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Entrar na Plataforma</span>
+          <span *ngIf="isLoading">Entrando...</span>
+          <span *ngIf="!isLoading" class="material-symbols-outlined text-sm">arrow_forward</span>
+          <span *ngIf="isLoading" class="material-symbols-outlined text-sm animate-spin">sync</span>
         </button>
       </form>
 

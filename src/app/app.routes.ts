@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -26,10 +28,18 @@ export const routes: Routes = [
       import('./pages/federations/components/federation-dashboard').then(
         (m) => m.FederationDashboard
       ),
+    canActivate: [authGuard], // Protege a rota exigindo autenticação
   },
   {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full',
   },
+  // Exemplo de rota protegida por role (descomente e ajuste conforme necessário):
+  // {
+  //   path: 'admin',
+  //   loadComponent: () => import('./pages/admin/admin').then((m) => m.Admin),
+  //   canActivate: [roleGuard],
+  //   data: { roles: ['ADMIN'] } // Define os roles permitidos
+  // },
 ];

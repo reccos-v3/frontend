@@ -14,41 +14,35 @@
     ></div>
 
     <div class="relative z-10">
-      <div
-        class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 mb-0 lg:mb-12"
-      >
-        <div class="flex items-center gap-3">
-          <div
-            class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
-          >
-            <span class="material-symbols-outlined text-2xl">sports_soccer</span>
-          </div>
-          <h1 class="text-xl font-bold tracking-tight text-white">ArenaManager</h1>
-        </div>
-
+      <div class="flex items-center gap-3 mb-8 lg:mb-12">
         <div
-          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-xs font-medium backdrop-blur-md"
+          class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
         >
-          <span class="relative flex h-2 w-2">
-            <span
-              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-alert-yellow opacity-75"
-            ></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-alert-yellow"></span>
-          </span>
-          <span>Convite Exclusivo</span>
+          <span class="material-symbols-outlined text-2xl">sports_soccer</span>
         </div>
+        <h1 class="text-xl font-bold tracking-tight text-white">ArenaManager</h1>
       </div>
 
-      <h2
-        class="text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 lg:mb-6 mt-8 lg:mt-24"
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-xs font-medium mb-6 backdrop-blur-md"
       >
+        <span class="relative flex h-2 w-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-alert-yellow opacity-75"
+          ></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-alert-yellow"></span>
+        </span>
+        <span>Convite Exclusivo</span>
+      </div>
+
+      <h2 class="text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 lg:mb-6">
         Você foi <br />
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400"
           >convocado!</span
         >
       </h2>
 
-      <p class="text-gray-400 text-sm lg:text-base leading-relaxed max-w-md hidden md:block mb-4">
+      <p class="text-gray-400 text-sm lg:text-base leading-relaxed max-w-md hidden md:block">
         Bem-vindo à elite da gestão esportiva. Confirme seus dados para integrar a equipe oficial do
         campeonato com acesso privilegiado.
       </p>
@@ -70,7 +64,13 @@
             <p class="text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">
               Organização Responsável
             </p>
-            <p class="font-bold text-lg lg:text-xl text-white">Federação Paulista de Futebol</p>
+            <p
+              class="font-bold text-lg lg:text-xl"
+              [class.text-white]="isValid()"
+              [class.text-gray-400]="!isValid()"
+            >
+              {{ federationName() }}
+            </p>
           </div>
         </div>
 
@@ -86,17 +86,25 @@
             <p class="text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">
               Papel Atribuído
             </p>
-            <p class="font-bold text-lg text-green-400">Gestor de Liga</p>
+            <p
+              class="font-bold text-lg text-green-400"
+              [class.text-green-400]="isValid()"
+              [class.text-gray-400]="!isValid()"
+            >
+              {{ roleName() }}
+            </p>
           </div>
         </div>
+      </div>
+      <div class="mt-6 hidden lg:flex items-center gap-2 text-xs text-gray-500">
+        <span class="material-symbols-outlined text-base">lock</span>
+        <span>Ambiente criptografado de ponta a ponta</span>
       </div>
     </div>
   </div>
 
   <!-- Right Panel - Activation Form -->
-  <div
-    class="flex-1 bg-white relative flex flex-col justify-center order-2 lg:order-2 overflow-y-auto"
-  >
+  <div class="flex-1 bg-white relative flex flex-col justify-center order-2 lg:order-2">
     <div class="absolute inset-0 bg-pattern opacity-40 pointer-events-none"></div>
 
     <div class="w-full max-w-lg mx-auto px-6 py-12 lg:px-10 relative z-10">
@@ -105,7 +113,7 @@
         <p class="text-gray-500">Preencha as credenciais de segurança para validar seu convite.</p>
       </div>
 
-      <form (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+      <form [formGroup]="activationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
         <!-- Verification Code -->
         <div class="space-y-2">
           <label class="block text-secondary text-sm font-bold" for="invite-code">
@@ -120,23 +128,35 @@
             <input
               type="text"
               id="invite-code"
-              [value]="verificationCode()"
-              readonly
-              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono text-lg tracking-widest uppercase"
+              formControlName="verificationCode"
+              maxlength="11"
+              [class.border-red-500]="validationError()"
+              class="w-full pl-12 pr-12 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono text-lg tracking-widest uppercase"
               placeholder="XXXX-XXXX"
             />
+            @if (isValidating()) {
+            <div
+              class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400"
+            >
+              <span class="material-symbols-outlined animate-spin">sync</span>
+            </div>
+            } @else if (isValid()) {
             <div
               class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-green-600"
             >
               <span class="material-symbols-outlined">check_circle</span>
             </div>
+            }
           </div>
+          @if (validationError()) {
+          <p class="text-xs text-alert-red mt-1">{{ validationError() }}</p>
+          }
         </div>
 
         <!-- Full Name Field -->
         <div class="space-y-2">
           <label class="block text-secondary text-sm font-bold" for="full-name">
-            Nome completo
+            Nome Completo
           </label>
           <div class="relative group">
             <div
@@ -147,10 +167,40 @@
             <input
               type="text"
               id="full-name"
-              placeholder="Digite seu nome completo"
-              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              formControlName="fullName"
+              [disabled]="fieldsDisabled()"
+              placeholder="Seu nome completo"
+              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
           </div>
+        </div>
+
+        <!-- CPF Field -->
+        <div class="space-y-2 pt-2 pb-2">
+          <label class="block text-secondary text-sm font-bold" for="cpf"> CPF </label>
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors"
+            >
+              <span class="material-symbols-outlined">badge</span>
+            </div>
+            <input
+              type="text"
+              id="cpf"
+              formControlName="documentValue"
+              [disabled]="fieldsDisabled()"
+              placeholder="000.000.000-00"
+              class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+              [class.border-red-500]="
+                activationForm.get('documentValue')?.invalid &&
+                activationForm.get('documentValue')?.touched
+              "
+            />
+          </div>
+          @if (activationForm.get('documentValue')?.hasError('cpfInvalid') &&
+          activationForm.get('documentValue')?.touched) {
+          <p class="text-xs text-alert-red mt-1">CPF inválido</p>
+          }
         </div>
 
         <!-- Password Field -->
@@ -170,10 +220,10 @@
               <input
                 [type]="showPassword() ? 'text' : 'password'"
                 id="new-password"
-                [value]="password()"
-                (input)="onPasswordChange($any($event.target).value)"
+                formControlName="password"
+                [disabled]="fieldsDisabled()"
                 placeholder="••••••••"
-                class="w-full pl-12 pr-12 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                class="w-full pl-12 pr-12 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
               />
               <button
                 type="button"
@@ -196,7 +246,58 @@
               ></div>
               }
             </div>
-            <p class="text-xs text-gray-500 mt-1">A senha deve ter no mínimo 8 caracteres.</p>
+
+            <!-- Password Requirements Alert -->
+            <div class="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-lg flex gap-3">
+              <span class="material-symbols-outlined text-blue-500 text-sm">info</span>
+              <div class="space-y-1">
+                <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider">
+                  Sua senha deve conter:
+                </p>
+                <ul class="text-[13px] space-y-1 pl-0">
+                  <li
+                    class="flex items-center gap-2 transition-colors"
+                    [class.text-green-600]="passwordStrength().hasMinLength"
+                    [class.text-blue-600/80]="!passwordStrength().hasMinLength"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">
+                      {{ passwordStrength().hasMinLength ? 'check_circle' : 'circle' }}
+                    </span>
+                    Mínimo de 8 caracteres
+                  </li>
+                  <li
+                    class="flex items-center gap-2 transition-colors"
+                    [class.text-green-600]="passwordStrength().hasUpperCase"
+                    [class.text-blue-600/80]="!passwordStrength().hasUpperCase"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">
+                      {{ passwordStrength().hasUpperCase ? 'check_circle' : 'circle' }}
+                    </span>
+                    Pelo menos uma letra maiúscula
+                  </li>
+                  <li
+                    class="flex items-center gap-2 transition-colors"
+                    [class.text-green-600]="passwordStrength().hasNumber"
+                    [class.text-blue-600/80]="!passwordStrength().hasNumber"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">
+                      {{ passwordStrength().hasNumber ? 'check_circle' : 'circle' }}
+                    </span>
+                    Pelo menos um número
+                  </li>
+                  <li
+                    class="flex items-center gap-2 transition-colors"
+                    [class.text-green-600]="passwordStrength().hasSpecial"
+                    [class.text-blue-600/80]="!passwordStrength().hasSpecial"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">
+                      {{ passwordStrength().hasSpecial ? 'check_circle' : 'circle' }}
+                    </span>
+                    Um caractere especial (! @ # $ %)
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <!-- Confirm Password -->
@@ -213,33 +314,41 @@
               <input
                 [type]="showConfirmPassword() ? 'text' : 'password'"
                 id="confirm-password"
-                [value]="confirmPassword()"
-                (input)="onConfirmPasswordChange($any($event.target).value)"
+                formControlName="confirmPassword"
+                [disabled]="fieldsDisabled()"
                 placeholder="••••••••"
-                class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
               />
             </div>
-            @if (!passwordsMatch() && confirmPassword().length > 0) {
+            @if (activationForm.hasError('passwordMismatch') &&
+            activationForm.get('confirmPassword')?.touched) {
             <p class="text-xs text-alert-red mt-1">As senhas não coincidem</p>
             }
           </div>
         </div>
 
-        <!-- Submit Button -->
         <div class="pt-4">
+          @if (submitError()) {
+          <p class="text-sm text-alert-red mb-3 text-center font-medium">{{ submitError() }}</p>
+          }
+
           <button
             type="submit"
-            [disabled]="!isFormValid()"
+            [disabled]="activationForm.invalid || isSubmitting()"
             class="w-full h-14 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 text-lg group disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
           >
+            @if (isSubmitting()) {
+            <span class="material-symbols-outlined animate-spin">sync</span>
+            <span>Ativando...</span>
+            } @else {
             <span>Ativar acesso</span>
             <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform"
               >arrow_forward</span
             >
+            }
           </button>
         </div>
 
-        <!-- Terms Notice -->
         <p class="text-center text-xs text-gray-400 mt-6 leading-relaxed">
           Ao clicar em ativar, você aceita os
           <a class="text-primary hover:underline font-medium" href="#">Termos de Serviço</a> e a
