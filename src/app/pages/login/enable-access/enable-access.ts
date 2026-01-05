@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, signal, computed, inject, OnInit, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import {
@@ -56,13 +56,13 @@ export class EnableAccess implements OnInit {
         ],
       ],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-      fullName: ['', [Validators.required, Validators.minLength(3)]],
-      documentValue: ['', [Validators.required, this.cpfValidator()]],
+      fullName: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(3)]],
+      documentValue: [{ value: '', disabled: true }, [Validators.required, this.cpfValidator()]],
       password: [
-        '',
+        { value: '', disabled: true },
         [Validators.required, Validators.minLength(8), this.passwordRequirementsValidator()],
       ],
-      confirmPassword: ['', [Validators.required]],
+      confirmPassword: [{ value: '', disabled: true }, [Validators.required]],
     },
     {
       validators: [this.passwordMatchValidator()],
@@ -91,8 +91,39 @@ export class EnableAccess implements OnInit {
   // Data signals
   protected validationData = signal<IValidateInvitationResponse | null>(null);
 
+  constructor() {
+    // Sync form controls state with component state
+    effect(() => {
+      const isValid = this.isValid();
+      const isSubmitting = this.isSubmitting();
+      const controls = this.activationForm.controls;
+
+      // Se estiver enviando, desabilita tudo (inclusive código)
+      if (isSubmitting) {
+        this.activationForm.disable({ emitEvent: false });
+        return;
+      }
+
+      // Se não estiver enviando, o código de verificação sempre fica habilitado
+      controls.verificationCode.enable({ emitEvent: false });
+
+      // Demais campos dependem da validade do código
+      if (isValid) {
+        controls.fullName.enable({ emitEvent: false });
+        controls.documentValue.enable({ emitEvent: false });
+        controls.password.enable({ emitEvent: false });
+        controls.confirmPassword.enable({ emitEvent: false });
+      } else {
+        controls.fullName.disable({ emitEvent: false });
+        controls.documentValue.disable({ emitEvent: false });
+        controls.password.disable({ emitEvent: false });
+        controls.confirmPassword.disable({ emitEvent: false });
+      }
+    });
+  }
+
   ngOnInit(): void {
-    const token = this.route.snapshot.paramMap.get('token');
+    const token = this.route.snapshot.queryParamMap.get('token');
     this.token.set(token || '');
 
     // Monitora mudanças no código de verificação para disparar validação automática
@@ -102,8 +133,10 @@ export class EnableAccess implements OnInit {
   }
 
   // Helper patterns
-  protected federationName = computed(() => this.validationData()?.federationName || '---');
-  protected roleName = computed(() => this.validationData()?.roleName || '---');
+  protected federationName = computed(
+    () => this.validationData()?.federationName || 'Aguardando validação...'
+  );
+  protected roleName = computed(() => this.validationData()?.roleName || 'Aguardando validação...');
 
   protected fieldsDisabled = computed(() => !this.isValid() || this.isSubmitting());
 
