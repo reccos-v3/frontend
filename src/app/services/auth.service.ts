@@ -4,7 +4,12 @@ import { Observable, tap, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { TokenService } from './token.service';
-import { ILoginRequest, IAuth, IValidateResetTokenResponse } from '../interfaces/auth.interface';
+import {
+  ILoginRequest,
+  IAuth,
+  IValidateResetTokenResponse,
+  IResetPasswordRequest,
+} from '../interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +61,18 @@ export class AuthService {
           return throwError(() => error);
         })
       );
+  }
+
+  /**
+   * Redefine a senha do usuário
+   */
+  resetPassword(payload: IResetPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/password/reset`, payload).pipe(
+      catchError((error) => {
+        console.error('Erro na redefinição de senha:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**

@@ -25,3 +25,11 @@ export interface IValidateResetTokenResponse {
   status: string;
   email: string | null;
 }
+
+/**
+ * Interface para requisição de redefinição de senha
+ */
+export interface IResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}

@@ -4,6 +4,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { IValidateResetTokenResponse } from '../../../interfaces/auth.interface';
+import { ToastService } from '../../../services/toast.service';
+import { delay, finalize } from 'rxjs';
 
 interface PasswordStrength {
   level: number;
@@ -23,12 +25,14 @@ interface HeroMessage {
 })
 export class ResetPassword implements OnInit, OnDestroy {
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   resetForm: FormGroup;
   showPassword = signal(false);
   showConfirmPassword = signal(false);
+  isSubmitting = signal(false);
   passwordStrength = signal<PasswordStrength>({ level: 0, isValid: false });
   passwordsMatch = signal(true);
 
@@ -218,11 +222,31 @@ export class ResetPassword implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.isFormValid()) {
-      console.log('Form submitted:', {
-        password: this.resetForm.get('password')?.value,
-      });
-      // Handle password reset logic here
+    if (this.isFormValid() && this.token()) {
+      this.isSubmitting.set(true);
+      const password = this.resetForm.get('password')?.value;
+      const token = this.token()!;
+
+      this.authService
+        .resetPassword({ token, newPassword: password })
+        .pipe(
+          delay(1500), // Artificial delay for better UX
+          finalize(() => this.isSubmitting.set(false))
+        )
+        .subscribe({
+          next: () => {
+            this.toastService.success('Senha redefinida com sucesso!');
+            this.router.navigate(['/login']);
+          },
+          error: (error) => {
+            if (error.status === 400 || error.status === 404) {
+              this.tokenStatus.set('invalid');
+              this.toastService.error('O link de recuperação expirou ou é inválido.');
+            } else {
+              this.toastService.error('Erro ao redefinir a senha. Tente novamente.');
+            }
+          },
+        });
     }
   }
 }
