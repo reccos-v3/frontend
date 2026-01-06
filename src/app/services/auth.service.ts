@@ -31,6 +31,18 @@ export class AuthService {
   }
 
   /**
+   * Envia solicitação de recuperação de senha
+   */
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/password/forgot`, { email }).pipe(
+      catchError((error) => {
+        console.error('Erro na recuperação de senha:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
    * Realiza o logout do usuário
    */
   logout(): void {
@@ -86,4 +98,3 @@ export class AuthService {
     return this.tokenService.getFederationId();
   }
 }
-
