@@ -1,251 +1,509 @@
-<div class="min-h-screen flex flex-col text-[#0f1a14] dark:text-white font-display overflow-x-hidden" style="background-color: var(--color-background-light);">
-  <!-- Top Navigation -->
-  <header class="sticky top-0 z-50 w-full bg-white dark:bg-secondary border-b px-6 py-4 shadow-sm" style="border-color: var(--color-neutral-border);">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="text-primary size-8">
-          <span class="material-symbols-outlined text-4xl">sports_soccer</span>
+<div class="max-w-[1200px] mx-auto p-6 lg:px-10 lg:pb-10 py-4 flex flex-col gap-8">
+  <!-- Federation Header -->
+  <section
+    class="rounded-2xl p-6 shadow-sm flex flex-col md:flex-row gap-6 justify-between items-start md:items-center"
+    style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+  >
+    <div class="flex items-center gap-5">
+      <div
+        class="size-16 rounded-xl flex items-center justify-center p-2"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <img
+          alt="Logo"
+          class="w-full h-full object-contain rounded-lg opacity-80"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrgzo9hPrjutjPsxrUPM1NVbpE_O3k2DOELP4d3RVUlzMRf1ukO-p1mdFdYclsBi9_Rj4hkbIEgUljz0uqn78IQ3svsqBdiheqK4R7AZmF7w7nJ8ecHf_wNisu84vmj40nz4H8esHqJaNOm2IDMthXreQV7D7r3qDbEMvlUdBuGnW5Mouo4gbpbK35yy_bfyItm94Wjrpp1XC4afVUVmVaw5-vKw13owagVfhajmURfJjLsrthwKFvIgKgFP0dfwJCE-RgB6uMJB0"
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1
+            class="text-2xl md:text-3xl font-bold tracking-tight"
+            style="color: var(--color-text-dark)"
+          >
+            Federação Reccos de Futebol
+          </h1>
+          <span
+            class="px-2.5 py-0.5 rounded-full text-xs font-bold border uppercase tracking-wide"
+            style="
+              background: var(--overlay-primary-light);
+              color: var(--color-primary);
+              border-color: var(--overlay-primary-light);
+            "
+            >Ativa</span
+          >
         </div>
-        <h1 class="text-secondary dark:text-white text-xl font-bold tracking-tight hidden sm:block">ArenaGestor</h1>
+        <div class="flex items-center gap-4 text-sm" style="color: var(--color-text-light)">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">trophy</span>
+            <span>12 Campeonatos</span>
+          </div>
+          <div class="w-1 h-1 rounded-full" style="background: var(--color-gray-300)"></div>
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">group</span>
+            <span>45 Usuários</span>
+          </div>
+        </div>
       </div>
-      <div class="flex-1 max-w-lg mx-8 hidden md:block">
-        <label class="relative flex items-center w-full">
-          <span class="absolute left-4 text-primary">
-            <span class="material-symbols-outlined">search</span>
-          </span>
-          <input
-            class="w-full h-12 pl-12 pr-4 bg-background-light dark:bg-opacity-10 rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-gray-500 text-secondary dark:text-white transition-all"
-            placeholder="Buscar campeonatos, times ou atletas..."
-            type="text"
-          />
-        </label>
+    </div>
+    <button
+      class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+      style="background: var(--color-gray-100); color: var(--color-text-dark); border: none"
+    >
+      <span class="material-symbols-outlined text-[20px]">settings</span>
+      Configurações da federação
+    </button>
+  </section>
+  <!-- Alerts & Pendências -->
+  <section class="flex flex-col gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Alert Item 1 -->
+      <div
+        class="flex items-start gap-4 p-4 rounded-xl"
+        style="
+          background: var(--color-alert-yellow-bg);
+          border: 1px solid var(--color-alert-yellow-border);
+        "
+      >
+        <div
+          class="p-2 rounded-lg shrink-0"
+          style="
+            background: var(--color-alert-yellow-border);
+            color: var(--color-alert-yellow-text);
+          "
+        >
+          <span class="material-symbols-outlined icon-filled">edit_document</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-bold text-sm" style="color: var(--color-alert-yellow-text-dark)">
+            Campeonatos em rascunho
+          </h4>
+          <p class="text-sm" style="color: var(--color-alert-yellow-text)">
+            Você tem 2 campeonatos criados mas não publicados. Finalize a configuração para
+            divulgá-los.
+          </p>
+          <a
+            class="text-xs font-bold hover:underline mt-1"
+            style="color: var(--color-alert-yellow-text-darker)"
+            href="#"
+            >Revisar rascunhos</a
+          >
+        </div>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="relative p-2 text-gray-500 hover:text-primary transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-opacity-10">
-          <span class="material-symbols-outlined">notifications</span>
-          <span class="absolute top-2 right-2 size-2 rounded-full border-2 border-white dark:border-secondary" style="background-color: var(--color-danger);"></span>
-        </button>
-        <div class="h-8 w-px mx-2" style="background-color: var(--color-neutral-border);"></div>
-        <div class="flex items-center gap-3">
-          <div class="text-right hidden sm:block">
-            <p class="text-sm font-bold text-secondary dark:text-white leading-tight">Admin Federação</p>
-            <p class="text-xs text-gray-500">Gestor Principal</p>
+      <!-- Alert Item 2 -->
+      <div
+        class="flex items-start gap-4 p-4 rounded-xl"
+        style="
+          background: var(--color-info);
+          border: 1px solid var(--color-info);
+          background: #f0f6ff;
+        "
+      >
+        <div class="p-2 rounded-lg shrink-0" style="background: #dbeafe; color: var(--color-info)">
+          <span class="material-symbols-outlined icon-filled">mail</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-bold text-sm" style="color: var(--color-info)">Convites Pendentes</h4>
+          <p class="text-sm" style="color: var(--color-info); opacity: 0.8">
+            Existem 3 convites de administradores aguardando aceitação há mais de 48 horas.
+          </p>
+          <a
+            class="text-xs font-bold hover:underline mt-1"
+            style="color: var(--color-info)"
+            href="#"
+            >Gerenciar convites</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Quick Actions -->
+  <section class="flex flex-col gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Card 1 -->
+      <button
+        class="group flex flex-col items-start gap-4 p-5 rounded-xl border transition-all text-left"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <div
+          class="size-12 rounded-lg flex items-center justify-center transition-colors"
+          style="background: var(--overlay-primary-light); color: var(--color-primary)"
+        >
+          <span class="material-symbols-outlined text-[28px]">add_circle</span>
+        </div>
+        <div>
+          <h4 class="font-bold transition-colors" style="color: var(--color-text-dark)">
+            Criar Campeonato
+          </h4>
+          <p class="text-xs mt-1" style="color: var(--color-text-light)">
+            Configure um novo torneio do zero
+          </p>
+        </div>
+      </button>
+      <!-- Card 2 -->
+      <button
+        class="group flex flex-col items-start gap-4 p-5 rounded-xl border transition-all text-left"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <div
+          class="size-12 rounded-lg flex items-center justify-center transition-colors"
+          style="background: var(--overlay-primary-light); color: var(--color-primary)"
+        >
+          <span class="material-symbols-outlined text-[28px]">person_add</span>
+        </div>
+        <div>
+          <h4 class="font-bold transition-colors" style="color: var(--color-text-dark)">
+            Convidar Usuários
+          </h4>
+          <p class="text-xs mt-1" style="color: var(--color-text-light)">
+            Adicione novos administradores
+          </p>
+        </div>
+      </button>
+      <!-- Card 3 -->
+      <button
+        class="group flex flex-col items-start gap-4 p-5 rounded-xl border transition-all text-left"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <div
+          class="size-12 rounded-lg flex items-center justify-center transition-colors"
+          style="background: var(--overlay-primary-light); color: var(--color-primary)"
+        >
+          <span class="material-symbols-outlined text-[28px]">manage_accounts</span>
+        </div>
+        <div>
+          <h4 class="font-bold transition-colors" style="color: var(--color-text-dark)">
+            Gerenciar Pessoas
+          </h4>
+          <p class="text-xs mt-1" style="color: var(--color-text-light)">
+            Edite perfis de atletas e staff
+          </p>
+        </div>
+      </button>
+      <!-- Card 4 -->
+      <button
+        class="group flex flex-col items-start gap-4 p-5 rounded-xl border transition-all text-left"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <div
+          class="size-12 rounded-lg flex items-center justify-center transition-colors"
+          style="background: var(--overlay-primary-light); color: var(--color-primary)"
+        >
+          <span class="material-symbols-outlined text-[28px]">visibility</span>
+        </div>
+        <div>
+          <h4 class="font-bold transition-colors" style="color: var(--color-text-dark)">
+            Campeonatos Ativos
+          </h4>
+          <p class="text-xs mt-1" style="color: var(--color-text-light)">
+            Acompanhe torneios em andamento
+          </p>
+        </div>
+      </button>
+    </div>
+  </section>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Championships Section (2 cols) -->
+    <section class="lg:col-span-2 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold flex items-center gap-2" style="color: var(--color-secondary)">
+          <span class="material-symbols-outlined" style="color: var(--color-gray-400)"
+            >emoji_events</span
+          >
+          Campeonatos Recentes
+        </h2>
+        <a class="text-sm font-bold hover:underline" style="color: var(--color-primary)" href="#"
+          >Ver todos</a
+        >
+      </div>
+      <div
+        class="rounded-xl overflow-hidden shadow-sm"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                style="
+                  background: var(--color-gray-100);
+                  border-bottom: 1px solid var(--color-border-light);
+                "
+              >
+                <th
+                  class="py-3 px-4 text-xs font-semibold uppercase tracking-wider"
+                  style="color: var(--color-gray-500)"
+                >
+                  Nome
+                </th>
+                <th
+                  class="py-3 px-4 text-xs font-semibold uppercase tracking-wider"
+                  style="color: var(--color-gray-500)"
+                >
+                  Data
+                </th>
+                <th
+                  class="py-3 px-4 text-xs font-semibold uppercase tracking-wider"
+                  style="color: var(--color-gray-500)"
+                >
+                  Status
+                </th>
+                <th
+                  class="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-right"
+                  style="color: var(--color-gray-500)"
+                >
+                  Ação
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Item 1: Draft -->
+              <tr
+                class="group transition-colors"
+                style="border-bottom: 1px solid var(--color-border-light)"
+              >
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="size-8 rounded flex items-center justify-center"
+                      style="background: var(--color-gray-100); color: var(--color-gray-400)"
+                    >
+                      <span class="material-symbols-outlined text-sm">edit_note</span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-bold" style="color: var(--color-text-dark)">
+                        Copa Verão 2024
+                      </p>
+                      <p class="text-xs" style="color: var(--color-gray-500)">Tênis • Masculino</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-sm" style="color: var(--color-gray-600)">Dez 20, 2024</td>
+                <td class="py-3 px-4">
+                  <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    style="
+                      background: var(--color-gray-100);
+                      color: var(--color-gray-600);
+                      border: 1px solid var(--color-gray-200);
+                    "
+                    >Rascunho</span
+                  >
+                </td>
+                <td class="py-3 px-4 text-right">
+                  <button class="transition-colors p-1" style="color: var(--color-gray-400)">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                </td>
+              </tr>
+              <!-- Item 2: Active -->
+              <tr
+                class="group transition-colors"
+                style="border-bottom: 1px solid var(--color-border-light)"
+              >
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="size-8 rounded flex items-center justify-center"
+                      style="background: var(--color-accent-green); color: var(--color-white)"
+                    >
+                      <span class="material-symbols-outlined text-sm">play_arrow</span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-bold" style="color: var(--color-text-dark)">
+                        Open Paulista Juvenil
+                      </p>
+                      <p class="text-xs" style="color: var(--color-gray-500)">Tênis • Misto</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-sm" style="color: var(--color-gray-600)">
+                  Out 15 - Out 20
+                </td>
+                <td class="py-3 px-4">
+                  <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    style="
+                      background: var(--color-accent-green);
+                      color: var(--color-white);
+                      border: 1px solid var(--color-accent-green);
+                    "
+                    >Ativo</span
+                  >
+                </td>
+                <td class="py-3 px-4 text-right">
+                  <button class="transition-colors p-1" style="color: var(--color-primary)">
+                    <span class="material-symbols-outlined">visibility</span>
+                  </button>
+                </td>
+              </tr>
+              <!-- Item 3: Finished -->
+              <tr class="group transition-colors">
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="size-8 rounded flex items-center justify-center"
+                      style="background: var(--color-info); color: var(--color-white)"
+                    >
+                      <span class="material-symbols-outlined text-sm">emoji_events</span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-bold" style="color: var(--color-text-dark)">
+                        Torneio de Inverno
+                      </p>
+                      <p class="text-xs" style="color: var(--color-gray-500)">Tênis • Feminino</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-sm" style="color: var(--color-gray-600)">Jul 10, 2024</td>
+                <td class="py-3 px-4">
+                  <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    style="
+                      background: var(--color-info);
+                      color: var(--color-white);
+                      border: 1px solid var(--color-info);
+                    "
+                    >Finalizado</span
+                  >
+                </td>
+                <td class="py-3 px-4 text-right">
+                  <button class="transition-colors p-1" style="color: var(--color-info)">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="p-3 text-center"
+          style="background: var(--color-gray-100); border-top: 1px solid var(--color-border-light)"
+        >
+          <button
+            class="text-xs font-bold flex items-center justify-center gap-1 w-full"
+            style="color: var(--color-gray-500)"
+          >
+            Ver histórico completo
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- Right Column: Users & People -->
+    <div class="flex flex-col gap-6">
+      <!-- Users & Invites Section -->
+      <section
+        class="rounded-xl p-5 shadow-sm flex flex-col gap-4"
+        style="background: var(--color-white); border: 1px solid var(--color-border-light)"
+      >
+        <div class="flex items-center justify-between">
+          <h2
+            class="text-lg font-bold flex items-center gap-2"
+            style="color: var(--color-secondary)"
+          >
+            <span class="material-symbols-outlined" style="color: var(--color-gray-400)"
+              >group</span
+            >
+            Usuários
+          </h2>
+          <button
+            style="
+              color: var(--color-primary);
+              background: var(--overlay-primary-light);
+              border-radius: 0.5rem;
+              padding: 0.25rem;
+            "
+          >
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div
+            class="p-3 rounded-lg border"
+            style="background: var(--color-gray-100); border-color: var(--color-gray-200)"
+          >
+            <p class="text-xs font-medium" style="color: var(--color-gray-500)">Ativos</p>
+            <p class="text-2xl font-black" style="color: var(--color-text-dark)">12</p>
           </div>
           <div
-            class="size-10 rounded-full bg-center bg-cover border-2 border-primary cursor-pointer"
-            [style.background-image]="'url(' + userAvatar() + ')'"
-            [attr.alt]="'Federation administrator profile picture'"
-          ></div>
+            class="p-3 rounded-lg border"
+            style="
+              background: var(--color-alert-yellow-bg);
+              border-color: var(--color-alert-yellow-border);
+            "
+          >
+            <p class="text-xs font-medium" style="color: var(--color-alert-yellow-text)">
+              Pendentes
+            </p>
+            <p class="text-2xl font-black" style="color: var(--color-alert-yellow-text)">3</p>
+          </div>
         </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-    <!-- Profile Header & Season Status -->
-    <section class="bg-white dark:bg-[#1A2C38] rounded-2xl p-6 shadow-sm border relative overflow-hidden group" style="border-color: rgba(229, 231, 235, 0.5);">
-      <div class="absolute top-0 right-0 w-64 h-full bg-gradient-to-l from-primary/10 to-transparent pointer-events-none"></div>
-      <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between relative z-10">
-        <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left w-full md:w-auto">
-          <div class="size-24 rounded-full bg-white dark:bg-secondary border-4 border-background-light dark:border-opacity-10 shadow-md p-1 flex-shrink-0">
+        <div class="space-y-3 mt-1">
+          <div
+            class="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-pointer"
+            style="background: var(--color-gray-100)"
+          >
             <div
-              class="w-full h-full rounded-full bg-cover bg-center"
-              [style.background-image]="'url(' + federationLogo() + ')'"
-              [attr.alt]="'Federation official logo'"
-            ></div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-secondary dark:text-white">{{ federationName() }}</h2>
-            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-              <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 flex items-center gap-1">
-                <span class="size-2 rounded-full bg-primary animate-pulse"></span>
-                Status: {{ isActive() ? 'Ativa' : 'Inativa' }}
-              </span>
-              <span class="px-3 py-1 rounded-full dark:text-blue-300 text-xs font-bold border" style="background-color: rgba(31, 58, 95, 0.1); color: var(--color-info); border-color: rgba(31, 58, 95, 0.2);">
-                Plano {{ planType() }}
-              </span>
-            </div>
-            <p class="text-gray-500 text-sm mt-1">Temporada {{ season() }}</p>
-          </div>
-        </div>
-        <div class="flex flex-wrap gap-3 w-full md:w-auto justify-center md:justify-end">
-          <button
-            (click)="onCreateChampionship()"
-            class="flex items-center justify-center gap-2 h-11 px-6 rounded-full text-white font-bold text-sm transition-all shadow-lg active:scale-95 w-full sm:w-auto"
-            style="background-color: var(--color-primary); box-shadow: 0 10px 15px -3px rgba(30, 128, 79, 0.3);"
-            (mouseenter)="onButtonHover($event, true)"
-            (mouseleave)="onButtonHover($event, false)"
-          >
-            <span class="material-symbols-outlined text-[20px]">add_circle</span>
-            Novo Campeonato
-          </button>
-          <button
-            (click)="onManageUsers()"
-            class="flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-white dark:bg-secondary text-secondary dark:text-white font-medium text-sm transition-all active:scale-95 w-full sm:w-auto border"
-            style="border-color: var(--color-neutral-border);"
-            (mouseenter)="onSecondaryButtonHover($event, true)"
-            (mouseleave)="onSecondaryButtonHover($event, false)"
-          >
-            <span class="material-symbols-outlined text-[20px]">group</span>
-            Gerenciar Usuários
-          </button>
-          <button
-            (click)="onSettings()"
-            class="flex items-center justify-center size-11 rounded-full bg-white dark:bg-secondary text-gray-500 transition-all active:scale-95 border"
-            style="border-color: var(--color-neutral-border);"
-            (mouseenter)="onSecondaryButtonHover($event, true)"
-            (mouseleave)="onSecondaryButtonHover($event, false)"
-            title="Configurações"
-          >
-            <span class="material-symbols-outlined">settings</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- KPI Grid -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      @for (kpi of kpis(); track kpi.label) {
-        <div class="bg-white dark:bg-[#1A2C38] rounded-xl p-5 border transition-colors shadow-sm flex flex-col justify-between h-32 group cursor-default hover:border-primary/50" style="border-color: rgba(229, 231, 235, 0.6);">
-          <div class="flex justify-between items-start">
-            <span class="p-2 rounded-lg bg-green-50 dark:bg-green-900/20 text-primary group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined">{{ kpi.icon }}</span>
-            </span>
-            <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ kpi.label }}</span>
-          </div>
-          <div>
-            <span class="text-3xl font-bold text-secondary dark:text-white tracking-tight">{{ kpi.value }}</span>
-            <p class="text-sm text-gray-500 font-medium">{{ kpi.description }}</p>
-          </div>
-        </div>
-      }
-    </section>
-
-    <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Championship List (2/3 width) -->
-      <div class="lg:col-span-2 space-y-6">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xl font-bold text-secondary dark:text-white flex items-center gap-2">
-            Campeonatos
-            <span class="text-xs font-normal text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">Recentes</span>
-          </h3>
-          <a class="text-sm font-bold hover:underline" href="#" style="color: var(--color-primary);" (mouseenter)="onLinkHover($event, true)" (mouseleave)="onLinkHover($event, false)">Ver todos</a>
-        </div>
-        <div class="space-y-4">
-          @for (championship of championships(); track championship.id) {
-            <div
-              class="bg-white dark:bg-[#1A2C38] rounded-2xl p-5 border-l-4 border-primary shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-5 items-center sm:items-stretch"
-              [class.opacity-75]="championship.status === 'finished'"
-              [class.hover:opacity-100]="championship.status === 'finished'"
+              class="size-8 rounded-full flex items-center justify-center text-xs font-bold"
+              style="background: var(--color-gray-200); color: var(--color-gray-600)"
             >
-              <div
-                class="size-16 rounded-xl bg-gray-100 dark:bg-gray-700 flex-shrink-0 bg-cover bg-center"
-                [class.grayscale]="championship.status === 'finished'"
-                [style.background-image]="'url(' + championship.icon + ')'"
-                [attr.alt]="'Championship icon'"
-              ></div>
-              <div class="flex-1 flex flex-col justify-center w-full">
-                <div class="flex justify-between items-start mb-1">
-                  <h4 class="text-lg font-bold text-secondary dark:text-white">{{ championship.name }}</h4>
-                  <span [ngClass]="getStatusBadgeClass(championship.status)">
-                    {{ getStatusLabel(championship.status) }}
-                  </span>
-                </div>
-                <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500">
-                  <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">sports_soccer</span>
-                    {{ championship.modality }}
-                  </span>
-                  <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
-                    {{ championship.format }}
-                  </span>
-                  @if (championship.teams > 0) {
-                    <span class="flex items-center gap-1">
-                      <span class="material-symbols-outlined text-[16px]">groups</span>
-                      {{ championship.teams }} Times
-                    </span>
-                  }
-                </div>
-              </div>
-              <div class="flex flex-col justify-center w-full sm:w-auto">
-                <button
-                  (click)="onManageChampionship(championship)"
-                  class="w-full sm:w-auto px-5 py-2 rounded-full bg-background-light dark:bg-background-dark hover:bg-gray-200 dark:hover:bg-opacity-20 text-secondary dark:text-white text-sm font-bold transition-colors"
-                >
-                  {{ getChampionshipButtonText(championship.status) }}
-                </button>
-              </div>
+              JD
             </div>
-          }
-        </div>
-      </div>
-
-      <!-- Shortcuts & Alerts (1/3 width) -->
-      <div class="lg:col-span-1 space-y-6">
-        <!-- Operational Shortcuts -->
-        <div class="bg-white dark:bg-[#1A2C38] rounded-2xl p-6 shadow-sm border border-neutral-border/50">
-          <h3 class="text-lg font-bold text-secondary dark:text-white mb-4">Atalhos Operacionais</h3>
-          <ul class="space-y-3">
-            <li>
-              <a class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group" href="#">
-                <span class="size-10 rounded-full bg-blue-50 dark:bg-blue-900/20 text-info dark:text-blue-300 flex items-center justify-center group-hover:bg-info group-hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">calendar_month</span>
-                </span>
-                <div class="flex-1">
-                  <p class="text-sm font-bold text-secondary dark:text-white">Jogos de hoje</p>
-                  <p class="text-xs text-gray-500">Visualizar grade</p>
-                </div>
-                <span class="material-symbols-outlined text-gray-400 group-hover:text-primary">chevron_right</span>
-              </a>
-            </li>
-            <li>
-              <a class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group" href="#">
-                <span class="size-10 rounded-full bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 flex items-center justify-center group-hover:bg-yellow-500 group-hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">mail</span>
-                </span>
-                <div class="flex-1">
-                  <p class="text-sm font-bold text-secondary dark:text-white">Convites pendentes</p>
-                  <p class="text-xs text-gray-500">4 aguardando aprovação</p>
-                </div>
-                <span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">4</span>
-              </a>
-            </li>
-            <li>
-              <a class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group" href="#">
-                <span class="size-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center group-hover:bg-gray-600 group-hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">assignment_ind</span>
-                </span>
-                <div class="flex-1">
-                  <p class="text-sm font-bold text-secondary dark:text-white">Escalações</p>
-                  <p class="text-xs text-gray-500">Validar súmulas</p>
-                </div>
-                <span class="material-symbols-outlined text-gray-400 group-hover:text-primary">chevron_right</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Alert Box -->
-        <div class="bg-red-50 dark:bg-red-900/10 rounded-2xl p-6 border border-red-100 dark:border-red-900/30">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="material-symbols-outlined" style="color: var(--color-danger);">warning</span>
-            <h3 class="text-lg font-bold" style="color: var(--color-danger);">Atenção Necessária</h3>
-          </div>
-          <div class="space-y-3">
-            <div class="flex gap-3 items-start bg-white dark:bg-red-950/20 p-3 rounded-xl border border-red-100 dark:border-red-900/20 shadow-sm">
-              <span class="mt-0.5 material-symbols-outlined text-[18px]" style="color: var(--color-danger);">schedule</span>
-              <div>
-                <p class="text-sm font-bold text-secondary dark:text-red-100">Conflito de Horário</p>
-                <p class="text-xs text-gray-600 dark:text-red-200/70 mt-0.5">2 jogos na Arena A no mesmo horário (14/05).</p>
-                <button class="text-xs font-bold mt-2 hover:underline" style="color: var(--color-danger);">Resolver agora</button>
-              </div>
+            <div class="flex-1">
+              <p class="text-sm font-bold" style="color: var(--color-text-dark)">João Doria</p>
+              <p class="text-xs" style="color: var(--color-gray-500)">Convite enviado há 2d</p>
             </div>
+            <span
+              class="text-xs px-2 py-0.5 rounded-full"
+              style="
+                background: var(--color-alert-yellow-bg);
+                color: var(--color-alert-yellow-text);
+              "
+              >Pendente</span
+            >
           </div>
         </div>
-      </div>
+        <button
+          class="w-full mt-2 py-2 rounded-lg text-sm font-bold transition-colors"
+          style="
+            color: var(--color-gray-700);
+            border: 1px solid var(--color-border-light);
+            background: var(--color-white);
+          "
+        >
+          Gerenciar Permissões
+        </button>
+      </section>
+      <!-- Pessoas Section -->
+      <section
+        class="relative overflow-hidden rounded-xl border-2 border-dashed p-6 flex flex-col items-center text-center gap-3"
+        style="border-color: var(--color-border-light); background: var(--color-gray-100)"
+      >
+        <div
+          class="absolute inset-0 opacity-10"
+          style="
+            background: url('https://www.transparenttextures.com/patterns/diagonal-stripes.png');
+          "
+        ></div>
+        <div class="relative z-10 flex flex-col items-center gap-3">
+          <div
+            class="size-12 rounded-full flex items-center justify-center"
+            style="background: var(--color-gray-200); color: var(--color-gray-400)"
+          >
+            <span class="material-symbols-outlined text-2xl">person_search</span>
+          </div>
+          <h3 class="text-base font-bold" style="color: var(--color-text-dark)">Módulo Pessoas</h3>
+          <p class="text-sm" style="color: var(--color-gray-500)">
+            Gerencie atletas, árbitros e staff em breve. Estamos preparando uma experiência
+            completa.
+          </p>
+          <span
+            class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+            style="background: var(--color-gray-200); color: var(--color-gray-600)"
+            >Em Breve</span
+          >
+        </div>
+      </section>
     </div>
-  </main>
+  </div>
 </div>
-

@@ -1,0 +1,70 @@
+/* Sidebar Component Styles */
+
+:host {
+  display: contents;
+}
+
+/* Navigation link default state */
+.nav-link {
+  color: var(--color-text-dark);
+}
+
+.nav-link:hover {
+  background-color: var(--color-gray-100);
+}
+
+.nav-link .material-symbols-outlined {
+  color: var(--color-gray-500);
+}
+
+.nav-link:hover .material-symbols-outlined {
+  color: var(--color-text-dark);
+}
+
+/* Active navigation link */
+.active-nav-link {
+  background-color: rgba(30, 127, 79, 0.1);
+  color: var(--color-primary-hover);
+}
+
+.active-nav-link .material-symbols-outlined {
+  color: var(--color-primary-hover);
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Icon filled state */
+.icon-filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  aside {
+    background-color: var(--color-secondary-darker) !important;
+    border-color: var(--color-gray-700) !important;
+  }
+
+  .nav-link {
+    color: var(--color-gray-300);
+  }
+
+  .nav-link:hover {
+    background-color: var(--color-gray-700);
+  }
+
+  .nav-link .material-symbols-outlined {
+    color: var(--color-gray-500);
+  }
+
+  .nav-link:hover .material-symbols-outlined {
+    color: white;
+  }
+
+  .active-nav-link {
+    color: var(--color-primary);
+  }
+
+  .active-nav-link .material-symbols-outlined {
+    color: var(--color-primary);
+  }
+}

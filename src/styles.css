@@ -128,11 +128,14 @@
     overflow-x: hidden;
   }
 
+  router-outlet + app-layout {
+    height: 100vh !important;
+    overflow: hidden !important;
+  }
+
   router-outlet + app-federation-dashboard {
-    height: auto !important;
-    min-height: 100vh;
-    overflow-y: auto !important;
-    overflow-x: hidden;
+    display: block;
+    width: 100%;
   }
 }
 

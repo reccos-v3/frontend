@@ -23,16 +23,57 @@ export const routes: Routes = [
       import('./pages/login/reset-password/reset-password').then((m) => m.ResetPassword),
   },
   {
-    path: 'federation-dashboard',
-    loadComponent: () =>
-      import('./pages/federations/components/federation-dashboard').then(
-        (m) => m.FederationDashboard
-      ),
-    canActivate: [authGuard], // Protege a rota exigindo autenticação
+    path: '',
+    loadComponent: () => import('./components/layout/layout.component').then((m) => m.LayoutComponent),
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'federation-dashboard',
+        loadComponent: () =>
+          import('./pages/federations/components/federation-dashboard').then(
+            (m) => m.FederationDashboard
+          ),
+      },
+      {
+        path: 'championships',
+        loadComponent: () =>
+          import('./pages/federations/components/federation-dashboard').then(
+            (m) => m.FederationDashboard
+          ),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./pages/federations/components/federation-dashboard').then(
+            (m) => m.FederationDashboard
+          ),
+      },
+      {
+        path: 'people',
+        loadComponent: () =>
+          import('./pages/federations/components/federation-dashboard').then(
+            (m) => m.FederationDashboard
+          ),
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./pages/federations/components/federation-dashboard').then(
+            (m) => m.FederationDashboard
+          ),
+      },
+      {
+        path: 'reports',
+        loadComponent: () =>
+          import('./pages/federations/components/federation-dashboard').then(
+            (m) => m.FederationDashboard
+          ),
+      },
+    ],
   },
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/federation-dashboard',
     pathMatch: 'full',
   },
   // Exemplo de rota protegida por role (descomente e ajuste conforme necessário):
