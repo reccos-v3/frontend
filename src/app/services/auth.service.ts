@@ -4,7 +4,7 @@ import { Observable, tap, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { TokenService } from './token.service';
-import { ILoginRequest, IAuth } from '../interfaces/auth.interface';
+import { ILoginRequest, IAuth, IValidateResetTokenResponse } from '../interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +40,22 @@ export class AuthService {
         return throwError(() => error);
       })
     );
+  }
+
+  /**
+   * Valida o token de recuperação de senha
+   */
+  validatePasswordResetToken(token: string): Observable<IValidateResetTokenResponse> {
+    return this.http
+      .get<IValidateResetTokenResponse>(
+        `${environment.apiUrl}/auth/password/reset/${token}/validate`
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Erro na validação do token:', error);
+          return throwError(() => error);
+        })
+      );
   }
 
   /**

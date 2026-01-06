@@ -1,7 +1,9 @@
 import { Component, signal, OnInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { IValidateResetTokenResponse } from '../../../interfaces/auth.interface';
 
 interface PasswordStrength {
   level: number;
@@ -20,11 +22,19 @@ interface HeroMessage {
   styleUrl: './reset-password.css',
 })
 export class ResetPassword implements OnInit, OnDestroy {
+  private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   resetForm: FormGroup;
   showPassword = signal(false);
   showConfirmPassword = signal(false);
   passwordStrength = signal<PasswordStrength>({ level: 0, isValid: false });
   passwordsMatch = signal(true);
+
+  // Estado do token
+  tokenStatus = signal<'validating' | 'valid' | 'invalid'>('validating');
+  token = signal<string | null>(null);
 
   // Validação de requisitos
   hasMinLength = signal(false);
@@ -66,10 +76,38 @@ export class ResetPassword implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Verificar token na URL
+    const token = this.route.snapshot.queryParamMap.get('token');
+    console.log('token', token);
+
+    if (token) {
+      this.token.set(token);
+      this.validateToken(token);
+    } else {
+      this.tokenStatus.set('invalid');
+    }
+
     // Auto-play do carrossel a cada 5 segundos (apenas no browser)
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
     }
+  }
+
+  validateToken(token: string): void {
+    this.tokenStatus.set('validating');
+
+    this.authService.validatePasswordResetToken(token).subscribe({
+      next: (response: IValidateResetTokenResponse) => {
+        if (response.status === 'VALID') {
+          this.tokenStatus.set('valid');
+        } else {
+          this.tokenStatus.set('invalid');
+        }
+      },
+      error: () => {
+        this.tokenStatus.set('invalid');
+      },
+    });
   }
 
   ngOnDestroy(): void {

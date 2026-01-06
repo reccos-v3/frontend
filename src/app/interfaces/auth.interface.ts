@@ -17,3 +17,11 @@ export interface IAuth {
   role: string;
 }
 
+/**
+ * Interface para resposta de validação de token de reset de senha
+ * Retornada pelo endpoint auth/password/reset/{token}/validate
+ */
+export interface IValidateResetTokenResponse {
+  status: string;
+  email: string | null;
+}
