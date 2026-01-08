@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,7 +14,7 @@ export class ActionCardComponent {
   icon = input.required<string>();
   color = input<string>('primary'); // Default to primary
 
-  protected get themeClasses() {
+  themeClasses = computed(() => {
     const color = this.color();
     const themes: Record<string, any> = {
       primary: {
@@ -50,5 +50,5 @@ export class ActionCardComponent {
       },
     };
     return themes[color] || themes['primary'];
-  }
+  });
 }

@@ -36,7 +36,7 @@ export class FederationDashboard {
       label: 'Convidar Usuários',
       icon: 'person_add',
       description: 'Adicione novos administradores',
-      color: 'blue',
+      color: 'secondary',
     },
     {
       label: 'Gerenciar Pessoas',
