@@ -24,48 +24,49 @@ export const routes: Routes = [
   },
   {
     path: '',
-    loadComponent: () => import('./components/layout/layout.component').then((m) => m.LayoutComponent),
+    loadComponent: () =>
+      import('./components/layout/layout.component').then((m) => m.LayoutComponent),
     canActivate: [authGuard],
     children: [
       {
         path: 'federation-dashboard',
         loadComponent: () =>
-          import('./pages/federations/components/federation-dashboard').then(
+          import('./pages/federations/federation-dashboard/federation-dashboard').then(
             (m) => m.FederationDashboard
           ),
       },
       {
         path: 'championships',
         loadComponent: () =>
-          import('./pages/federations/components/federation-dashboard').then(
+          import('./pages/federations/federation-dashboard/federation-dashboard').then(
             (m) => m.FederationDashboard
           ),
       },
       {
         path: 'users',
         loadComponent: () =>
-          import('./pages/federations/components/federation-dashboard').then(
+          import('./pages/federations/federation-dashboard/federation-dashboard').then(
             (m) => m.FederationDashboard
           ),
       },
       {
         path: 'people',
         loadComponent: () =>
-          import('./pages/federations/components/federation-dashboard').then(
+          import('./pages/federations/federation-dashboard/federation-dashboard').then(
             (m) => m.FederationDashboard
           ),
       },
       {
         path: 'settings',
         loadComponent: () =>
-          import('./pages/federations/components/federation-dashboard').then(
+          import('./pages/federations/federation-dashboard/federation-dashboard').then(
             (m) => m.FederationDashboard
           ),
       },
       {
         path: 'reports',
         loadComponent: () =>
-          import('./pages/federations/components/federation-dashboard').then(
+          import('./pages/federations/federation-dashboard/federation-dashboard').then(
             (m) => m.FederationDashboard
           ),
       },

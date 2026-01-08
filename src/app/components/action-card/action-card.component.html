@@ -1,0 +1,20 @@
+<div
+  class="group bg-white h-full flex flex-col items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 text-left"
+  [class]="themeClasses.container"
+>
+  <div
+    class="size-12 rounded-lg flex items-center justify-center transition-colors"
+    [class]="themeClasses.iconBg + ' ' + themeClasses.iconColor"
+  >
+    <span class="material-symbols-outlined text-[28px]">{{ icon() }}</span>
+  </div>
+  <div>
+    <h4
+      class="font-bold text-text-main dark:text-white transition-colors"
+      [class]="themeClasses.titleColor"
+    >
+      {{ title() }}
+    </h4>
+    <p class="text-xs text-text-secondary mt-1">{{ description() }}</p>
+  </div>
+</div>

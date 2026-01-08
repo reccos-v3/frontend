@@ -1,0 +1,167 @@
+<div class="max-w-[1200px] mx-auto p-6 lg:px-10 lg:pb-10 py-4 flex flex-col gap-8">
+  <!-- Federation Header -->
+  <section
+    class="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-all hover:shadow-md"
+  >
+    <!-- Subtle decorative background gradient -->
+    <div
+      class="absolute top-0 right-0 p-12 opacity-50 bg-gradient-to-br from-primary/5 to-transparent blur-2xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none"
+    ></div>
+
+    <div
+      class="relative flex flex-col md:flex-row gap-6 justify-between items-start md:items-center z-10"
+    >
+      <div class="flex items-center gap-5">
+        <!-- Logo Container -->
+        <div
+          class="size-20 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center p-3 shadow-sm"
+        >
+          <img
+            alt="Logo"
+            class="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal opacity-90"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrgzo9hPrjutjPsxrUPM1NVbpE_O3k2DOELP4d3RVUlzMRf1ukO-p1mdFdYclsBi9_Rj4hkbIEgUljz0uqn78IQ3svsqBdiheqK4R7AZmF7w7nJ8ecHf_wNisu84vmj40nz4H8esHqJaNOm2IDMthXreQV7D7r3qDbEMvlUdBuGnW5Mouo4gbpbK35yy_bfyItm94Wjrpp1XC4afVUVmVaw5-vKw13owagVfhajmURfJjLsrthwKFvIgKgFP0dfwJCE-RgB6uMJB0"
+          />
+        </div>
+
+        <!-- Info -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-3 flex-wrap">
+            <h1
+              class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white"
+            >
+              Federação Reccos de Futebol
+            </h1>
+            <span
+              class="px-2.5 py-1 rounded-full text-xs font-bold border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 uppercase tracking-wide"
+            >
+              Ativa
+            </span>
+          </div>
+
+          <div
+            class="flex items-center gap-6 text-sm font-medium text-slate-500 dark:text-slate-400"
+          >
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[20px] text-amber-500">trophy</span>
+              <span>12 Campeonatos</span>
+            </div>
+            <div class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[20px] text-blue-500">group</span>
+              <span>45 Usuários</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button
+        class="shrink-0 flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary text-slate-700 dark:text-slate-200 rounded-xl text-sm font-bold transition-all shadow-sm hover:shadow active:scale-95"
+      >
+        <span class="material-symbols-outlined text-[20px]">settings</span>
+        Configurações
+      </button>
+    </div>
+  </section>
+  <!-- Alerts & Pendências -->
+  <section class="flex flex-col gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Alert Item 1 -->
+      <div
+        class="flex items-start gap-4 p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30"
+      >
+        <div
+          class="p-2 bg-amber-100 dark:bg-amber-800/40 text-amber-700 dark:text-amber-400 rounded-lg shrink-0"
+        >
+          <span class="material-symbols-outlined icon-filled">edit_document</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-bold text-sm text-amber-900 dark:text-amber-100">
+            Campeonatos em rascunho
+          </h4>
+          <p class="text-sm text-amber-700 dark:text-amber-300/80">
+            Você tem 2 campeonatos criados mas não publicados. Finalize a configuração para
+            divulgá-los.
+          </p>
+          <a
+            class="text-xs font-bold text-amber-800 dark:text-amber-400 hover:underline mt-1"
+            href="#"
+            >Revisar rascunhos</a
+          >
+        </div>
+      </div>
+      <!-- Alert Item 2 -->
+      <div
+        class="flex items-start gap-4 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30"
+      >
+        <div
+          class="p-2 bg-blue-100 dark:bg-blue-800/40 text-blue-700 dark:text-blue-400 rounded-lg shrink-0"
+        >
+          <span class="material-symbols-outlined icon-filled">mail</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-bold text-sm text-blue-900 dark:text-blue-100">Convites Pendentes</h4>
+          <p class="text-sm text-blue-700 dark:text-blue-300/80">
+            Existem 3 convites de administradores aguardando aceitação há mais de 48 horas.
+          </p>
+          <a
+            class="text-xs font-bold text-blue-800 dark:text-blue-400 hover:underline mt-1"
+            href="#"
+            >Gerenciar convites</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Quick Actions -->
+  <section class="flex flex-col gap-4">
+    <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+      <span class="material-symbols-outlined text-slate-400">emoji_events</span>
+      Ações rápidas
+    </h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      @for (action of quickActions(); track action.label) {
+      <button class="text-left w-full h-full">
+        <app-action-card
+          [title]="action.label"
+          [description]="action.description"
+          [icon]="action.icon"
+          [color]="action.color || 'primary'"
+        ></app-action-card>
+      </button>
+      }
+    </div>
+  </section>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <app-recent-championships class="lg:col-span-2" />
+    <div class="flex flex-col gap-6">
+      <!-- <app-dash-recent-users class="flex flex-col" /> -->
+      <app-operational-shortcuts />
+      <!-- Users & Invites Section -->
+      <!-- Pessoas Section -->
+      <!-- <section
+        class="relative overflow-hidden rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/30 p-6 flex flex-col items-center text-center gap-3"
+      >
+        <div
+          class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-10"
+        ></div>
+        <div class="relative z-10 flex flex-col items-center gap-3">
+          <div
+            class="size-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400"
+          >
+            <span class="material-symbols-outlined text-2xl">person_search</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-800 dark:text-slate-200">Módulo Pessoas</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Gerencie atletas, árbitros e staff em breve. Estamos preparando uma experiência
+            completa.
+          </p>
+          <span
+            class="inline-block mt-2 px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider"
+            >Em Breve</span
+          >
+        </div>
+      </section> -->
+    </div>
+  </div>
+</div>
