@@ -42,11 +42,7 @@
           [routerLinkActiveOptions]="{ exact: false }"
           class="flex items-center gap-3 px-3 py-3 rounded-xl transition-colors group nav-link"
         >
-          <span
-            class="material-symbols-outlined"
-            [class.icon-filled]="item.active"
-            >{{ item.icon }}</span
-          >
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
           <span class="font-medium text-sm">{{ item.label }}</span>
         </a>
       }

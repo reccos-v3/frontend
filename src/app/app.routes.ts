@@ -38,8 +38,15 @@ export const routes: Routes = [
       {
         path: 'championships',
         loadComponent: () =>
-          import('./pages/federations/federation-dashboard/federation-dashboard').then(
-            (m) => m.FederationDashboard
+          import('./pages/championships/championship-list/championship-list').then(
+            (m) => m.ChampionshipList
+          ),
+      },
+      {
+        path: 'championships/create',
+        loadComponent: () =>
+          import('./pages/championships/championship-create/championship-create').then(
+            (m) => m.ChampionshipCreate
           ),
       },
       {
