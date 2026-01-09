@@ -39,7 +39,6 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) =
 
   // Se não tiver o role necessário, redireciona para dashboard ou página de acesso negado
   console.warn('Acesso negado: role insuficiente');
-  router.navigate(['/federation-dashboard']); // Ou criar uma página de acesso negado
+  router.navigate(['/admin']); // Ou criar uma página de acesso negado
   return false;
 };
-

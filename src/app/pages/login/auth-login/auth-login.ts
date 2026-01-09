@@ -28,7 +28,7 @@ export class AuthLogin {
 
     // Verifica se já está autenticado ao carregar o componente
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/federation-dashboard']);
+      this.router.navigate(['/admin']);
     }
   }
 
@@ -52,7 +52,7 @@ export class AuthLogin {
     this.authService.login(credentials).subscribe({
       next: () => {
         // Login bem-sucedido, redireciona para o dashboard
-        this.router.navigate(['/federation-dashboard']);
+        this.router.navigate(['/admin']);
       },
       error: (error) => {
         this.isLoading = false;

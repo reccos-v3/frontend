@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 export interface RecentChampionship {
   id: number;
@@ -19,7 +20,7 @@ export interface RecentChampionship {
 @Component({
   selector: 'app-recent-championships',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './recent-championships.component.html',
   styleUrl: './recent-championships.component.css',
 })

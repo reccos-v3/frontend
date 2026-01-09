@@ -35,32 +35,32 @@ export class SidebarComponent implements OnInit, OnDestroy {
     {
       label: 'Dashboard',
       icon: 'dashboard',
-      route: '/federation-dashboard',
+      route: '/admin',
     },
     {
       label: 'Campeonatos',
       icon: 'trophy',
-      route: '/championships',
+      route: '/admin/championships',
     },
     {
       label: 'Usuários & Convites',
       icon: 'group',
-      route: '/users',
+      route: 'users',
     },
     {
       label: 'Pessoas',
       icon: 'badge',
-      route: '/people',
+      route: 'people',
     },
     {
       label: 'Configurações',
       icon: 'settings',
-      route: '/settings',
+      route: 'settings',
     },
     {
       label: 'Relatórios',
       icon: 'bar_chart',
-      route: '/reports',
+      route: 'reports',
       disabled: true,
       badge: 'Em breve',
     },
