@@ -27,6 +27,13 @@ export const routes: Routes = [
         path: 'championships',
         children: championshipsRoutes,
       },
+      {
+        path: 'invitations',
+        loadComponent: () =>
+          import('./pages/invitations/manage-invitations/manage-invitations').then(
+            (m) => m.ManageInvitations
+          ),
+      },
     ],
   },
 

@@ -7,7 +7,10 @@ import {
   IValidateInvitationResponse,
   IActivateInvitationRequest,
   IActivateInvitationResponse,
+  ISendInvitationRequest,
+  ISendInvitationResponse,
 } from '../components/interfaces/invitation.interface';
+import { IAuth } from '../components/interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +48,21 @@ export class InvitationService {
       .pipe(
         catchError((error) => {
           console.error('Erro ao ativar convite:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  sendInvitation(request: ISendInvitationRequest): Observable<ISendInvitationResponse> {
+    const federationId: IAuth = JSON.parse(localStorage.getItem('auth') || '{}').federationId;
+    return this.http
+      .post<ISendInvitationResponse>(
+        `${environment.apiUrl}/federations/${federationId}/invitations`,
+        request
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao enviar convite:', error);
           return throwError(() => error);
         })
       );

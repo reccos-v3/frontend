@@ -35,3 +35,14 @@ export interface IActivateInvitationResponse {
   email: string;
   role: string;
 }
+
+export interface ISendInvitationRequest {
+  email: string;
+  role: string;
+}
+
+export interface ISendInvitationResponse {
+  invitationToken: string;
+  invitationCode: string;
+  expiresAt: string;
+}

@@ -45,7 +45,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     {
       label: 'Usuários & Convites',
       icon: 'group',
-      route: 'users',
+      route: '/admin/invitations',
     },
     {
       label: 'Pessoas',
