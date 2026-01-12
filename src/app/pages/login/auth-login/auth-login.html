@@ -126,16 +126,21 @@
         </label>
 
         <!-- Error Message -->
-        <div *ngIf="errorMessage" class="p-4 bg-red-50 border border-red-200 rounded-xl">
+        @if (errorMessage) {
+        <div class="p-4 bg-red-50 border border-red-200 rounded-xl">
           <p class="text-sm text-red-600">{{ errorMessage }}</p>
         </div>
+        }
 
         <!-- Submit Button -->
         <button class="submit-button" type="submit" [disabled]="loginForm.invalid || isLoading">
-          <span *ngIf="!isLoading">Entrar na Plataforma</span>
-          <span *ngIf="isLoading">Entrando...</span>
-          <span *ngIf="!isLoading" class="material-symbols-outlined text-sm">arrow_forward</span>
-          <span *ngIf="isLoading" class="material-symbols-outlined text-sm animate-spin">sync</span>
+          @if (isLoading) {
+          <span>Entrando...</span>
+          <span class="material-symbols-outlined text-sm animate-spin">sync</span>
+          } @else {
+          <span>Entrar na Plataforma</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          }
         </button>
       </form>
 

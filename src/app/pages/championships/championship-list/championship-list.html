@@ -138,8 +138,101 @@
       </button>
     </div>
   </div>
-  <!-- Table Card -->
-  <!-- <app-table-list /> -->
+  <!-- View Switcher -->
+  <div class="flex items-center justify-between gap-4">
+    <div
+      class="inline-flex items-center gap-1 bg-white dark:bg-surface-dark p-1 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+      role="tablist"
+    >
+      <button
+        (click)="setView('table')"
+        [class]="
+          isActiveView('table')
+            ? 'bg-primary text-white shadow-md'
+            : 'text-text-muted hover:text-[#111814] dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+        "
+        class="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all font-semibold text-sm relative"
+        role="tab"
+        [attr.aria-selected]="isActiveView('table')"
+        [attr.aria-label]="'Visualização em Tabela'"
+      >
+        <span class="material-symbols-outlined text-[20px]">{{
+          isActiveView('table') ? 'table_rows' : 'table_rows'
+        }}</span>
+        <span>Tabela</span>
+        @if (isActiveView('table')) {
+        <span
+          class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white"
+        ></span>
+        }
+      </button>
+      <button
+        (click)="setView('sequence')"
+        [class]="
+          isActiveView('sequence')
+            ? 'bg-primary text-white shadow-md'
+            : 'text-text-muted hover:text-[#111814] dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+        "
+        class="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all font-semibold text-sm relative"
+        role="tab"
+        [attr.aria-selected]="isActiveView('sequence')"
+        [attr.aria-label]="'Visualização em Sequência'"
+      >
+        <span class="material-symbols-outlined text-[20px]">{{
+          isActiveView('sequence') ? 'view_agenda' : 'view_agenda'
+        }}</span>
+        <span>Sequência</span>
+        @if (isActiveView('sequence')) {
+        <span
+          class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white"
+        ></span>
+        }
+      </button>
+      <button
+        (click)="setView('step')"
+        [class]="
+          isActiveView('step')
+            ? 'bg-primary text-white shadow-md'
+            : 'text-text-muted hover:text-[#111814] dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+        "
+        class="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all font-semibold text-sm relative"
+        role="tab"
+        [attr.aria-selected]="isActiveView('step')"
+        [attr.aria-label]="'Visualização em Etapas'"
+      >
+        <span class="material-symbols-outlined text-[20px]">{{
+          isActiveView('step') ? 'view_list' : 'view_list'
+        }}</span>
+        <span>Etapas</span>
+        @if (isActiveView('step')) {
+        <span
+          class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white"
+        ></span>
+        }
+      </button>
+    </div>
+    <!-- View Info Badge -->
+    <div
+      class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-gray-700"
+    >
+      <span class="material-symbols-outlined text-text-muted text-[18px]">info</span>
+      <span class="text-xs text-text-muted font-medium">
+        @if (currentView() === 'table') { Visualização em tabela } @else if (currentView() ===
+        'sequence') { Visualização em sequência } @else { Visualização em etapas }
+      </span>
+    </div>
+  </div>
+  <!-- Content Views -->
+  @if (currentView() === 'table') {
+  <app-table-list
+    [columns]="columns()"
+    [data]="data()"
+    [actions]="actions()"
+    emptyMessage="Nenhum campeonato encontrado."
+  />
+  } @else if (currentView() === 'sequence') {
   <app-sequence-list />
-  <!-- <app-step-list /> -->
+  } @else if (currentView() === 'step') {
+  <app-step-list />
+  }
 </main>

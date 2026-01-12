@@ -38,11 +38,26 @@ export interface IActivateInvitationResponse {
 
 export interface ISendInvitationRequest {
   email: string;
-  role: string;
+  roleId: string;
 }
 
 export interface ISendInvitationResponse {
   invitationToken: string;
   invitationCode: string;
   expiresAt: string;
+}
+
+/**
+ * Interface para um convite individual retornado na listagem paginada
+ */
+export interface IInvitation {
+  id: string;
+  email: string;
+  federationId: string;
+  federationName: string;
+  roleName: string;
+  status: 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'USED';
+  expiresAt: string;
+  usedAt: string | null;
+  createdAt: string;
 }

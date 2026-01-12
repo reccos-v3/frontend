@@ -9,7 +9,9 @@ import {
   IActivateInvitationResponse,
   ISendInvitationRequest,
   ISendInvitationResponse,
+  IInvitation,
 } from '../components/interfaces/invitation.interface';
+import { IPage } from '../components/interfaces/page.interface';
 import { IAuth } from '../components/interfaces/auth.interface';
 
 @Injectable({
@@ -63,6 +65,23 @@ export class InvitationService {
       .pipe(
         catchError((error) => {
           console.error('Erro ao enviar convite:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  /**
+   * Busca lista paginada de convites
+   */
+  getInvitations(page: number = 0, size: number = 10): Observable<IPage<IInvitation>> {
+    const federationId: IAuth = JSON.parse(localStorage.getItem('auth') || '{}').federationId;
+    return this.http
+      .get<IPage<IInvitation>>(
+        `${environment.apiUrl}/federations/${federationId}/invitations?page=${page}&size=${size}`
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao buscar convites:', error);
           return throwError(() => error);
         })
       );

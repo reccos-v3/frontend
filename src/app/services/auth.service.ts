@@ -4,6 +4,7 @@ import { Observable, tap, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { TokenService } from './token.service';
+import { RolesService } from './roles.service';
 import {
   ILoginRequest,
   IAuth,
@@ -18,6 +19,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private tokenService = inject(TokenService);
+  private rolesService = inject(RolesService);
 
   /**
    * Realiza o login do usuário
@@ -80,6 +82,8 @@ export class AuthService {
    */
   logout(): void {
     this.tokenService.clearTokens();
+    // Limpa cache de roles ao fazer logout
+    this.rolesService.clearCache();
     this.router.navigate(['/login']);
   }
 

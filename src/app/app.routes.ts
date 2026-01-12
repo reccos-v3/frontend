@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './components/guards/auth.guard';
+import { rolesResolver } from './resolvers/roles.resolver';
 import { loginRoutes } from './pages/login/login.routes';
 import { federationsRoutes } from './pages/federations/federations.routes';
 import { championshipsRoutes } from './pages/championships/championships.routes';
@@ -14,6 +15,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/layout/layout.component').then((m) => m.LayoutComponent),
     canActivate: [authGuard],
+    resolve: {
+      roles: rolesResolver,
+    },
     children: [
       {
         path: '',
