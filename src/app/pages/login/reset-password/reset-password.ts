@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { IValidateResetTokenResponse } from '../../../interfaces/auth.interface';
+import { IValidateResetTokenResponse } from '../../../components/interfaces/auth.interface';
 import { ToastService } from '../../../services/toast.service';
 import { delay, finalize } from 'rxjs';
 

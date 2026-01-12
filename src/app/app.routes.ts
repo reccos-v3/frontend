@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth.guard';
+import { authGuard } from './components/guards/auth.guard';
 import { loginRoutes } from './pages/login/login.routes';
 import { federationsRoutes } from './pages/federations/federations.routes';
 import { championshipsRoutes } from './pages/championships/championships.routes';

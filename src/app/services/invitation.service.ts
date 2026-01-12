@@ -7,7 +7,7 @@ import {
   IValidateInvitationResponse,
   IActivateInvitationRequest,
   IActivateInvitationResponse,
-} from '../interfaces/invitation.interface';
+} from '../components/interfaces/invitation.interface';
 
 @Injectable({
   providedIn: 'root',
