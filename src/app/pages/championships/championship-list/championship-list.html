@@ -82,144 +82,106 @@
   </div>
   <!-- Toolbar: Search & Filters -->
   <div
-    class="flex flex-col lg:flex-row gap-4 lg:items-center justify-between bg-white dark:bg-surface-dark p-5 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm"
+    class="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between bg-white dark:bg-surface-dark p-5 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm"
   >
-    <!-- Search -->
-    <div class="relative flex-1 min-w-[300px]">
-      <div
-        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted"
-      >
-        <span class="material-symbols-outlined">search</span>
+    <!-- First Row: Search, View Switcher and Filters (all in one line on desktop) -->
+    <div
+      class="flex flex-col sm:flex-row gap-4 items-start sm:items-center lg:flex-1 lg:min-w-0 lg:gap-3"
+    >
+      <!-- Search -->
+      <div class="relative flex-1 min-w-0 w-full sm:min-w-[300px] lg:flex-1 lg:max-w-none">
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted"
+        >
+          <span class="material-symbols-outlined">search</span>
+        </div>
+        <input
+          class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+          placeholder="Buscar por nome, liga ou ano..."
+          type="text"
+        />
       </div>
-      <input
-        class="block w-full pl-10 pr-3 py-2.5 border-none bg-[#f0f4f2] dark:bg-white/5 rounded-lg text-sm text-[#111814] dark:text-white placeholder-text-muted focus:ring-2 focus:ring-primary/50 transition-shadow"
-        placeholder="Buscar por nome, liga ou ano..."
-        type="text"
-      />
-    </div>
-    <!-- Filters -->
-    <div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 px-2 lg:px-0">
-      <button
-        class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+      <!-- View Switcher -->
+      <div
+        class="flex items-center gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-lg border border-gray-200 dark:border-gray-700 w-full sm:w-auto shrink-0"
       >
-        <span class="material-symbols-outlined text-text-muted text-[20px]">sports_soccer</span>
-        <span class="text-sm font-medium text-[#111814] dark:text-white">Modalidade</span>
-        <span
-          class="material-symbols-outlined text-text-muted text-[18px] group-hover:text-[#111814]"
-          >keyboard_arrow_down</span
+        <button
+          (click)="setView('table')"
+          [class]="
+            isActiveView('table')
+              ? 'bg-white dark:bg-gray-800 text-primary shadow-sm'
+              : 'bg-transparent text-text-muted hover:text-[#111814] dark:hover:text-white'
+          "
+          class="flex items-center justify-center p-2 rounded-md transition-all flex-1 sm:flex-none"
+          title="Visualização em Tabela"
         >
-      </button>
-      <button
-        class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
-      >
-        <span class="material-symbols-outlined text-text-muted text-[20px]">grid_view</span>
-        <span class="text-sm font-medium text-[#111814] dark:text-white">Tipo</span>
-        <span
-          class="material-symbols-outlined text-text-muted text-[18px] group-hover:text-[#111814]"
-          >keyboard_arrow_down</span
+          <span class="material-symbols-outlined text-[20px]">table_rows</span>
+        </button>
+        <button
+          (click)="setView('sequence')"
+          [class]="
+            isActiveView('sequence')
+              ? 'bg-white dark:bg-gray-800 text-primary shadow-sm'
+              : 'bg-transparent text-text-muted hover:text-[#111814] dark:hover:text-white'
+          "
+          class="flex items-center justify-center p-2 rounded-md transition-all flex-1 sm:flex-none"
+          title="Visualização em Sequência"
         >
-      </button>
-      <button
-        class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
-      >
-        <span class="material-symbols-outlined text-text-muted text-[20px]">label</span>
-        <span class="text-sm font-medium text-[#111814] dark:text-white">Status</span>
-        <span
-          class="material-symbols-outlined text-text-muted text-[18px] group-hover:text-[#111814]"
-          >keyboard_arrow_down</span
+          <span class="material-symbols-outlined text-[20px]">view_agenda</span>
+        </button>
+        <button
+          (click)="setView('step')"
+          [class]="
+            isActiveView('step')
+              ? 'bg-white dark:bg-gray-800 text-primary shadow-sm'
+              : 'bg-transparent text-text-muted hover:text-[#111814] dark:hover:text-white'
+          "
+          class="flex items-center justify-center p-2 rounded-md transition-all flex-1 sm:flex-none"
+          title="Visualização em Etapas"
         >
-      </button>
-      <div class="w-px h-8 bg-gray-200 dark:bg-gray-700 mx-1"></div>
-      <button
-        class="flex items-center gap-2 px-3 py-2 text-text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm font-medium whitespace-nowrap"
-      >
-        <span class="material-symbols-outlined text-[18px]">filter_alt_off</span>
-        <span>Limpar</span>
-      </button>
-    </div>
-  </div>
-  <!-- View Switcher -->
-  <div class="flex items-center justify-between gap-4">
-    <div
-      class="inline-flex items-center gap-1 bg-white dark:bg-surface-dark p-1 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
-      role="tablist"
-    >
-      <button
-        (click)="setView('table')"
-        [class]="
-          isActiveView('table')
-            ? 'bg-primary text-white shadow-md'
-            : 'text-text-muted hover:text-[#111814] dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
-        "
-        class="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all font-semibold text-sm relative"
-        role="tab"
-        [attr.aria-selected]="isActiveView('table')"
-        [attr.aria-label]="'Visualização em Tabela'"
-      >
-        <span class="material-symbols-outlined text-[20px]">{{
-          isActiveView('table') ? 'table_rows' : 'table_rows'
-        }}</span>
-        <span>Tabela</span>
-        @if (isActiveView('table')) {
-        <span
-          class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white"
-        ></span>
-        }
-      </button>
-      <button
-        (click)="setView('sequence')"
-        [class]="
-          isActiveView('sequence')
-            ? 'bg-primary text-white shadow-md'
-            : 'text-text-muted hover:text-[#111814] dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
-        "
-        class="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all font-semibold text-sm relative"
-        role="tab"
-        [attr.aria-selected]="isActiveView('sequence')"
-        [attr.aria-label]="'Visualização em Sequência'"
-      >
-        <span class="material-symbols-outlined text-[20px]">{{
-          isActiveView('sequence') ? 'view_agenda' : 'view_agenda'
-        }}</span>
-        <span>Sequência</span>
-        @if (isActiveView('sequence')) {
-        <span
-          class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white"
-        ></span>
-        }
-      </button>
-      <button
-        (click)="setView('step')"
-        [class]="
-          isActiveView('step')
-            ? 'bg-primary text-white shadow-md'
-            : 'text-text-muted hover:text-[#111814] dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
-        "
-        class="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all font-semibold text-sm relative"
-        role="tab"
-        [attr.aria-selected]="isActiveView('step')"
-        [attr.aria-label]="'Visualização em Etapas'"
-      >
-        <span class="material-symbols-outlined text-[20px]">{{
-          isActiveView('step') ? 'view_list' : 'view_list'
-        }}</span>
-        <span>Etapas</span>
-        @if (isActiveView('step')) {
-        <span
-          class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white"
-        ></span>
-        }
-      </button>
-    </div>
-    <!-- View Info Badge -->
-    <div
-      class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-gray-700"
-    >
-      <span class="material-symbols-outlined text-text-muted text-[18px]">info</span>
-      <span class="text-xs text-text-muted font-medium">
-        @if (currentView() === 'table') { Visualização em tabela } @else if (currentView() ===
-        'sequence') { Visualização em sequência } @else { Visualização em etapas }
-      </span>
+          <span class="material-symbols-outlined text-[20px]">view_list</span>
+        </button>
+      </div>
+      <!-- Filters (inline on desktop) -->
+      <div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 px-2 lg:px-0 -mx-2 lg:mx-0 shrink-0">
+        <button
+          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+        >
+          <span class="material-symbols-outlined text-text-muted text-[20px]">sports_soccer</span>
+          <span class="text-sm font-medium text-[#111814] dark:text-white">Modalidade</span>
+          <span
+            class="material-symbols-outlined text-text-muted text-[18px] group-hover:text-[#111814]"
+            >keyboard_arrow_down</span
+          >
+        </button>
+        <button
+          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+        >
+          <span class="material-symbols-outlined text-text-muted text-[20px]">grid_view</span>
+          <span class="text-sm font-medium text-[#111814] dark:text-white">Tipo</span>
+          <span
+            class="material-symbols-outlined text-text-muted text-[18px] group-hover:text-[#111814]"
+            >keyboard_arrow_down</span
+          >
+        </button>
+        <button
+          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+        >
+          <span class="material-symbols-outlined text-text-muted text-[20px]">label</span>
+          <span class="text-sm font-medium text-[#111814] dark:text-white">Status</span>
+          <span
+            class="material-symbols-outlined text-text-muted text-[18px] group-hover:text-[#111814]"
+            >keyboard_arrow_down</span
+          >
+        </button>
+        <div class="w-px h-8 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+        <button
+          class="flex items-center gap-2 p-2 text-text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors text-sm font-medium whitespace-nowrap"
+        >
+          <span class="material-symbols-outlined text-[18px]">filter_alt_off</span>
+          <span>Limpar</span>
+        </button>
+      </div>
     </div>
   </div>
   <!-- Content Views -->
