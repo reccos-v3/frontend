@@ -1,288 +1,186 @@
-<!-- Top Navigation -->
-<header
-  class="flex items-center justify-between whitespace-nowrap border-b border-solid border-neutral-border dark:border-secondary-border px-6 lg:px-10 py-3 bg-white dark:bg-surface-dark sticky top-0 z-50"
->
-  <div class="flex items-center gap-4">
-    <div class="size-8 text-primary">
-      <span class="material-symbols-outlined text-3xl">emoji_events</span>
-    </div>
-    <h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">SportManager</h2>
-  </div>
-  <div class="hidden md:flex flex-1 justify-end gap-8 items-center">
-    <div class="flex items-center gap-6 lg:gap-9">
-      <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
-      <a class="text-sm font-medium text-primary" href="#">Campeonatos</a>
-      <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Times</a>
-      <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Configurações</a>
-    </div>
-    <div class="flex items-center gap-3">
-      <button
-        class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      >
-        <span class="material-symbols-outlined text-xl">notifications</span>
-        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full"></span>
-      </button>
-      <div
-        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20"
-        data-alt="User profile avatar"
-        style="
-          background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsWpCX8A3gdigA32OYJHVcACkpOrInHHtgiOUYlgsNXK-WSFGOb2anRQyfeBj45YDyVfaZjgoJKUSE6bFU8tkTMS2TxiJS-RQqeHa811uePTWboglBEsA5ixtHbh7PEINlOVnhAPys2gHH4R4d4OMg6hNPsqUFooA9sn7EzbbbjOB7UWSdKYFgXYjC-nRw6AIb2SDLi5uLGjX2CIu3hsr2tnFCrQYcpKLtK-xrZm5uu9gc2xOFFFJ_AcpM3S0QbSCmpI-6n49yAGs');
-        "
-      ></div>
-    </div>
-  </div>
-  <button class="md:hidden p-2 text-text-main dark:text-white">
-    <span class="material-symbols-outlined">menu</span>
-  </button>
-</header>
-
-<!-- Main Content Area -->
-<main class="flex-grow flex justify-center py-8 px-4 sm:px-6 lg:px-8">
-  <div class="layout-content-container flex flex-col w-full max-w-[960px]">
-    <!-- Breadcrumbs -->
-    <div class="flex flex-wrap gap-2 px-1 py-4 mb-2 items-center text-sm">
-      <a class="text-text-muted hover:text-primary" href="#">Home</a>
-      <span class="text-text-muted opacity-50">/</span>
-      <a class="text-text-muted hover:text-primary" href="#">Campeonatos</a>
-      <span class="text-text-muted opacity-50">/</span>
-      <span class="font-medium text-primary">Novo Campeonato</span>
+<div class="max-w-[1440px] mx-auto px-6 py-8 flex flex-col lg:flex-row gap-8">
+  <div class="flex-[1.2] space-y-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <h1 class="text-4xl font-black tracking-tight text-secondary">Novo Campeonato</h1>
+          <span
+            class="px-2.5 py-1 rounded-md bg-primary/20 border border-neutral-border text-neutral-gray text-[10px] font-bold text-primary uppercase tracking-widest"
+            >Rascunho</span
+          >
+        </div>
+      </div>
     </div>
 
-    <!-- Page Title -->
-    <div class="mb-8">
-      <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight">
-        Criação Inicial de Campeonato
-      </h1>
-      <p class="mt-2 text-text-muted">
-        Configure os dados básicos para começar uma nova competição.
-      </p>
-    </div>
-
-    <!-- Content Card -->
     <div
-      class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-neutral-border dark:border-secondary-border overflow-hidden"
+      class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 md:p-5 flex items-start gap-4"
     >
-      <!-- Info Banner -->
+      <span class="material-symbols-outlined text-blue-500 mt-0.5">info</span>
+      <div>
+        <h3 class="font-bold text-blue-900 dark:text-blue-100 text-sm md:text-base">
+          Atenção ao processo
+        </h3>
+        <p class="text-blue-800 dark:text-blue-200 text-sm mt-1">
+          Você está criando apenas a base do campeonato. Regras, estrutura, times e jogos serão
+          definidos nos próximos passos após salvar este rascunho.
+        </p>
+      </div>
+    </div>
+
+    <section class="space-y-6">
+      <div class="flex items-center gap-2">
+        <span
+          class="size-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold"
+          >1</span
+        >
+        <h2 class="text-xl font-bold text-secondary">Informações Básicas</h2>
+      </div>
       <div
-        class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 md:p-5 flex items-start gap-4"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-xl bg-white border border-neutral-border"
       >
-        <span class="material-symbols-outlined text-blue-500 mt-0.5">info</span>
+        <div class="col-span-full">
+          <label class="block text-sm font-medium text-text-main mb-2">Nome do Campeonato</label>
+          <input
+            class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+            placeholder="Ex: Campeonato Estadual de Elite 2024"
+            type="text"
+            [(ngModel)]="formData.name"
+          />
+        </div>
         <div>
-          <h3 class="font-bold text-blue-900 dark:text-blue-100 text-sm md:text-base">
-            Atenção ao processo
-          </h3>
-          <p class="text-blue-800 dark:text-blue-200 text-sm mt-1">
-            Você está criando apenas a base do campeonato. Regras, estrutura, times e jogos serão
-            definidos nos próximos passos após salvar este rascunho.
+          <label class="block text-sm font-medium text-text-main mb-2">Modalidade</label>
+          <div class="relative">
+            <select
+              class="w-full pl-4 pr-12 py-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none"
+              [(ngModel)]="formData.modality"
+              [disabled]="modalities().length === 0"
+            >
+              <option value="">Selecione a modalidade</option>
+              @for (modality of modalities(); track modality.id) {
+              <option [value]="modality.id">{{ modality.name }}</option>
+              }
+            </select>
+            <span
+              class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xl"
+              >keyboard_arrow_down</span
+            >
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-text-main mb-2">Gênero</label>
+          <div class="flex gap-2 p-1 bg-white rounded-lg border border-neutral-border">
+            @for (gender of genderOptions; track gender.value) {
+            <label class="flex-1 cursor-pointer">
+              <input
+                class="hidden peer"
+                name="gender"
+                type="radio"
+                [value]="gender.value"
+                [(ngModel)]="formData.gender"
+              />
+              <div
+                class="text-center py-3 text-sm font-medium rounded-md text-neutral-gray peer-checked:bg-gray-100 peer-checked:text-text-main transition-all"
+              >
+                {{ gender.label }}
+              </div>
+            </label>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-6">
+      <div class="flex items-center gap-2">
+        <span
+          class="size-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold"
+          >2</span
+        >
+        <h2 class="text-xl font-bold text-secondary">Vinculação com Temporada</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+        @for (card of seasonTypeCards; track card.type) {
+        <app-season-type-card
+          [config]="card"
+          [isSelected]="formData.seasonType === card.type"
+          [disabled]="card.type === 'existing' && seasons().length === 0"
+          [season]="formData.season || ''"
+          [seasonName]="formData.seasonName || ''"
+          [seasonStart]="formData.seasonStart || ''"
+          [seasonEnd]="formData.seasonEnd || ''"
+          [seasons]="seasons()"
+          [missingExistingSeason]="formData.seasonType === 'existing' && isExistingSeasonMissing()"
+          [missingNewSeason]="formData.seasonType === 'new' && isNewSeasonMissing()"
+          [modalities]="modalities()"
+          (selectCard)="onSeasonTypeSelect($event)"
+          (seasonChange)="onSeasonChange($event)"
+          (seasonNameChange)="onSeasonNameChange($event)"
+          (seasonStartChange)="onSeasonStartChange($event)"
+          (seasonEndChange)="onSeasonEndChange($event)"
+        ></app-season-type-card>
+        }
+      </div>
+    </section>
+  </div>
+
+  <aside class="w-full lg:w-80 shrink-0">
+    <div
+      class="sticky top-0 lg:top-8 p-6 rounded-2xl bg-white border border-neutral-border space-y-6"
+    >
+      <div>
+        <h3 class="text-lg font-bold text-primary mb-4">Resumo</h3>
+        <div class="space-y-4">
+          <div class="space-y-1">
+            <p class="text-[10px] font-bold text-text-main uppercase tracking-wider">Nome</p>
+            <p class="text-sm font-medium text-primary italic">
+              {{ formData.name || 'Aguardando preenchimento...' }}
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <p class="text-[10px] font-bold text-text-main uppercase tracking-wider">Vínculo</p>
+              <p class="text-xs font-medium text-primary">
+                {{ getSeasonSummary() }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[10px] font-bold text-text-main uppercase tracking-wider">Status</p>
+              <div class="flex items-center gap-1.5">
+                <div class="size-1.5 rounded-full bg-neutral-gray"></div>
+                <p class="text-xs font-medium text-primary">Rascunho</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pt-6 border-t border-neutral-border">
+        <button
+          class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_0_20px_rgba(47,163,107,0.2)]"
+          (click)="onSubmit()"
+          [disabled]="
+            isSubmitting() ||
+            !formData.name ||
+            !formData.modality ||
+            isExistingSeasonMissing() ||
+            isNewSeasonMissing()
+          "
+        >
+          <span>{{ isSubmitting() ? 'Salvando...' : 'Continuar configuração' }}</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+        <p class="mt-3 text-[11px] text-neutral-gray text-center leading-relaxed">
+          Você poderá alterar todos os campos desta etapa nas telas seguintes antes da ativação.
+        </p>
+      </div>
+      <div class="p-4 rounded-lg bg-gray-100 border border-neutral-border">
+        <div class="flex items-center gap-3 text-text-main">
+          <span class="material-symbols-outlined text-base">info</span>
+          <p class="text-[10px]">
+            Após clicar em continuar, as etapas de <b>Regulamento</b> e <b>Tabelas</b> serão
+            desbloqueadas.
           </p>
         </div>
       </div>
-
-      <div class="p-6 md:p-8 lg:p-10 space-y-8">
-        <!-- Form Section 1: Basic Info -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          <!-- Name Input -->
-          <div class="md:col-span-2">
-            <label class="block text-sm font-bold mb-2" for="camp-name">Nome do campeonato</label>
-            <div class="relative">
-              <input
-                class="form-input w-full h-14 pl-4 pr-4 rounded-xl border border-neutral-border dark:border-gray-700 bg-background-light dark:bg-black/20 text-base placeholder-gray-400 dark:placeholder-gray-600"
-                id="camp-name"
-                placeholder="Ex: Campeonato Regional de Verão 2024"
-                type="text"
-                [(ngModel)]="formData.name"
-              />
-            </div>
-          </div>
-
-          <!-- Modality Select -->
-          <div>
-            <label class="block text-sm font-bold mb-2" for="modality">Modalidade</label>
-            <div class="relative">
-              <select
-                class="form-select w-full h-14 pl-4 pr-10 rounded-xl border border-neutral-border dark:border-gray-700 bg-background-light dark:bg-black/20 text-base appearance-none cursor-pointer"
-                id="modality"
-                [(ngModel)]="formData.modality"
-              >
-                <option disabled selected value="">Selecione a modalidade</option>
-                <option value="futebol">Futebol</option>
-                <option value="futsal">Futsal</option>
-                <option value="basquete">Basquete</option>
-                <option value="volei">Vôlei</option>
-                <option value="handebol">Handebol</option>
-              </select>
-              <div
-                class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
-              >
-                <span class="material-symbols-outlined">expand_more</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Type Select -->
-          <div>
-            <label class="block text-sm font-bold mb-2" for="dispute-type">Tipo de disputa</label>
-            <div class="relative">
-              <select
-                class="form-select w-full h-14 pl-4 pr-10 rounded-xl border border-neutral-border dark:border-gray-700 bg-background-light dark:bg-black/20 text-base appearance-none cursor-pointer"
-                id="dispute-type"
-                [(ngModel)]="formData.disputeType"
-              >
-                <option disabled selected value="">Selecione o formato</option>
-                <option value="pontos">Pontos Corridos</option>
-                <option value="mata">Mata-mata (Eliminatória)</option>
-                <option value="grupos">Fase de Grupos + Eliminatória</option>
-                <option value="suico">Sistema Suíço</option>
-              </select>
-              <div
-                class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
-              >
-                <span class="material-symbols-outlined">expand_more</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="w-full h-px bg-gray-100 dark:bg-gray-800"></div>
-
-        <!-- Form Section 2: Seasonality -->
-        <div>
-          <label class="block text-sm font-bold mb-4">Tipo de campeonato</label>
-          <div class="flex flex-col md:flex-row gap-4">
-            <!-- Radio Option 1 -->
-            <label
-              class="relative flex items-center p-4 rounded-xl border border-neutral-border dark:border-gray-700 cursor-pointer hover:border-primary/50 transition-colors group has-[:checked]:border-primary has-[:checked]:bg-primary/5 dark:has-[:checked]:bg-primary/10 flex-1"
-            >
-              <input
-                checked
-                class="form-radio w-5 h-5 mr-3 focus:ring-primary focus:ring-offset-0 bg-gray-100 border-gray-300"
-                name="season-type"
-                type="radio"
-                value="season"
-                [(ngModel)]="formData.seasonType"
-              />
-              <div class="flex flex-col">
-                <span class="font-bold text-sm mb-1">Vinculado a temporada</span>
-                <span class="text-xs text-text-muted">Faz parte de um calendário anual</span>
-              </div>
-            </label>
-
-            <!-- Radio Option 2 -->
-            <label
-              class="relative flex items-center p-4 rounded-xl border border-neutral-border dark:border-gray-700 cursor-pointer hover:border-primary/50 transition-colors group has-[:checked]:border-primary has-[:checked]:bg-primary/5 dark:has-[:checked]:bg-primary/10 flex-1"
-            >
-              <input
-                class="form-radio w-5 h-5 mr-3 focus:ring-primary focus:ring-offset-0 bg-gray-100 border-gray-300"
-                name="season-type"
-                type="radio"
-                value="standalone"
-                [(ngModel)]="formData.seasonType"
-              />
-              <div class="flex flex-col">
-                <span class="font-bold text-sm mb-1">Campeonato Avulso</span>
-                <span class="text-xs text-text-muted">Torneio único sem vínculo anual</span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Conditional Season Select -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-bold mb-2 flex items-center gap-2" for="season">
-              Temporada
-              <span
-                class="text-xs font-normal bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full text-gray-500"
-                >Opcional</span
-              >
-            </label>
-            <div class="relative">
-              <select
-                class="form-select w-full h-14 pl-4 pr-10 rounded-xl border border-neutral-border dark:border-gray-700 bg-background-light dark:bg-black/20 text-base appearance-none cursor-pointer"
-                id="season"
-                [(ngModel)]="formData.season"
-              >
-                <option value="2024">Temporada 2024</option>
-                <option value="2025">Temporada 2025</option>
-                <option value="2023">Temporada 2023 (Arquivado)</option>
-              </select>
-              <div
-                class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
-              >
-                <span class="material-symbols-outlined">calendar_month</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="pt-6 flex flex-col-reverse md:flex-row items-center justify-end gap-4">
-          <button
-            type="button"
-            class="w-full md:w-auto h-12 px-8 rounded-full font-medium text-text-muted hover:text-text-main dark:hover:text-white transition-colors"
-            (click)="onCancel()"
-          >
-            Cancelar
-          </button>
-          <button
-            type="button"
-            class="submit-button w-full md:w-auto h-14 px-8 rounded-full bg-primary hover:bg-primary-hover text-white font-bold text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all flex items-center justify-center gap-2 group"
-            (click)="onSubmit()"
-            [disabled]="isSubmitting()"
-          >
-            <span>{{ isSubmitting() ? 'Criando...' : 'Criar campeonato em rascunho' }}</span>
-            <span
-              class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1"
-              >arrow_forward</span
-            >
-          </button>
-        </div>
-      </div>
     </div>
-
-    <!-- Helper Links / Bottom Area -->
-    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div
-        class="p-4 rounded-xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer"
-      >
-        <div
-          class="size-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-300"
-        >
-          <span class="material-symbols-outlined">menu_book</span>
-        </div>
-        <div>
-          <p class="font-bold text-sm">Documentação</p>
-          <p class="text-xs text-text-muted">Aprenda a estruturar torneios</p>
-        </div>
-      </div>
-
-      <div
-        class="p-4 rounded-xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer"
-      >
-        <div
-          class="size-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-300"
-        >
-          <span class="material-symbols-outlined">support_agent</span>
-        </div>
-        <div>
-          <p class="font-bold text-sm">Suporte</p>
-          <p class="text-xs text-text-muted">Dúvidas sobre o formato?</p>
-        </div>
-      </div>
-
-      <div
-        class="p-4 rounded-xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer"
-      >
-        <div
-          class="size-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-300"
-        >
-          <span class="material-symbols-outlined">download</span>
-        </div>
-        <div>
-          <p class="font-bold text-sm">Importar Dados</p>
-          <p class="text-xs text-text-muted">Use uma planilha CSV</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
+  </aside>
+</div>

@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { RolesService } from '../services/roles.service';
-import { IRole } from '../components/interfaces/roles.interface';
+import { IRole } from '../interfaces/roles.interface';
 
 /**
  * Resolver que pré-carrega os roles antes de ativar a rota

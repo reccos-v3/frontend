@@ -1,7 +1,7 @@
 import { Component, input, output, inject, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ITableColumn, ITableAction, ITablePagination } from '../interfaces/table.interface';
+import { ITableColumn, ITableAction, ITablePagination } from '../../interfaces/table.interface';
 
 @Component({
   selector: 'app-table-list',
@@ -15,7 +15,7 @@ export class TableList<T = any> {
   // Inputs obrigatórios
   columns = input.required<ITableColumn<T>[]>();
   data = input.required<T[]>();
-  
+
   // Inputs opcionais
   actions = input<ITableAction<T>[]>([]);
   pagination = input<ITablePagination | undefined>(undefined);
@@ -45,10 +45,10 @@ export class TableList<T = any> {
   getPaginationText(): string {
     const pag = this.pagination();
     if (!pag) return '';
-    
+
     const start = pag.currentPage * pag.pageSize + 1;
     const end = Math.min((pag.currentPage + 1) * pag.pageSize, pag.totalElements);
-    
+
     return `Mostrando ${start} até ${end} de ${pag.totalElements} resultados`;
   }
 
@@ -74,24 +74,24 @@ export class TableList<T = any> {
   getPages(): number[] {
     const pag = this.pagination();
     if (!pag) return [];
-    
+
     const pages: number[] = [];
     const totalPages = pag.totalPages;
     const currentPage = pag.currentPage;
-    
+
     // Mostra até 5 páginas
     let start = Math.max(0, currentPage - 2);
     let end = Math.min(totalPages, start + 5);
-    
+
     // Ajusta o início se estiver no final
     if (end - start < 5) {
       start = Math.max(0, end - 5);
     }
-    
+
     for (let i = start; i < end; i++) {
       pages.push(i);
     }
-    
+
     return pages;
   }
 
@@ -148,7 +148,7 @@ export class TableList<T = any> {
    */
   getActionClasses(variant: string = 'default'): string {
     const baseClasses = 'p-1.5 rounded-md text-text-muted transition-colors';
-    
+
     switch (variant) {
       case 'primary':
         return `${baseClasses} hover:text-primary hover:bg-primary/10`;

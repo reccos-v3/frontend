@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InvitationService } from '../../../services/invitation.service';
-import { IInvitation } from '../../../components/interfaces/invitation.interface';
-import { IPage } from '../../../components/interfaces/page.interface';
-import { ITableColumn, ITableAction, ITablePagination } from '../../../components/interfaces/table.interface';
+import { IInvitation } from '../../../interfaces/invitation.interface';
+import { IPage } from '../../../interfaces/page.interface';
+import { ITableColumn, ITableAction, ITablePagination } from '../../../interfaces/table.interface';
 import { TableList } from '../../../components/table-list/table-list';
 import { SendInvitations } from '../send-invitations/send-invitations';
 
@@ -121,13 +121,13 @@ export class ManageInvitations implements OnInit {
 
   renderRoleCell(row: IInvitation): string {
     const roleColors: { [key: string]: string } = {
-      'FEDERATION_OWNER': 'bg-blue-50 text-blue-700 border-blue-100',
-      'FEDERATION_ADMIN': 'bg-purple-50 text-purple-700 border-purple-100',
-      'ORGANIZER': 'bg-green-50 text-green-700 border-green-100',
-      'REFEREE': 'bg-orange-50 text-orange-700 border-orange-100',
-      'USER': 'bg-slate-100 text-slate-700 border-slate-200',
+      FEDERATION_OWNER: 'bg-blue-50 text-blue-700 border-blue-100',
+      FEDERATION_ADMIN: 'bg-purple-50 text-purple-700 border-purple-100',
+      ORGANIZER: 'bg-green-50 text-green-700 border-green-100',
+      REFEREE: 'bg-orange-50 text-orange-700 border-orange-100',
+      USER: 'bg-slate-100 text-slate-700 border-slate-200',
     };
-    
+
     const colors = roleColors[row.roleName] || 'bg-slate-100 text-slate-700 border-slate-200';
     return `
       <span class="text-xs font-medium px-2 py-1 ${colors} border rounded">
@@ -138,12 +138,12 @@ export class ManageInvitations implements OnInit {
 
   renderStatusCell(row: IInvitation): string {
     const statusConfig: { [key: string]: { color: string; bg: string; label: string } } = {
-      'PENDING': { color: 'text-amber-600', bg: 'bg-amber-500', label: 'Pendente' },
-      'ACTIVE': { color: 'text-primary', bg: 'bg-primary', label: 'Ativo' },
-      'EXPIRED': { color: 'text-red-600', bg: 'bg-red-500', label: 'Expirado' },
-      'USED': { color: 'text-green-600', bg: 'bg-green-500', label: 'Usado' },
+      PENDING: { color: 'text-amber-600', bg: 'bg-amber-500', label: 'Pendente' },
+      ACTIVE: { color: 'text-primary', bg: 'bg-primary', label: 'Ativo' },
+      EXPIRED: { color: 'text-red-600', bg: 'bg-red-500', label: 'Expirado' },
+      USED: { color: 'text-green-600', bg: 'bg-green-500', label: 'Usado' },
     };
-    
+
     const config = statusConfig[row.status] || statusConfig['PENDING'];
     return `
       <div class="flex items-center gap-1.5">
@@ -157,12 +157,10 @@ export class ManageInvitations implements OnInit {
     if (!row.expiresAt) {
       return '<span class="text-sm text-slate-600">-</span>';
     }
-    
+
     const isExpired = row.status === 'EXPIRED';
-    const classes = isExpired 
-      ? 'text-sm text-red-500 font-semibold' 
-      : 'text-sm text-slate-600';
-    
+    const classes = isExpired ? 'text-sm text-red-500 font-semibold' : 'text-sm text-slate-600';
+
     return `<span class="${classes}">${this.formatDate(row.expiresAt)}</span>`;
   }
 

@@ -3,17 +3,25 @@ import { CommonModule } from '@angular/common';
 import { ActionCardComponent } from '../../../components/action-card/action-card.component';
 import { RecentChampionshipsComponent } from '../../../components/recent-championships/recent-championships.component';
 import { OperationalShortcuts } from '../operational-shortcuts/operational-shortcuts';
+import { RouterModule } from '@angular/router';
 
 interface QuickAction {
   label: string;
   icon: string;
   description: string;
   color?: string;
+  route: string;
 }
 
 @Component({
   selector: 'app-federation-dashboard',
-  imports: [CommonModule, ActionCardComponent, RecentChampionshipsComponent, OperationalShortcuts],
+  imports: [
+    CommonModule,
+    ActionCardComponent,
+    RecentChampionshipsComponent,
+    OperationalShortcuts,
+    RouterModule,
+  ],
   templateUrl: './federation-dashboard.html',
   styleUrl: './federation-dashboard.css',
 })
@@ -31,24 +39,28 @@ export class FederationDashboard {
       icon: 'add_circle',
       description: 'Configure um novo torneio do zero',
       color: 'primary',
+      route: '/admin/championships/create',
     },
     {
       label: 'Convidar Usuários',
       icon: 'person_add',
       description: 'Adicione novos administradores',
       color: 'secondary',
+      route: '/admin/invitations',
     },
     {
       label: 'Gerenciar Pessoas',
       icon: 'manage_accounts',
       description: 'Edite perfis de atletas e staff',
       color: 'danger',
+      route: '/admin/people',
     },
     {
       label: 'Campeonatos Ativos',
       icon: 'visibility',
       description: 'Acompanhe torneios em andamento',
       color: 'warning',
+      route: '/admin/championships',
     },
   ]);
 

@@ -10,7 +10,7 @@ import {
   IAuth,
   IValidateResetTokenResponse,
   IResetPasswordRequest,
-} from '../components/interfaces/auth.interface';
+} from '../interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root',

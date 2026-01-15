@@ -1,0 +1,24 @@
+/* Component styles */
+
+/* Garantir que o ícone/calendário nativo apareça nos inputs de data */
+input[type="date"] {
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  display: block;
+  cursor: pointer;
+}
+
+/* Esconde o placeholder dd/mm/aaaa sem afetar o valor selecionado */
+input[type="date"]:not(:focus):invalid::-webkit-datetime-edit {
+  color: transparent;
+}
+
+/* Ao focar, mostra a área de edição para facilitar digitação */
+input[type="date"]:focus::-webkit-datetime-edit {
+  color: inherit;
+}

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { IApiError } from '../components/interfaces/error.interface';
+import { IApiError } from '../interfaces/error.interface';
 import { ToastService } from '../services/toast.service';
 
 /**

@@ -10,9 +10,9 @@ import {
   ISendInvitationRequest,
   ISendInvitationResponse,
   IInvitation,
-} from '../components/interfaces/invitation.interface';
-import { IPage } from '../components/interfaces/page.interface';
-import { IAuth } from '../components/interfaces/auth.interface';
+} from '../interfaces/invitation.interface';
+import { IPage } from '../interfaces/page.interface';
+import { IAuth } from '../interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root',

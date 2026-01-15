@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { IRole } from '../../../components/interfaces/roles.interface';
+import { IRole } from '../../../interfaces/roles.interface';
 import { RolesService } from '../../../services/roles.service';
 import { InvitationService } from '../../../services/invitation.service';
 import { ToastService } from '../../../services/toast.service';
@@ -13,7 +13,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { ISendInvitationResponse } from '../../../components/interfaces/invitation.interface';
+import { ISendInvitationResponse } from '../../../interfaces/invitation.interface';
 import { ErrorHandlerUtil } from '../../../utils/error-handler.util';
 
 @Component({

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { TableList } from '../../../components/table-list/table-list';
 import { SequenceList } from './components/sequence-list/sequence-list';
 import { StepList } from './components/step-list/step-list';
-import { ITableColumn, ITableAction } from '../../../components/interfaces/table.interface';
+import { ITableColumn, ITableAction } from '../../../interfaces/table.interface';
 
 export interface IChampionship {
   id: string;

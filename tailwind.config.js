@@ -28,6 +28,7 @@ module.exports = {
         'text-secondary': '#4C9A73',
         'text-muted': '#618975',
         'neutral-border': '#E5E7EB',
+        'neutral-gray': '#6b7280',
 
         // Se quiser manter aliases usados nas telas legadas:
         'alert-error': '#D64545',

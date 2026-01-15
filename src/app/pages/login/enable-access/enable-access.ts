@@ -12,8 +12,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvitationService } from '../../../services/invitation.service';
-import { IValidateInvitationResponse } from '../../../components/interfaces/invitation.interface';
-import { IApiError } from '../../../components/interfaces/error.interface';
+import { IValidateInvitationResponse } from '../../../interfaces/invitation.interface';
+import { IApiError } from '../../../interfaces/error.interface';
 import { catchError, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 

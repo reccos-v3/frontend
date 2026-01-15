@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
-import { IRole } from '../components/interfaces/roles.interface';
+import { IRole } from '../interfaces/roles.interface';
 
 interface CachedRoles {
   data: IRole[];
@@ -46,7 +46,7 @@ export class RolesService {
       }
 
       const parsed = JSON.parse(cached);
-      
+
       // Verifica se é o formato antigo (objeto direto da API) e converte
       if (parsed && typeof parsed === 'object') {
         // Se tem propriedade 'data' e 'timestamp', é o formato correto do cache
@@ -173,7 +173,12 @@ export class RolesService {
     return this.http.get<IRole[] | { data: IRole[] }>(`${environment.apiUrl}/roles`).pipe(
       map((response) => {
         // Se a resposta vier como objeto com propriedade data, extrai o array
-        if (response && typeof response === 'object' && 'data' in response && Array.isArray((response as { data: IRole[] }).data)) {
+        if (
+          response &&
+          typeof response === 'object' &&
+          'data' in response &&
+          Array.isArray((response as { data: IRole[] }).data)
+        ) {
           return (response as { data: IRole[] }).data;
         }
         // Se já vier como array, retorna diretamente

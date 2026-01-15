@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../services/toast.service';
+import { IHttpApiErrorResponse } from '../../../interfaces/error.interface';
 
 @Component({
   selector: 'app-auth-login',
@@ -12,8 +14,9 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class AuthLogin {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   loginForm: FormGroup;
   showPassword = false;
@@ -54,16 +57,9 @@ export class AuthLogin {
         // Login bem-sucedido, redireciona para o dashboard
         this.router.navigate(['/admin']);
       },
-      error: (error) => {
+      error: (error: IHttpApiErrorResponse) => {
         this.isLoading = false;
-        // Trata erros de autenticação
-        if (error.status === 401) {
-          this.errorMessage = 'E-mail ou senha inválidos. Verifique suas credenciais.';
-        } else if (error.status === 0) {
-          this.errorMessage = 'Erro de conexão. Verifique se o servidor está em execução.';
-        } else {
-          this.errorMessage = 'Erro ao realizar login. Tente novamente mais tarde.';
-        }
+        this.toastService.error(error.error.message);
       },
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { IAuth } from '../components/interfaces/auth.interface';
+import { IAuth } from '../interfaces/auth.interface';
 
 @Injectable({
   providedIn: 'root',
