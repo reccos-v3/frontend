@@ -1,0 +1,202 @@
+@if (format() === 'groups_knockout') {
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+  <div>
+    <label class="block text-xs font-bold uppercase tracking-wide text-primary mb-2"
+      >Quantidade de Grupos</label
+    >
+    <div class="relative">
+      <button
+        class="absolute left-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">remove</span>
+      </button>
+      <input
+        class="w-full text-center bg-transparent border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary font-bold text-lg dark:text-white py-2"
+        readonly=""
+        type="number"
+        value="4"
+      />
+      <button
+        class="absolute right-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">add</span>
+      </button>
+    </div>
+  </div>
+  <div>
+    <label class="block text-xs font-bold uppercase tracking-wide text-primary mb-2"
+      >Classificados por Grupo</label
+    >
+    <div class="relative">
+      <button
+        class="absolute left-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">remove</span>
+      </button>
+      <input
+        class="w-full text-center bg-transparent border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary font-bold text-lg dark:text-white py-2"
+        readonly=""
+        type="number"
+        value="2"
+      />
+      <button
+        class="absolute right-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">add</span>
+      </button>
+    </div>
+  </div>
+</div>
+} @else if (format() === 'knockout') {
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl"
+  id="direct-knockout-config"
+>
+  <div>
+    <label
+      class="block text-xs font-bold uppercase tracking-wide text-primary dark:text-gray/70 mb-2"
+      >Número Total de Times</label
+    >
+    <div class="relative">
+      <button
+        class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">remove</span>
+      </button>
+      <input
+        class="w-full text-center bg-transparent border-gray/50 dark:border-gray/40 rounded-lg focus:ring-primary focus:border-primary font-bold text-lg dark:text-light py-2"
+        type="number"
+        value="13"
+      />
+      <button
+        class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">add</span>
+      </button>
+    </div>
+  </div>
+  <div>
+    <label
+      class="block text-xs font-bold uppercase tracking-wide text-primary dark:text-gray/70 mb-2"
+      >Formato da Primeira Fase</label
+    >
+    <div class="relative">
+      <select
+        class="w-full appearance-none bg-gray-50 dark:bg-gray-800 border border-gray/50 dark:border-gray/40 text-main dark:text-light py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+      >
+        <option>Sorteio Direto da Chave</option>
+        <option>Rodada Preliminar</option>
+        <option>Classificação por Ranking</option>
+      </select>
+      <div
+        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-secondary dark:text-gray/70"
+      >
+        <span class="material-symbols-outlined">expand_more</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-full">
+    <label
+      class="block text-xs font-bold uppercase tracking-wide text-primary dark:text-gray/70 mb-2"
+      >Número de Byes (Times que avançam direto)</label
+    >
+    <div class="relative">
+      <button
+        class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">remove</span>
+      </button>
+      <input
+        class="w-full text-center bg-transparent border-gray/50 dark:border-gray/40 rounded-lg focus:ring-primary focus:border-primary font-bold text-lg dark:text-light py-2"
+        type="number"
+        value="3"
+      />
+      <button
+        class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray-50 text-main dark:text-white"
+      >
+        <span class="material-symbols-outlined text-base">add</span>
+      </button>
+    </div>
+  </div>
+</div>
+} @else if (format() === 'round_robin') {
+<section
+  class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-800"
+>
+  <div class="accordion-header flex items-center gap-2 justify-between">
+    <h2 class="text-lg font-bold text-main dark:text-white-bg flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">settings</span>
+      Configurações de Liga
+    </h2>
+  </div>
+  <div class="accordion-content open pt-2 pb-4">
+    <p class="text-sm text-secondary mb-4">
+      Defina os parâmetros específicos para o formato de pontos corridos.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wide text-primary mb-2"
+          >Número de Rodadas</label
+        >
+        <div class="relative">
+          <button
+            class="absolute left-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray/50 text-main dark:text-white-bg"
+          >
+            <span class="material-symbols-outlined text-base">remove</span>
+          </button>
+          <input
+            class="w-full text-center bg-transparent border-gray dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary font-bold text-lg dark:text-white-bg py-2"
+            readonly=""
+            type="number"
+            value="19"
+          />
+          <button
+            class="absolute right-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray/50 text-main dark:text-white-bg"
+          >
+            <span class="material-symbols-outlined text-base">add</span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wide text-primary mb-2"
+          >Partidas por Time</label
+        >
+        <div class="relative">
+          <button
+            class="absolute left-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray/50 text-main dark:text-white-bg"
+          >
+            <span class="material-symbols-outlined text-base">remove</span>
+          </button>
+          <input
+            class="w-full text-center bg-transparent border-gray dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary font-bold text-lg dark:text-white-bg py-2"
+            readonly=""
+            type="number"
+            value="38"
+          />
+          <button
+            class="absolute right-1 top-1 bottom-1 w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:bg-gray/50 text-main dark:text-white-bg"
+          >
+            <span class="material-symbols-outlined text-base">add</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 flex-1 flex flex-col justify-end">
+      <label
+        class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+      >
+        <div class="relative inline-flex items-center cursor-pointer">
+          <input class="sr-only peer" type="checkbox" value="" />
+          <div
+            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-50 peer-checked:bg-accent"
+          ></div>
+        </div>
+        <div>
+          <span class="text-sm font-bold text-main dark:text-white block">Turno e Returno</span>
+          <span class="text-xs text-secondary block">Jogos de ida e volta</span>
+        </div>
+      </label>
+    </div>
+  </div>
+</section>
+}

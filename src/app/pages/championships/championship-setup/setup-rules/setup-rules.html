@@ -1,0 +1,177 @@
+<div class="flex flex-col gap-8">
+  <!-- Title Section -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">
+      Regras e Pontuação
+    </h2>
+    <p class="text-text-secondary dark:text-gray-400">
+      Defina como os times pontuam e os critérios de desempate para a tabela de classificação.
+    </p>
+  </div>
+  <!-- Warning Banner -->
+  <div
+    class="flex items-start gap-4 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30"
+  >
+    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 shrink-0">info</span>
+    <div class="flex flex-col gap-1">
+      <h4 class="text-sm font-bold text-blue-900 dark:text-blue-100">Modo de Edição</h4>
+      <p class="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+        As regras definidas aqui valerão durante todo o campeonato. Elas poderão ser alteradas
+        livremente enquanto o campeonato estiver com status de <strong>Rascunho</strong>.
+      </p>
+    </div>
+  </div>
+  <!-- Form Section: Points -->
+  <section
+    class="flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark"
+  >
+    <div class="flex items-center gap-3 pb-4 border-b border-border-light dark:border-border-dark">
+      <div class="p-2 rounded-lg bg-primary/10 text-primary">
+        <span class="material-symbols-outlined">scoreboard</span>
+      </div>
+      <h3 class="text-lg font-bold text-text-main dark:text-white">Sistema de Pontuação</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Victory -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-bold text-text-main dark:text-gray-200">Vitória</label>
+        <div class="relative">
+          <input
+            class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+            type="number"
+            value="3"
+          />
+          <span
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
+            >pts</span
+          >
+        </div>
+      </div>
+      <!-- Draw -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-bold text-text-main dark:text-gray-200">Empate</label>
+        <div class="relative">
+          <input
+            class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+            type="number"
+            value="1"
+          />
+          <span
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
+            >pts</span
+          >
+        </div>
+      </div>
+      <!-- Loss -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-bold text-text-main dark:text-gray-200">Derrota</label>
+        <div class="relative">
+          <input
+            class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+            type="number"
+            value="0"
+          />
+          <span
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
+            >pts</span
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Form Section: Tiebreakers -->
+  <section
+    class="flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark"
+  >
+    <div
+      class="flex items-center justify-between pb-4 border-b border-border-light dark:border-border-dark"
+    >
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-lg bg-primary/10 text-primary">
+          <span class="material-symbols-outlined">sort</span>
+        </div>
+        <h3 class="text-lg font-bold text-text-main dark:text-white">Critérios de Desempate</h3>
+      </div>
+      <button class="text-sm font-bold text-primary hover:text-primary-hover transition-colors">
+        + Adicionar critério
+      </button>
+    </div>
+    <div class="flex flex-col gap-3">
+      <p class="text-sm text-text-secondary dark:text-gray-400 mb-2">
+        Arraste para reordenar a prioridade dos critérios.
+      </p>
+      <!-- Item 1 -->
+      <div
+        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
+      >
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
+          <span class="font-bold text-text-main dark:text-white">1. Número de Vitórias</span>
+        </div>
+        <button
+          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+        >
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+      <!-- Item 2 -->
+      <div
+        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
+      >
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
+          <span class="font-bold text-text-main dark:text-white">2. Saldo de Gols</span>
+        </div>
+        <button
+          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+        >
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+      <!-- Item 3 -->
+      <div
+        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
+      >
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
+          <span class="font-bold text-text-main dark:text-white">3. Gols Pró (Ataque)</span>
+        </div>
+        <button
+          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+        >
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+      <!-- Item 4 -->
+      <div
+        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
+      >
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
+          <span class="font-bold text-text-main dark:text-white">4. Confronto Direto</span>
+        </div>
+        <button
+          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+        >
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <!-- Bottom Actions -->
+  <div class="flex items-center justify-end gap-4 pt-4">
+    <button
+      class="px-8 h-12 rounded-full font-bold text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+    >
+      Voltar
+    </button>
+    <button
+      type="button"
+      (click)="saveAndContinue()"
+      class="flex items-center justify-center gap-2 px-8 h-12 rounded-full bg-primary text-white hover:bg-primary-dark font-bold shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5"
+    >
+      <span>Salvar e Continuar</span>
+      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+    </button>
+  </div>
+</div>

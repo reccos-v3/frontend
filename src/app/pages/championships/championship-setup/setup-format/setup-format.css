@@ -1,0 +1,12 @@
+.step-connector {
+  position: absolute;
+  top: 24px;
+  left: 15px;
+  bottom: -24px;
+  width: 2px;
+  background-color: #e2e8f0;
+  z-index: 0;
+}
+.step-connector.active {
+  background-color: #13ec80;
+}

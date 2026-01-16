@@ -1,0 +1,96 @@
+<div class="max-w-[1000px] mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-main dark:text-white tracking-tight mb-2">
+      Estrutura da Disputa
+    </h1>
+    <p class="text-secondary text-base">
+      Defina como os jogos serão organizados, fases de grupos e critérios de classificação.
+    </p>
+  </div>
+  <!-- Info Alert -->
+  <div
+    class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl p-4 mb-8 flex items-start gap-3"
+  >
+    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 mt-0.5">info</span>
+    <div>
+      <p class="text-sm text-blue-800 dark:text-blue-200 leading-relaxed font-medium">
+        A estrutura selecionada impactará diretamente na geração automática da tabela de jogos.
+        Certifique-se de que o número de times é compatível.
+      </p>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <!-- Left Column: Form Configuration -->
+    <div class="xl:col-span-2 space-y-8">
+      <!-- Section: Competition Format -->
+      <section
+        class="bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800"
+      >
+        <h2 class="text-lg font-bold text-main dark:text-white mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">format_list_bulleted</span>
+          Formato do Campeonato
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          @for (format of formats; track format.id) {
+          <label class="relative cursor-pointer group" (click)="selectedFormat = format.id">
+            <input
+              class="peer sr-only"
+              name="format"
+              type="radio"
+              [value]="format.id"
+              [checked]="selectedFormat === format.id"
+            />
+            <div
+              class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all h-full flex flex-col items-center text-center gap-3"
+            >
+              <div
+                class="size-16 rounded-full bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center text-main dark:text-white group-hover:scale-110 transition-transform"
+              >
+                <span class="material-symbols-outlined">{{ format.icon }}</span>
+              </div>
+              <div>
+                <span class="block text-sm font-bold text-main dark:text-white mb-1">{{
+                  format.label
+                }}</span>
+                <span class="block text-xs text-secondary">{{ format.description }}</span>
+              </div>
+            </div>
+            <div
+              class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+            >
+              <span class="material-symbols-outlined text-xl">check_circle</span>
+            </div>
+          </label>
+          }
+        </div>
+        <!-- Group Configuration Inputs -->
+        <app-setup-system-format [format]="selectedFormat" />
+      </section>
+      <app-setup-knockout-group />
+    </div>
+    <!-- Right Column: Visualization Preview -->
+    <div class="xl:col-span-1">
+      <app-setup-sidebar-format />
+    </div>
+  </div>
+</div>
+<!-- Fixed Bottom Action Bar -->
+<!-- <div
+  class="fixed bottom-0 left-0 right-0 lg:left-[280px] bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 p-4 z-30"
+> -->
+<div class="mt-8 max-w-[1000px] mx-auto flex justify-end items-center">
+  <button
+    (click)="returnToPrevious()"
+    class="flex items-center gap-2 px-6 py-3 rounded-full text-secondary hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium text-sm"
+  >
+    <span class="material-symbols-outlined text-lg">arrow_back</span>
+    Voltar
+  </button>
+  <button
+    class="flex items-center gap-2 px-8 py-3 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 font-bold text-sm"
+  >
+    Próximo: Times
+    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+  </button>
+  <!-- </div> -->
+</div>

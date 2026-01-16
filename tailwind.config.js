@@ -8,6 +8,7 @@ module.exports = {
         primary: '#1E7F4F',
         'primary-hover': '#16633D',
         'primary-dark': '#16623F',
+        'primary-light': '#13ec80',
         accent: '#2FA36B',
 
         // Base
