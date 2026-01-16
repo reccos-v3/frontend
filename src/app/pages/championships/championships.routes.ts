@@ -11,4 +11,9 @@ export const championshipsRoutes: Routes = [
     loadComponent: () =>
       import('./championship-create/championship-create').then((m) => m.ChampionshipCreate),
   },
+  {
+    path: 'edit/:id',
+    loadComponent: () =>
+      import('./championship-create/championship-create').then((m) => m.ChampionshipCreate),
+  },
 ];

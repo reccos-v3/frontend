@@ -29,15 +29,15 @@ export interface IChampionshipResponse {
     status: string;
     createdAt: string;
     updatedAt: string;
-  };
+  } | null;
   status: string;
   createdAt: string;
   updatedAt: string;
-  activatedAt: string;
+  activatedAt: string | null;
   format: {
     id: string;
     formatType: string;
-  };
+  } | null;
   rules: {
     id: string;
     pointsWin: number;
@@ -45,7 +45,7 @@ export interface IChampionshipResponse {
     pointsLoss: number;
     tieBreakerOrder: string[];
     hasHomeAway: boolean;
-  };
+  } | null;
   progress: {
     id: string;
     rulesDone: boolean;
@@ -54,4 +54,11 @@ export interface IChampionshipResponse {
     reviewDone: boolean;
   };
   teamsCount: number;
+}
+
+export interface IChampionshipStatisticsCard {
+  totalChampionships: number;
+  totalInProgress: number;
+  totalDrafts: number;
+  totalTeams: number;
 }

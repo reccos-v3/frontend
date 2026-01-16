@@ -1,21 +1,17 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TableList } from '../../../components/table-list/table-list';
 import { SequenceList } from './components/sequence-list/sequence-list';
 import { StepList } from './components/step-list/step-list';
-import { ITableColumn, ITableAction } from '../../../interfaces/table.interface';
-
-export interface IChampionship {
-  id: string;
-  name: string;
-  modality: string;
-  format: string;
-  status: 'ACTIVE' | 'CONFIG' | 'DRAFT' | 'FINISHED';
-  teamsCount: number;
-  icon?: string;
-}
-
+import { ITableColumn, ITableAction, ITablePagination } from '../../../interfaces/table.interface';
+import { ChampionshipService } from '../../../services/championship.service';
+import {
+  IChampionshipResponse,
+  IChampionshipStatisticsCard,
+} from '../../../interfaces/championship.interface';
+import { IPage } from '../../../interfaces/page.interface';
+import { ToastService } from '../../../services/toast.service';
 export type ViewMode = 'table' | 'sequence' | 'step';
 
 @Component({
@@ -25,104 +21,83 @@ export type ViewMode = 'table' | 'sequence' | 'step';
   templateUrl: './championship-list.html',
   styleUrl: './championship-list.css',
 })
-export class ChampionshipList {
+export class ChampionshipList implements OnInit {
+  private router = inject(Router);
+  private championshipService = inject(ChampionshipService);
+  private toastService = inject(ToastService);
+
   // Controle de visualização
   currentView = signal<ViewMode>('table');
+  statistics = signal<IChampionshipStatisticsCard>({
+    totalChampionships: 0,
+    totalInProgress: 0,
+    totalDrafts: 0,
+    totalTeams: 0,
+  });
 
-  // Dados mock
-  data = signal<IChampionship[]>([
+  statCards = computed(() => [
     {
-      id: '8821',
-      name: 'Copa Verão 2024',
-      modality: 'Futsal',
-      format: 'Mata-mata',
-      status: 'ACTIVE',
-      teamsCount: 32,
-      icon: 'CV',
+      label: 'Total de Campeonatos',
+      value: this.statistics().totalChampionships,
+      icon: 'trophy',
+      bgClass: 'bg-blue-50 dark:bg-blue-900/20',
+      iconClass: 'text-blue-600 dark:text-blue-400',
     },
     {
-      id: '9102',
-      name: 'Liga Estadual Sub-20',
-      modality: 'Futebol',
-      format: 'Pontos Corridos',
-      status: 'CONFIG',
-      teamsCount: 16,
-      icon: 'LE',
+      label: 'Em Andamento',
+      value: this.statistics().totalInProgress,
+      icon: 'play_circle',
+      bgClass: 'bg-primary/10',
+      iconClass: 'text-primary-dark',
     },
     {
-      id: '---',
-      name: 'Torneio Início',
-      modality: 'Vôlei',
-      format: 'Misto',
-      status: 'DRAFT',
-      teamsCount: 0,
-      icon: 'TI',
+      label: 'Rascunhos',
+      value: this.statistics().totalDrafts,
+      icon: 'edit_document',
+      bgClass: 'bg-orange-50 dark:bg-orange-900/20',
+      iconClass: 'text-orange-600 dark:text-orange-400',
     },
     {
-      id: '8550',
-      name: 'Supercopa Regional',
-      modality: 'Basquete',
-      format: 'Mata-mata',
-      status: 'FINISHED',
-      teamsCount: 12,
-      icon: 'SR',
-    },
-    {
-      id: '9234',
-      name: 'Copa do Interior',
-      modality: 'Futebol',
-      format: 'Pontos Corridos',
-      status: 'ACTIVE',
-      teamsCount: 24,
-      icon: 'CI',
-    },
-    {
-      id: '7891',
-      name: 'Torneio de Verão',
-      modality: 'Futsal',
-      format: 'Mata-mata',
-      status: 'CONFIG',
-      teamsCount: 8,
-      icon: 'TV',
+      label: 'Total de Equipes',
+      value: this.statistics().totalTeams,
+      icon: 'groups',
+      bgClass: 'bg-purple-50 dark:bg-purple-900/20',
+      iconClass: 'text-purple-600 dark:text-purple-400',
     },
   ]);
 
+  // Dados mock
+  data = signal<IChampionshipResponse[]>([]);
+
   // Configuração das colunas
-  columns = signal<ITableColumn<IChampionship>[]>([
+  columns = signal<ITableColumn<IChampionshipResponse>[]>([
     {
       key: 'name',
-      label: 'Nome do Campeonato',
-      width: '35%',
+      label: 'Campeonato',
       render: (row) => this.renderChampionshipName(row),
     },
     {
       key: 'modality',
       label: 'Modalidade',
-      width: '15%',
       render: (row) => this.renderModality(row),
     },
     {
       key: 'format',
       label: 'Formato',
-      width: '15%',
       render: (row) => this.renderFormat(row),
     },
     {
       key: 'status',
       label: 'Status',
-      width: '15%',
       render: (row) => this.renderStatus(row),
     },
   ]);
 
+  // Paginação
+  pagination = signal<ITablePagination | undefined>(undefined);
+
   // Configuração das ações
-  actions = signal<ITableAction<IChampionship>[]>([
-    {
-      icon: 'visibility',
-      label: 'Ver Detalhes',
-      variant: 'primary',
-      action: (row) => this.viewChampionship(row),
-    },
+  actions = signal<ITableAction<IChampionshipResponse>[]>([
     {
       icon: 'edit',
       label: 'Editar',
@@ -130,19 +105,23 @@ export class ChampionshipList {
       action: (row) => this.editChampionship(row),
     },
     {
-      icon: 'more_vert',
-      label: 'Mais Opções',
+      icon: 'delete',
+      label: 'Excluir',
       variant: 'default',
-      action: (row) => this.showMoreOptions(row),
+      action: (row) => this.deleteChampionship(row),
     },
   ]);
 
+  ngOnInit(): void {
+    this.getChampionships();
+  }
+
   // Métodos de renderização
-  renderChampionshipName(row: IChampionship): string {
+  renderChampionshipName(row: IChampionshipResponse): string {
     const gradientColors: { [key: string]: string } = {
       ACTIVE: 'from-blue-500 to-indigo-600',
       CONFIG: 'from-green-500 to-emerald-600',
-      DRAFT: 'bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600',
+      DRAFT: 'bg-orange-100 dark:bg-orange-700 border border-orange-200 dark:border-orange-600',
       FINISHED: 'from-orange-500 to-red-600',
     };
 
@@ -155,19 +134,21 @@ export class ChampionshipList {
     return `
       <div class="flex items-center gap-3">
         <div class="${iconClasses}">
-          ${row.icon || row.name.substring(0, 2).toUpperCase()}
+          ${row.name.substring(0, 2).toUpperCase()}
         </div>
         <div class="flex flex-col">
           <span class="font-semibold text-[#111814] dark:text-white text-base group-hover:text-primary transition-colors">
             ${row.name}
           </span>
-          <span class="text-xs text-text-muted">ID: #${row.id} • ${row.teamsCount} Equipes</span>
+          <span class="text-xs text-slate-500">${row.teamsCount} Equipes • ${
+      row.gender.charAt(0).toUpperCase() + row.gender.slice(1).toLocaleLowerCase()
+    }</span>
         </div>
       </div>
     `;
   }
 
-  renderModality(row: IChampionship): string {
+  renderModality(row: IChampionshipResponse): string {
     const modalityIcons: { [key: string]: string } = {
       Futsal: 'sports_soccer',
       Futebol: 'sports_soccer',
@@ -176,24 +157,25 @@ export class ChampionshipList {
       Tênis: 'sports_tennis',
     };
 
-    const icon = modalityIcons[row.modality] || 'sports';
+    const icon = modalityIcons[row.modality.name] || 'sports';
     return `
       <div class="flex items-center gap-2">
         <span class="material-symbols-outlined text-gray-400 text-[20px]">${icon}</span>
-        <span class="text-sm text-[#111814] dark:text-gray-200">${row.modality}</span>
+        <span class="text-sm text-[#111814] dark:text-gray-200">${row.modality.name}</span>
       </div>
     `;
   }
 
-  renderFormat(row: IChampionship): string {
+  renderFormat(row: IChampionshipResponse): string {
+    const formatName = row.format?.formatType || 'Não definido';
     return `
       <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
-        ${row.format}
+        ${formatName}
       </span>
     `;
   }
 
-  renderStatus(row: IChampionship): string {
+  renderStatus(row: IChampionshipResponse): string {
     const statusConfig: {
       [key: string]: { bg: string; text: string; border: string; dot: string; icon?: string };
     } = {
@@ -203,17 +185,17 @@ export class ChampionshipList {
         border: 'border-primary/20',
         dot: 'bg-green-500',
       },
-      CONFIG: {
+      CONFIGURING: {
         bg: 'bg-yellow-50 dark:bg-yellow-900/20',
         text: 'text-yellow-700 dark:text-yellow-400',
         border: 'border-yellow-200 dark:border-yellow-800/30',
         dot: 'bg-yellow-500',
       },
       DRAFT: {
-        bg: 'bg-gray-100 dark:bg-gray-800',
-        text: 'text-gray-600 dark:text-gray-400',
-        border: 'border-gray-200 dark:border-gray-700',
-        dot: 'bg-gray-400',
+        bg: 'bg-orange-100 dark:bg-orange-800',
+        text: 'text-orange-600 dark:text-orange-400',
+        border: 'border-orange-200 dark:border-orange-700',
+        dot: 'bg-orange-400',
       },
       FINISHED: {
         bg: 'bg-blue-50 dark:bg-blue-900/20',
@@ -248,20 +230,76 @@ export class ChampionshipList {
     `;
   }
 
+  getChampionships(page: number = 0) {
+    this.championshipService.getChampionshipsByFederation(page).subscribe({
+      next: (response) => {
+        this.data.set(response.content);
+        this.pagination.set({
+          currentPage: response.number,
+          pageSize: response.size,
+          totalElements: response.totalElements,
+          totalPages: response.totalPages,
+          onPageChange: (newPage) => this.getChampionships(newPage),
+        });
+        this.calculateStatistics(response);
+      },
+      error: (error) => {
+        console.error('Erro ao buscar campeonatos:', error);
+      },
+    });
+  }
+
+  calculateStatistics(response: IPage<IChampionshipResponse>) {
+    const totalChampionships = response.totalElements;
+    const totalInProgress = response.content.filter(
+      (championship) => championship.status === 'IN_PROGRESS'
+    ).length;
+    const totalDrafts = response.content.filter(
+      (championship) => championship.status === 'DRAFT'
+    ).length;
+    const totalTeams = response.content.reduce(
+      (total, championship) => total + championship.teamsCount,
+      0
+    );
+
+    this.statistics.set({
+      totalChampionships,
+      totalInProgress,
+      totalDrafts,
+      totalTeams,
+    });
+  }
+
   // Métodos de ação
-  viewChampionship(row: IChampionship): void {
+  viewChampionship(row: IChampionshipResponse): void {
     console.log('Ver campeonato:', row);
-    // TODO: Navegar para detalhes do campeonato
+    // Para campeonatos ativos, poderíamos navegar para um dashboard de gerenciamento
+    // Para rascunhos, talvez para o wizard de configuração
+    if (row.status === 'ACTIVE') {
+      // this.router.navigate(['/championships/manage', row.id]);
+    } else {
+      this.router.navigate(['/admin/championships/edit', row.id]);
+    }
   }
 
-  editChampionship(row: IChampionship): void {
+  editChampionship(row: IChampionshipResponse): void {
     console.log('Editar campeonato:', row);
-    // TODO: Navegar para edição do campeonato
+    this.router.navigate(['/admin/championships/edit', row.id]);
   }
 
-  showMoreOptions(row: IChampionship): void {
-    console.log('Mais opções:', row);
-    // TODO: Abrir menu de opções
+  deleteChampionship(row: IChampionshipResponse): void {
+    if (confirm(`Tem certeza que deseja excluir o campeonato "${row.name}"?`)) {
+      this.championshipService.deleteChampionship(row.id).subscribe({
+        next: () => {
+          this.toastService.success('Campeonato excluído com sucesso!');
+          this.getChampionships(this.pagination()?.currentPage || 0);
+        },
+        error: (error) => {
+          this.toastService.error('Erro ao excluir campeonato.');
+          console.error(error);
+        },
+      });
+    }
   }
 
   // Métodos para trocar visualização

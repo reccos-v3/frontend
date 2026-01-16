@@ -71,7 +71,7 @@
           @if (hasActions()) {
           <td class="py-4 px-6 text-right">
             <div
-              class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              class="flex items-center justify-end gap-2"
             >
               @for (action of actions(); track action.label) {
               @if (shouldShowAction(action, row)) {

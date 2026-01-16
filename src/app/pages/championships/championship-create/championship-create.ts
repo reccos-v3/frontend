@@ -1,7 +1,7 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import { Component, signal, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   SeasonTypeCard,
   SeasonTypeCardConfig,
@@ -21,7 +21,7 @@ import { seasonTypeCards } from '../../../utils/mocks/season-type-cards';
 interface ChampionshipFormData {
   name: string;
   modality: string;
-  gender: 'masculino' | 'feminino' | 'misto';
+  gender: 'MASCULINO' | 'FEMININO' | 'MISTO';
   seasonType: 'existing' | 'new' | 'standalone';
   season: string | null;
   seasonName?: string;
@@ -38,15 +38,17 @@ interface ChampionshipFormData {
 })
 export class ChampionshipCreate implements OnInit {
   private router = inject(Router);
-  private seasonService = inject(SeasonService);
-  private modalityService = inject(ModalityService);
+  private route = inject(ActivatedRoute);
   private championshipService = inject(ChampionshipService);
+  private modalityService = inject(ModalityService);
+  private seasonService = inject(SeasonService);
   private toastService = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   formData: ChampionshipFormData = {
     name: '',
     modality: '',
-    gender: 'masculino',
+    gender: 'MASCULINO',
     seasonType: 'existing',
     season: null,
     seasonName: '',
@@ -55,8 +57,12 @@ export class ChampionshipCreate implements OnInit {
   };
 
   isSubmitting = signal(false);
-  seasons = signal<ISeasonResponse[]>([]);
+  saveSuccess = signal(false);
+  isEditMode = signal(false);
+  championshipId = signal<string | null>(null);
+
   modalities = signal<IModalityResponse[]>([]);
+  seasons = signal<ISeasonResponse[]>([]);
 
   genderOptions = [
     { value: 'MASCULINO', label: 'Masculino' },
@@ -64,11 +70,67 @@ export class ChampionshipCreate implements OnInit {
     { value: 'MISTO', label: 'Misto' },
   ];
 
-  seasonTypeCards: SeasonTypeCardConfig[] = seasonTypeCards;
+  seasonTypeCards: SeasonTypeCardConfig[] = [
+    {
+      type: 'existing',
+      icon: 'history',
+      title: 'Temporada Existente',
+      description: 'Vincular a uma temporada já criada na federação.',
+      customContent: 'select',
+    },
+    {
+      type: 'new',
+      icon: 'add_circle',
+      title: 'Nova Temporada',
+      description: 'Criar uma nova temporada específica para este campeonato.',
+      customContent: 'inputs',
+    },
+    {
+      type: 'standalone',
+      icon: 'vignette',
+      title: 'Campeonato Avulso',
+      description: 'Campeonato sem vínculo com temporada (Torneio rápido).',
+      customContent: 'badge',
+      badgeText: 'Torneio Avulso',
+    },
+  ];
 
   ngOnInit(): void {
+    this.checkEditMode();
     this.getSeasonsByFederationId();
     this.getModalities();
+  }
+
+  checkEditMode(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode.set(true);
+      this.championshipId.set(id);
+      this.loadChampionshipData(id);
+    }
+  }
+
+  loadChampionshipData(id: string): void {
+    this.championshipService.getChampionshipById(id).subscribe({
+      next: (championship) => {
+        const seasonType: SeasonType = championship.season ? 'existing' : 'standalone';
+        this.formData = {
+          name: championship.name,
+          modality: championship.modality?.id || (championship as any).modalityId || '',
+          gender: (championship.gender || 'MASCULINO').toUpperCase() as any,
+          seasonType: seasonType,
+          season: championship.season?.id || null,
+          seasonName: '',
+          seasonStart: '',
+          seasonEnd: '',
+        };
+        setTimeout(() => this.cdr.detectChanges(), 0);
+      },
+      error: (error) => {
+        this.toastService.error('Erro ao carregar dados do campeonato.');
+        console.error(error);
+      },
+    });
   }
 
   onSeasonTypeSelect(type: SeasonType): void {
@@ -123,7 +185,12 @@ export class ChampionshipCreate implements OnInit {
 
   onCancel(): void {
     // Navegar de volta ou fechar
-    this.router.navigate(['/championships']);
+    this.router.navigate(['/admin/championships']);
+  }
+
+  goToSetup(): void {
+    // Navigate to the setup rules page
+    this.router.navigate(['/admin/championships/setup-rules', this.championshipId()]);
   }
 
   onSubmit(): void {
@@ -141,13 +208,6 @@ export class ChampionshipCreate implements OnInit {
       this.toastService.error('Preencha nome, início e fim da nova temporada.');
       return;
     }
-
-    // if (this.formData.seasonType === 'new') {
-    //   this.createNewSeason();
-    // } else {
-    //   this.formData.season = null;
-    //   this.createObjectToApi();
-    // }
 
     this.formData.seasonType !== 'new' ? this.createObjectToApi() : this.createNewSeason();
 
@@ -196,7 +256,8 @@ export class ChampionshipCreate implements OnInit {
         }, 1000);
       },
       error: (error) => {
-        console.error('Erro ao criar temporada:', error);
+        this.isSubmitting.set(false);
+        this.toastService.error('Erro ao criar temporada.');
       },
     });
   }
@@ -205,19 +266,42 @@ export class ChampionshipCreate implements OnInit {
     const objectToApi: IChampionshipRequest = {
       name: this.formData.name,
       modalityId: this.formData.modality,
-      gender: this.formData.gender,
+      gender: this.formData.gender.toUpperCase(),
       type: this.formData.seasonType !== 'standalone' ? 'SEASONAL' : 'AVULSO',
       seasonId: this.formData.season || null,
     };
 
-    this.createChampionship(objectToApi);
+    if (this.isEditMode()) {
+      this.updateChampionship(objectToApi);
+    } else {
+      this.createChampionship(objectToApi);
+    }
+  }
+
+  updateChampionship(championship: IChampionshipRequest) {
+    const id = this.championshipId();
+    if (!id) return;
+
+    this.championshipService.updateChampionship(id, championship).subscribe({
+      next: (response) => {
+        this.isSubmitting.set(false);
+        this.saveSuccess.set(true);
+        this.toastService.success('Campeonato atualizado com sucesso!');
+      },
+      error: (error) => {
+        this.isSubmitting.set(false);
+        this.toastService.error('Erro ao atualizar campeonato.');
+        console.error(error);
+      },
+    });
   }
 
   createChampionship(championship: IChampionshipRequest) {
     this.championshipService.createChampionship(championship).subscribe({
       next: (response) => {
         this.isSubmitting.set(false);
-        console.log('Campeonato criado:', response);
+        this.saveSuccess.set(true);
+        this.toastService.success('Campeonato criado com sucesso!');
       },
       error: (error) => {
         console.error('Erro ao criar campeonato:', error);

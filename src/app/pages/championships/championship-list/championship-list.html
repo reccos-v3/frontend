@@ -15,7 +15,7 @@
       </p>
     </div>
     <a
-      routerLink="/championships/create"
+      routerLink="/admin/championships/create"
       class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all transform active:scale-95 group"
     >
       <span
@@ -27,62 +27,27 @@
   </div>
   <!-- Quick Stats Row -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    @for (card of statCards(); track card.label) {
     <div
-      class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4"
+      class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100/50 dark:border-gray-800/40 flex items-center gap-4 text-left"
     >
       <div
-        class="size-12 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center"
+        class="size-12 rounded-full flex items-center justify-center {{ card.bgClass }} {{
+          card.iconClass
+        }}"
       >
-        <span class="material-symbols-outlined icon-filled">trophy</span>
+        <span class="material-symbols-outlined icon-filled">{{ card.icon }}</span>
       </div>
       <div>
-        <p class="text-sm text-text-muted font-medium">Total de Campeonatos</p>
-        <p class="text-2xl font-bold text-[#111814] dark:text-white">24</p>
+        <p class="text-sm text-text-muted font-medium">{{ card.label }}</p>
+        <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ card.value }}</p>
       </div>
     </div>
-    <div
-      class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4"
-    >
-      <div
-        class="size-12 rounded-full bg-primary/10 text-primary-dark flex items-center justify-center"
-      >
-        <span class="material-symbols-outlined icon-filled">play_circle</span>
-      </div>
-      <div>
-        <p class="text-sm text-text-muted font-medium">Em Andamento</p>
-        <p class="text-2xl font-bold text-[#111814] dark:text-white">8</p>
-      </div>
-    </div>
-    <div
-      class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4"
-    >
-      <div
-        class="size-12 rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 flex items-center justify-center"
-      >
-        <span class="material-symbols-outlined icon-filled">edit_document</span>
-      </div>
-      <div>
-        <p class="text-sm text-text-muted font-medium">Rascunhos</p>
-        <p class="text-2xl font-bold text-[#111814] dark:text-white">3</p>
-      </div>
-    </div>
-    <div
-      class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4"
-    >
-      <div
-        class="size-12 rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center"
-      >
-        <span class="material-symbols-outlined icon-filled">groups</span>
-      </div>
-      <div>
-        <p class="text-sm text-text-muted font-medium">Total de Equipes</p>
-        <p class="text-2xl font-bold text-[#111814] dark:text-white">142</p>
-      </div>
-    </div>
+    }
   </div>
   <!-- Toolbar: Search & Filters -->
   <div
-    class="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between bg-white dark:bg-surface-dark p-5 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm"
+    class="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between bg-white dark:bg-surface-dark p-5 rounded-xl border border-gray-100/50 dark:border-gray-800/40 shadow-sm"
   >
     <!-- First Row: Search, View Switcher and Filters (all in one line on desktop) -->
     <div
@@ -96,14 +61,14 @@
           <span class="material-symbols-outlined">search</span>
         </div>
         <input
-          class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+          class="w-full pl-12 pr-4 h-14 bg-gray-50 border border-gray-100 dark:bg-white/5 dark:border-gray-800/50 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
           placeholder="Buscar por nome, liga ou ano..."
           type="text"
         />
       </div>
       <!-- View Switcher -->
       <div
-        class="flex items-center gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-lg border border-gray-200 dark:border-gray-700 w-full sm:w-auto shrink-0"
+        class="flex items-center gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-lg border border-gray-100/50 dark:border-gray-700/30 w-full sm:w-auto shrink-0"
       >
         <button
           (click)="setView('table')"
@@ -145,7 +110,7 @@
       <!-- Filters (inline on desktop) -->
       <div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 px-2 lg:px-0 -mx-2 lg:mx-0 shrink-0">
         <button
-          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-100/50 dark:border-gray-700/30 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
         >
           <span class="material-symbols-outlined text-text-muted text-[20px]">sports_soccer</span>
           <span class="text-sm font-medium text-[#111814] dark:text-white">Modalidade</span>
@@ -155,7 +120,7 @@
           >
         </button>
         <button
-          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-100/50 dark:border-gray-700/30 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
         >
           <span class="material-symbols-outlined text-text-muted text-[20px]">grid_view</span>
           <span class="text-sm font-medium text-[#111814] dark:text-white">Tipo</span>
@@ -165,7 +130,7 @@
           >
         </button>
         <button
-          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
+          class="flex items-center gap-2 p-2 bg-white dark:bg-surface-dark border border-gray-100/50 dark:border-gray-700/30 rounded-md hover:bg-gray-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap group"
         >
           <span class="material-symbols-outlined text-text-muted text-[20px]">label</span>
           <span class="text-sm font-medium text-[#111814] dark:text-white">Status</span>
@@ -190,10 +155,17 @@
     [columns]="columns()"
     [data]="data()"
     [actions]="actions()"
+    [pagination]="pagination()"
     emptyMessage="Nenhum campeonato encontrado."
   />
   } @else if (currentView() === 'sequence') {
-  <app-sequence-list />
+  <app-sequence-list
+    [data]="data()"
+    [pagination]="pagination()"
+    (onEdit)="editChampionship($event)"
+    (onDelete)="deleteChampionship($event)"
+    (onManage)="viewChampionship($event)"
+  />
   } @else if (currentView() === 'step') {
   <app-step-list />
   }

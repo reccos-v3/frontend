@@ -3,7 +3,9 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
         <div class="flex items-center gap-3 mb-2">
-          <h1 class="text-4xl font-black tracking-tight text-secondary">Novo Campeonato</h1>
+          <h1 class="text-4xl font-black tracking-tight text-secondary">
+            {{ isEditMode() ? 'Editar' : 'Novo' }} Campeonato
+          </h1>
           <span
             class="px-2.5 py-1 rounded-md bg-primary/20 border border-neutral-border text-neutral-gray text-[10px] font-bold text-primary uppercase tracking-widest"
             >Rascunho</span
@@ -21,8 +23,11 @@
           Atenção ao processo
         </h3>
         <p class="text-blue-800 dark:text-blue-200 text-sm mt-1">
-          Você está criando apenas a base do campeonato. Regras, estrutura, times e jogos serão
-          definidos nos próximos passos após salvar este rascunho.
+          {{
+            isEditMode()
+              ? 'Você está alterando as informações básicas. Outros aspectos do campeonato (regras, times) devem ser editados em suas respectivas abas.'
+              : 'Você está criando apenas a base do campeonato. Regras, estrutura, times e jogos serão definidos nos próximos passos após salvar este rascunho.'
+          }}
         </p>
       </div>
     </div>
@@ -155,18 +160,31 @@
       </div>
       <div class="pt-6 border-t border-neutral-border">
         <button
-          class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_0_20px_rgba(47,163,107,0.2)]"
-          (click)="onSubmit()"
+          class="w-full font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(47,163,107,0.2)]"
+          [class.bg-primary]="!saveSuccess()"
+          [class.hover:bg-primary/90]="!saveSuccess()"
+          [class.text-white]="!saveSuccess()"
+          [class.bg-emerald-600]="saveSuccess()"
+          [class.hover:bg-emerald-700]="saveSuccess()"
+          [class.text-white]="saveSuccess()"
+          (click)="saveSuccess() ? goToSetup() : onSubmit()"
           [disabled]="
             isSubmitting() ||
-            !formData.name ||
-            !formData.modality ||
-            isExistingSeasonMissing() ||
-            isNewSeasonMissing()
+            (!saveSuccess() && (!formData.name || !formData.modality || isExistingSeasonMissing() || isNewSeasonMissing()))
           "
         >
-          <span>{{ isSubmitting() ? 'Salvando...' : 'Continuar configuração' }}</span>
-          <span class="material-symbols-outlined">arrow_forward</span>
+          <span>{{
+            isSubmitting()
+              ? 'Salvando...'
+              : saveSuccess()
+              ? 'Ir para Setup'
+              : isEditMode()
+              ? 'Atualizar campeonato'
+              : 'Continuar configuração'
+          }}</span>
+          <span class="material-symbols-outlined">{{
+            saveSuccess() ? 'settings' : 'arrow_forward'
+          }}</span>
         </button>
         <p class="mt-3 text-[11px] text-neutral-gray text-center leading-relaxed">
           Você poderá alterar todos os campos desta etapa nas telas seguintes antes da ativação.
