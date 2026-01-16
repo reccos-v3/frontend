@@ -10,7 +10,7 @@ import { SetupSystemFormat } from '../setup-system-format/setup-system-format';
   styleUrl: './setup-format.css',
 })
 export class SetupFormat {
-  advanced = output<'rules' | 'format'>();
+  advanced = output<'rules' | 'format' | 'teams'>();
 
   selectedFormat = 'groups_knockout';
 
@@ -36,7 +36,8 @@ export class SetupFormat {
   ];
 
   saveAndContinue() {
-    this.advanced.emit('rules');
+    console.log('saveAndContinue');
+    this.advanced.emit('teams');
   }
 
   returnToPrevious() {

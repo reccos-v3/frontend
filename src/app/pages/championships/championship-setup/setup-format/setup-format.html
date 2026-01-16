@@ -66,7 +66,9 @@
         <!-- Group Configuration Inputs -->
         <app-setup-system-format [format]="selectedFormat" />
       </section>
+      @if (selectedFormat !== 'round_robin') {
       <app-setup-knockout-group />
+      }
     </div>
     <!-- Right Column: Visualization Preview -->
     <div class="xl:col-span-1">
@@ -78,8 +80,9 @@
 <!-- <div
   class="fixed bottom-0 left-0 right-0 lg:left-[280px] bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 p-4 z-30"
 > -->
-<div class="mt-8 max-w-[1000px] mx-auto flex justify-end items-center">
+<div class="mt-8 max-w-[1000px] mx-auto flex justify-end items-center relative z-50">
   <button
+    type="button"
     (click)="returnToPrevious()"
     class="flex items-center gap-2 px-6 py-3 rounded-full text-secondary hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium text-sm"
   >
@@ -87,6 +90,8 @@
     Voltar
   </button>
   <button
+    type="button"
+    (click)="saveAndContinue()"
     class="flex items-center gap-2 px-8 py-3 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 font-bold text-sm"
   >
     Próximo: Times

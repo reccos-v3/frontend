@@ -9,6 +9,8 @@
       <app-setup-rules (advanced)="advanced($event)" />
       } @case ('format') {
       <app-setup-format (advanced)="advanced($event)" />
+      } @case ('teams') {
+      <app-setup-add-teams (advanced)="advanced($event)" />
       } }
     </main>
   </div>

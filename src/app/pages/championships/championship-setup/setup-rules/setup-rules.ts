@@ -7,10 +7,9 @@ import { Component, output } from '@angular/core';
   styleUrl: './setup-rules.css',
 })
 export class SetupRules {
-  advanced = output<'rules' | 'format'>();
+  advanced = output<'rules' | 'format' | 'teams'>();
 
   saveAndContinue() {
-    console.log('SetupRules: saveAndContinue clicked, emitting format');
     this.advanced.emit('format');
   }
 }
