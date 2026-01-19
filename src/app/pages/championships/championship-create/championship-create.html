@@ -62,7 +62,7 @@
             >
               <option value="">Selecione a modalidade</option>
               @for (modality of modalities(); track modality.id) {
-              <option [value]="modality.id">{{ modality.name }}</option>
+                <option [value]="modality.id">{{ modality.name }}</option>
               }
             </select>
             <span
@@ -75,20 +75,20 @@
           <label class="block text-sm font-medium text-text-main mb-2">Gênero</label>
           <div class="flex gap-2 p-1 bg-white rounded-lg border border-neutral-border">
             @for (gender of genderOptions; track gender.value) {
-            <label class="flex-1 cursor-pointer">
-              <input
-                class="hidden peer"
-                name="gender"
-                type="radio"
-                [value]="gender.value"
-                [(ngModel)]="formData.gender"
-              />
-              <div
-                class="text-center py-3 text-sm font-medium rounded-md text-neutral-gray peer-checked:bg-gray-100 peer-checked:text-text-main transition-all"
-              >
-                {{ gender.label }}
-              </div>
-            </label>
+              <label class="flex-1 cursor-pointer">
+                <input
+                  class="hidden peer"
+                  name="gender"
+                  type="radio"
+                  [value]="gender.value"
+                  [(ngModel)]="formData.gender"
+                />
+                <div
+                  class="text-center py-3 text-sm font-medium rounded-md text-neutral-gray peer-checked:bg-gray-100 peer-checked:text-text-main transition-all"
+                >
+                  {{ gender.label }}
+                </div>
+              </label>
             }
           </div>
         </div>
@@ -105,24 +105,26 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
         @for (card of seasonTypeCards; track card.type) {
-        <app-season-type-card
-          [config]="card"
-          [isSelected]="formData.seasonType === card.type"
-          [disabled]="card.type === 'existing' && seasons().length === 0"
-          [season]="formData.season || ''"
-          [seasonName]="formData.seasonName || ''"
-          [seasonStart]="formData.seasonStart || ''"
-          [seasonEnd]="formData.seasonEnd || ''"
-          [seasons]="seasons()"
-          [missingExistingSeason]="formData.seasonType === 'existing' && isExistingSeasonMissing()"
-          [missingNewSeason]="formData.seasonType === 'new' && isNewSeasonMissing()"
-          [modalities]="modalities()"
-          (selectCard)="onSeasonTypeSelect($event)"
-          (seasonChange)="onSeasonChange($event)"
-          (seasonNameChange)="onSeasonNameChange($event)"
-          (seasonStartChange)="onSeasonStartChange($event)"
-          (seasonEndChange)="onSeasonEndChange($event)"
-        ></app-season-type-card>
+          <app-season-type-card
+            [config]="card"
+            [isSelected]="formData.seasonType === card.type"
+            [disabled]="card.type === 'existing' && seasons().length === 0"
+            [season]="formData.season || ''"
+            [seasonName]="formData.seasonName || ''"
+            [seasonStart]="formData.seasonStart || ''"
+            [seasonEnd]="formData.seasonEnd || ''"
+            [seasons]="seasons()"
+            [missingExistingSeason]="
+              formData.seasonType === 'existing' && isExistingSeasonMissing()
+            "
+            [missingNewSeason]="formData.seasonType === 'new' && isNewSeasonMissing()"
+            [modalities]="modalities()"
+            (selectCard)="onSeasonTypeSelect($event)"
+            (seasonChange)="onSeasonChange($event)"
+            (seasonNameChange)="onSeasonNameChange($event)"
+            (seasonStartChange)="onSeasonStartChange($event)"
+            (seasonEndChange)="onSeasonEndChange($event)"
+          ></app-season-type-card>
         }
       </div>
     </section>
@@ -160,27 +162,29 @@
       </div>
       <div class="pt-6 border-t border-neutral-border">
         <button
-          class="w-full font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(47,163,107,0.2)]"
+          class="w-full font-bold py-4 text-white rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(47,163,107,0.2)]"
           [class.bg-primary]="!saveSuccess()"
           [class.hover:bg-primary/90]="!saveSuccess()"
-          [class.text-white]="!saveSuccess()"
           [class.bg-emerald-600]="saveSuccess()"
           [class.hover:bg-emerald-700]="saveSuccess()"
-          [class.text-white]="saveSuccess()"
           (click)="saveSuccess() ? goToSetup() : onSubmit()"
           [disabled]="
             isSubmitting() ||
-            (!saveSuccess() && (!formData.name || !formData.modality || isExistingSeasonMissing() || isNewSeasonMissing()))
+            (!saveSuccess() &&
+              (!formData.name ||
+                !formData.modality ||
+                isExistingSeasonMissing() ||
+                isNewSeasonMissing()))
           "
         >
           <span>{{
             isSubmitting()
               ? 'Salvando...'
               : saveSuccess()
-              ? 'Ir para Setup'
-              : isEditMode()
-              ? 'Atualizar campeonato'
-              : 'Continuar configuração'
+                ? 'Ir para Setup'
+                : isEditMode()
+                  ? 'Atualizar campeonato'
+                  : 'Continuar configuração'
           }}</span>
           <span class="material-symbols-outlined">{{
             saveSuccess() ? 'settings' : 'arrow_forward'

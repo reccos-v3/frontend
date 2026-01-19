@@ -86,78 +86,182 @@
     <div
       class="flex items-center justify-between pb-4 border-b border-border-light dark:border-border-dark"
     >
-      <div class="flex items-center gap-3">
-        <div class="p-2 rounded-lg bg-primary/10 text-primary">
+      <div class="flex items-start gap-3">
+        <div class="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
           <span class="material-symbols-outlined">sort</span>
         </div>
-        <h3 class="text-lg font-bold text-text-main dark:text-white">Critérios de Desempate</h3>
+        <div class="flex flex-col gap-0.5">
+          <h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">
+            Critérios de Desempate
+          </h3>
+          <p class="text-sm font-medium text-orange-800 dark:text-orange-400">
+            Pontos é sempre o primeiro critério por regra do sistema.
+          </p>
+        </div>
       </div>
-      <button class="text-sm font-bold text-primary hover:text-primary-hover transition-colors">
+      <button
+        (click)="openModal()"
+        class="text-sm font-bold text-primary hover:text-primary-hover transition-colors"
+      >
         + Adicionar critério
       </button>
     </div>
     <div class="flex flex-col gap-3">
-      <p class="text-sm text-text-secondary dark:text-gray-400 mb-2">
-        Arraste para reordenar a prioridade dos critérios.
-      </p>
-      <!-- Item 1 -->
-      <div
-        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
-      >
-        <div class="flex items-center gap-4">
-          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
-          <span class="font-bold text-text-main dark:text-white">1. Número de Vitórias</span>
-        </div>
-        <button
-          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+      @if (tiebreaks().length > 1) {
+        <p class="text-sm text-text-secondary dark:text-gray-400 mb-2">
+          Arraste para reordenar a prioridade dos demais critérios.
+        </p>
+      }
+
+      @for (tiebreak of tiebreaks(); track $index) {
+        <div
+          class="group flex items-center justify-between p-4 rounded-xl border transition-all duration-200"
+          [class.bg-background-light]="dragOverIndex !== $index"
+          [class.dark:bg-background-dark]="dragOverIndex !== $index"
+          [class.border-border-light]="dragOverIndex !== $index"
+          [class.dark:border-border-dark]="dragOverIndex !== $index"
+          [class.border-primary]="dragOverIndex === $index"
+          [class.bg-primary/5]="dragOverIndex === $index"
+          [class.opacity-50]="dragIndex === $index"
+          [class.cursor-grab]="tiebreak.code !== 'POINTS'"
+          [class.active:cursor-grabbing]="tiebreak.code !== 'POINTS'"
+          [attr.draggable]="tiebreak.code !== 'POINTS'"
+          (dragstart)="tiebreak.code !== 'POINTS' ? onDragStart($index) : null"
+          (dragover)="tiebreak.code !== 'POINTS' ? onDragOver($event, $index) : null"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($index)"
         >
-          <span class="material-symbols-outlined">delete</span>
-        </button>
-      </div>
-      <!-- Item 2 -->
-      <div
-        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
-      >
-        <div class="flex items-center gap-4">
-          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
-          <span class="font-bold text-text-main dark:text-white">2. Saldo de Gols</span>
+          <div class="flex items-center gap-4">
+            @if (tiebreak.code !== 'POINTS') {
+              <span class="material-symbols-outlined text-gray-400 cursor-grab"
+                >drag_indicator</span
+              >
+            } @else {
+              <span class="material-symbols-outlined text-primary/40">lock</span>
+            }
+            <span class="font-bold text-text-main dark:text-white"
+              >{{ $index + 1 }}. {{ tiebreak.name }}</span
+            >
+          </div>
+          @if (tiebreak.code !== 'POINTS') {
+            <button
+              (click)="removeTiebreak($index)"
+              class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+            >
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          }
         </div>
-        <button
-          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+      } @empty {
+        <div
+          (click)="openModal()"
+          class="group flex flex-col items-center justify-center gap-4 p-10 rounded-[2rem] border-2 border-dashed border-border-light dark:border-border-dark hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all duration-300"
         >
-          <span class="material-symbols-outlined">delete</span>
-        </button>
-      </div>
-      <!-- Item 3 -->
-      <div
-        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
-      >
-        <div class="flex items-center gap-4">
-          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
-          <span class="font-bold text-text-main dark:text-white">3. Gols Pró (Ataque)</span>
+          <div
+            class="w-16 h-16 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+          >
+            <span
+              class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors"
+              >playlist_add</span
+            >
+          </div>
+          <div class="flex flex-col items-center gap-1 text-center">
+            <h4 class="font-bold text-text-main dark:text-white">Selecione critérios adicionais</h4>
+            <p class="text-sm text-text-secondary dark:text-gray-400 max-w-[280px]">
+              Os pontos são obrigatórios, mas você pode adicionar outros critérios para desempate.
+            </p>
+          </div>
         </div>
-        <button
-          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-        >
-          <span class="material-symbols-outlined">delete</span>
-        </button>
-      </div>
-      <!-- Item 4 -->
-      <div
-        class="group flex items-center justify-between p-4 rounded-xl bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all"
-      >
-        <div class="flex items-center gap-4">
-          <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
-          <span class="font-bold text-text-main dark:text-white">4. Confronto Direto</span>
-        </div>
-        <button
-          class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-        >
-          <span class="material-symbols-outlined">delete</span>
-        </button>
-      </div>
+      }
     </div>
   </section>
+
+  <!-- Selection Modal -->
+  @if (showModal()) {
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md bg-black/40 animate-in fade-in duration-300"
+    >
+      <div
+        class="w-full max-w-2xl bg-white dark:bg-surface-dark rounded-[2.5rem] shadow-2xl border border-white/20 dark:border-white/10 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300"
+      >
+        <!-- Modal Header -->
+        <div
+          class="px-8 pt-8 pb-6 flex items-center justify-between border-b border-border-light dark:border-border-dark"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="text-2xl font-bold text-text-main dark:text-white">Adicionar Critérios</h3>
+            <p class="text-sm text-text-secondary dark:text-gray-400">
+              Selecione os critérios de desempate desejados
+            </p>
+          </div>
+          <button
+            (click)="closeModal()"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            <span class="material-symbols-outlined text-text-secondary">close</span>
+          </button>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="p-8 overflow-y-auto custom-scrollbar">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @for (item of availableTiebreaks(); track item.id) {
+              <div
+                (click)="item.code !== 'POINTS' ? toggleTiebreak(item) : null"
+                class="relative group p-4 rounded-2xl border-2 transition-all cursor-pointer select-none"
+                [class.border-primary]="isSelected(item.id)"
+                [class.bg-primary/5]="isSelected(item.id)"
+                [class.border-border-light]="!isSelected(item.id)"
+                [class.dark:border-border-dark]="!isSelected(item.id)"
+                [class.hover:border-primary/50]="!isSelected(item.id)"
+                [class.opacity-60]="item.code === 'POINTS'"
+                [class.cursor-not-allowed]="item.code === 'POINTS'"
+              >
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center justify-between">
+                    <span
+                      class="text-xs font-bold uppercase tracking-wider text-text-secondary dark:text-gray-500"
+                    >
+                      {{ item.category }}
+                    </span>
+                    @if (isSelected(item.id)) {
+                      <div
+                        class="w-5 h-5 rounded-full bg-primary flex items-center justify-center animate-in zoom-in duration-200"
+                      >
+                        <span class="material-symbols-outlined text-white text-[14px]">check</span>
+                      </div>
+                    }
+                  </div>
+                  <h4 class="font-bold text-text-main dark:text-white">{{ item.name }}</h4>
+                  <p class="text-xs text-text-secondary dark:text-gray-400 line-clamp-2">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div
+          class="p-8 mt-auto flex items-center justify-end gap-4 bg-gray-50/50 dark:bg-white/5 border-t border-border-light dark:border-border-dark"
+        >
+          <button
+            (click)="closeModal()"
+            class="px-6 h-12 rounded-full font-bold text-text-main dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            (click)="confirmSelection()"
+            class="px-8 h-12 rounded-full bg-primary text-white hover:bg-primary-dark font-bold shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5"
+          >
+            Confirmar Seleção
+          </button>
+        </div>
+      </div>
+    </div>
+  }
   <!-- Bottom Actions -->
   <div class="flex items-center justify-end gap-4 pt-4">
     <button
