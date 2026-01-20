@@ -167,10 +167,11 @@
           [class.hover:bg-primary/90]="!saveSuccess()"
           [class.bg-emerald-600]="saveSuccess()"
           [class.hover:bg-emerald-700]="saveSuccess()"
-          (click)="saveSuccess() ? goToSetup() : onSubmit()"
+          (click)="isEditMode() || saveSuccess() ? goToSetup() : onSubmit()"
           [disabled]="
             isSubmitting() ||
-            (!saveSuccess() &&
+            (!isEditMode() &&
+              !saveSuccess() &&
               (!formData.name ||
                 !formData.modality ||
                 isExistingSeasonMissing() ||
@@ -180,11 +181,9 @@
           <span>{{
             isSubmitting()
               ? 'Salvando...'
-              : saveSuccess()
+              : isEditMode() || saveSuccess()
                 ? 'Ir para Setup'
-                : isEditMode()
-                  ? 'Atualizar campeonato'
-                  : 'Continuar configuração'
+                : 'Continuar configuração'
           }}</span>
           <span class="material-symbols-outlined">{{
             saveSuccess() ? 'settings' : 'arrow_forward'

@@ -1,4 +1,4 @@
-import { Component, effect, inject, output, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, effect, inject, output, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { TiebreakService } from '../../../../services/tiebreak.service';
@@ -47,9 +47,13 @@ export class SetupRules {
   tempSelectedIds = signal<number[]>([]);
 
   ngOnInit() {
-    this.getAllTiebreaks();
-    this.getModalities();
-    this.getSeasons();
+    const isBrowser = isPlatformBrowser(this.platformId);
+    console.log('SetupRules ngOnInit - IsBrowser:', isBrowser);
+    if (isBrowser) {
+      this.getAllTiebreaks();
+      this.getModalities();
+      this.getSeasons();
+    }
   }
 
   getModalities() {
@@ -155,17 +159,15 @@ export class SetupRules {
     this.dragOverIndex = null;
   }
 
-  isValid = signal(false);
+  isValid = computed(() => {
+    return this.name().length >= 3 && this.modalityId() !== '' && this.seasonId() !== '';
+  });
 
   constructor() {
-    effect(
-      () => {
-        const valid = this.name().length >= 3 && this.modalityId() !== '' && this.seasonId() !== '';
-        this.isValid.set(valid);
-        this.valid.emit(valid);
-      },
-      { allowSignalWrites: true },
-    );
+    // Escuta mudanças em isValid para emitir o evento
+    effect(() => {
+      this.valid.emit(this.isValid());
+    });
   }
 
   saveAndContinue() {

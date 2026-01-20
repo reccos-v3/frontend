@@ -190,7 +190,7 @@ export class ChampionshipCreate implements OnInit {
 
   goToSetup(): void {
     // Navigate to the setup rules page
-    this.router.navigate(['/admin/championships/setup-rules', this.championshipId()]);
+    this.router.navigate(['/admin/championships/setup', this.championshipId()]);
   }
 
   onSubmit(): void {
@@ -301,9 +301,12 @@ export class ChampionshipCreate implements OnInit {
       next: (response) => {
         this.isSubmitting.set(false);
         this.saveSuccess.set(true);
+        this.championshipId.set(response.id);
         this.toastService.success('Campeonato criado com sucesso!');
       },
       error: (error) => {
+        this.isSubmitting.set(false);
+        this.toastService.error('Erro ao criar campeonato.');
         console.error('Erro ao criar campeonato:', error);
       },
     });

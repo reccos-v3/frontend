@@ -35,17 +35,16 @@ export const routes: Routes = [
         path: 'invitations',
         loadComponent: () =>
           import('./pages/invitations/manage-invitations/manage-invitations').then(
-            (m) => m.ManageInvitations
+            (m) => m.ManageInvitations,
           ),
       },
     ],
   },
-
   {
     path: 'admin/championships/setup/:id',
     loadComponent: () =>
       import('./pages/championships/championship-setup/championship-setup').then(
-        (m) => m.ChampionshipSetup
+        (m) => m.ChampionshipSetup,
       ),
   },
 
