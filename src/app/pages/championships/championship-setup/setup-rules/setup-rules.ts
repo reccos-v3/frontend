@@ -1,5 +1,15 @@
-import { Component, computed, effect, inject, output, PLATFORM_ID, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  output,
+  PLATFORM_ID,
+  signal,
+  OnInit,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TiebreakService } from '../../../../services/tiebreak.service';
 import { ITiebreakResponse } from '../../../../interfaces/tiebreak.interface';
@@ -11,15 +21,17 @@ import { ISeasonResponse } from '../../../../interfaces/season.interface';
 
 @Component({
   selector: 'app-setup-rules',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './setup-rules.html',
   styleUrl: './setup-rules.css',
 })
-export class SetupRules {
+export class SetupRules implements OnInit {
   private tiebreakService = inject(TiebreakService);
   private modalityService = inject(ModalityService);
   private seasonService = inject(SeasonService);
   private platformId = inject(PLATFORM_ID);
+  private fb = inject(FormBuilder);
 
   advanced = output<SetupStep>();
   valid = output<boolean>();
@@ -32,11 +44,8 @@ export class SetupRules {
   type = signal('SEASONAL');
   seasonId = signal('');
 
-  // Rules
-  pointsWin = signal(3);
-  pointsDraw = signal(1);
-  pointsLoss = signal(0);
-  hasHomeAway = signal(true);
+  // Rules Form
+  rulesForm: FormGroup;
 
   modalities = signal<IModalityResponse[]>([]);
   seasons = signal<ISeasonResponse[]>([]);
@@ -46,9 +55,29 @@ export class SetupRules {
   showModal = signal(false);
   tempSelectedIds = signal<number[]>([]);
 
+  dragIndex: number | null = null;
+  dragOverIndex: number | null = null;
+
+  isValid = computed(() => {
+    return this.rulesForm.valid && this.tiebreaks().length > 0;
+  });
+
+  constructor() {
+    this.rulesForm = this.fb.group({
+      pointsWin: [3, [Validators.required, Validators.min(0)]],
+      pointsDraw: [1, [Validators.required, Validators.min(0)]],
+      pointsLoss: [0, [Validators.required, Validators.min(0)]],
+      hasHomeAway: [true],
+    });
+
+    // Escuta mudanças em isValid para emitir o evento
+    effect(() => {
+      this.valid.emit(this.isValid());
+    });
+  }
+
   ngOnInit() {
     const isBrowser = isPlatformBrowser(this.platformId);
-    console.log('SetupRules ngOnInit - IsBrowser:', isBrowser);
     if (isBrowser) {
       this.getAllTiebreaks();
       this.getModalities();
@@ -76,9 +105,6 @@ export class SetupRules {
       });
     }
   }
-
-  dragIndex: number | null = null;
-  dragOverIndex: number | null = null;
 
   openModal() {
     const selectedIds = this.tiebreaks().map((t) => t.id);
@@ -159,19 +185,9 @@ export class SetupRules {
     this.dragOverIndex = null;
   }
 
-  isValid = computed(() => {
-    return this.name().length >= 3 && this.modalityId() !== '' && this.seasonId() !== '';
-  });
-
-  constructor() {
-    // Escuta mudanças em isValid para emitir o evento
-    effect(() => {
-      this.valid.emit(this.isValid());
-    });
-  }
-
   saveAndContinue() {
     if (this.isValid()) {
+      const formValues = this.rulesForm.value;
       this.dataUpdate.emit({
         basics: {
           name: this.name(),
@@ -181,10 +197,10 @@ export class SetupRules {
           seasonId: this.seasonId(),
         },
         rules: {
-          pointsWin: this.pointsWin(),
-          pointsDraw: this.pointsDraw(),
-          pointsLoss: this.pointsLoss(),
-          hasHomeAway: this.hasHomeAway(),
+          pointsWin: formValues.pointsWin,
+          pointsDraw: formValues.pointsDraw,
+          pointsLoss: formValues.pointsLoss,
+          hasHomeAway: formValues.hasHomeAway,
           tieBreakerOrder: this.tiebreaks().map((t) => t.id.toString()),
         },
         tiebreaks: {
