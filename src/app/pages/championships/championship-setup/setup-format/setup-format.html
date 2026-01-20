@@ -32,42 +32,50 @@
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           @for (format of formats; track format.id) {
-          <label class="relative cursor-pointer group" (click)="selectedFormat = format.id">
-            <input
-              class="peer sr-only"
-              name="format"
-              type="radio"
-              [value]="format.id"
-              [checked]="selectedFormat === format.id"
-            />
-            <div
-              class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all h-full flex flex-col items-center text-center gap-3"
-            >
+            <label class="relative cursor-pointer group" (click)="selectedFormat.set(format.id)">
+              <input
+                class="peer sr-only"
+                name="format"
+                type="radio"
+                [value]="format.id"
+                [checked]="selectedFormat() === format.id"
+              />
               <div
-                class="size-16 rounded-full bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center text-main dark:text-white group-hover:scale-110 transition-transform"
+                class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all h-full flex flex-col items-center text-center gap-3"
               >
-                <span class="material-symbols-outlined">{{ format.icon }}</span>
+                <div
+                  class="size-16 rounded-full bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center text-main dark:text-white group-hover:scale-110 transition-transform"
+                >
+                  <span class="material-symbols-outlined">{{ format.icon }}</span>
+                </div>
+                <div>
+                  <span class="block text-sm font-bold text-main dark:text-white mb-1">{{
+                    format.label
+                  }}</span>
+                  <span class="block text-xs text-secondary">{{ format.description }}</span>
+                </div>
               </div>
-              <div>
-                <span class="block text-sm font-bold text-main dark:text-white mb-1">{{
-                  format.label
-                }}</span>
-                <span class="block text-xs text-secondary">{{ format.description }}</span>
+              <div
+                class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+              >
+                <span class="material-symbols-outlined text-xl">check_circle</span>
               </div>
-            </div>
-            <div
-              class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
-            >
-              <span class="material-symbols-outlined text-xl">check_circle</span>
-            </div>
-          </label>
+            </label>
           }
         </div>
         <!-- Group Configuration Inputs -->
-        <app-setup-system-format [format]="selectedFormat" />
+        <app-setup-system-format
+          [format]="selectedFormat()"
+          [groupsCount]="groupsCount()"
+          [qualifiedPerGroup]="qualifiedPerGroup()"
+          [totalTeams]="totalTeams()"
+          (updateGroupsCount)="updateGroupsCount($event)"
+          (updateQualified)="updateQualified($event)"
+          (updateTotalTeams)="updateTotalTeams($event)"
+        />
       </section>
-      @if (selectedFormat !== 'round_robin') {
-      <app-setup-knockout-group />
+      @if (selectedFormat() !== 'round_robin') {
+        <app-setup-knockout-group />
       }
     </div>
     <!-- Right Column: Visualization Preview -->

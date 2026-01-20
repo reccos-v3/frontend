@@ -1,90 +1,122 @@
 <aside
-  class="w-[280px] hidden lg:flex flex-col border-r border-[#e7f3ed] dark:border-surface-dark bg-surface-light dark:bg-surface-dark overflow-y-auto"
+  class="w-[300px] flex-none hidden lg:flex flex-col border-r border-[#e7f3ed] dark:border-surface-dark bg-surface-light dark:bg-surface-dark overflow-y-auto h-screen"
 >
   <div class="p-6">
-    <div class="mb-8">
-      <h2 class="text-lg font-bold text-text-main dark:text-white mb-1">Configuração</h2>
-      <div class="flex items-center gap-2">
+    <!-- Progress Header -->
+    <div class="mb-10">
+      <h2 class="text-lg font-bold text-text-main dark:text-white mb-2">Configuração</h2>
+      <div class="flex items-center gap-3">
         <div class="h-2 flex-1 bg-border-light dark:bg-border-dark rounded-full overflow-hidden">
-          <div class="h-full bg-primary w-1/4"></div>
+          <div
+            class="h-full bg-primary transition-all duration-500 ease-out"
+            [style.width.%]="progress()"
+          ></div>
         </div>
-        <span class="text-xs font-bold text-primary">25%</span>
+        <span class="text-sm font-bold text-primary">{{ progress() }}%</span>
       </div>
     </div>
+
+    <!-- Steps List -->
     <div class="flex flex-col gap-0">
-      <!-- Step 1: Completed -->
-      <div class="relative flex gap-4 pb-8 group">
-        <div class="step-connector active"></div>
-        <div class="relative z-10 flex-none">
-          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[#FFF]">
-            <span class="material-symbols-outlined text-lg">check</span>
+      @for (step of steps; track step.id; let i = $index) {
+        <div class="relative flex gap-5 pb-10 group last:pb-0">
+          <!-- Step Connector Line -->
+          @if (i < steps.length - 1) {
+            <div
+              class="absolute left-[19px] top-10 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"
+              [class.bg-primary]="stepStatuses()[step.id] === 'completed'"
+            ></div>
+          }
+
+          <!-- Step Indicator -->
+          <div class="relative z-10 flex-none">
+            @if (stepStatuses()[step.id] === 'completed') {
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white"
+              >
+                <span class="material-symbols-outlined text-xl">check</span>
+              </div>
+            } @else if (activeStep() === step.id) {
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-primary ring-4 ring-primary/20 text-white"
+              >
+                <span class="material-symbols-outlined text-xl">
+                  @if (step.id === 'rules') {
+                    scoreboard
+                  } @else if (step.id === 'format') {
+                    schema
+                  } @else if (step.id === 'teams') {
+                    groups
+                  } @else {
+                    rate_review
+                  }
+                </span>
+              </div>
+            } @else {
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-200 dark:border-gray-700 bg-transparent text-gray-400"
+              >
+                <span class="text-base font-bold">{{ i + 1 }}</span>
+              </div>
+            }
+          </div>
+
+          <!-- Step Content -->
+          <div class="flex flex-col pt-1.5">
+            <span
+              class="text-base font-bold transition-colors leading-tight mb-1"
+              [class.text-text-main]="
+                activeStep() === step.id || stepStatuses()[step.id] === 'completed'
+              "
+              [class.dark:text-white]="
+                activeStep() === step.id || stepStatuses()[step.id] === 'completed'
+              "
+              [class.text-gray-400]="
+                activeStep() !== step.id && stepStatuses()[step.id] !== 'completed'
+              "
+              [class.dark:text-gray-500]="
+                activeStep() !== step.id && stepStatuses()[step.id] !== 'completed'
+              "
+            >
+              {{ step.label }}
+            </span>
+            <span
+              class="text-xs transition-colors font-medium"
+              [class.text-primary]="activeStep() === step.id"
+              [class.text-emerald-600]="
+                stepStatuses()[step.id] === 'completed' && activeStep() !== step.id
+              "
+              [class.text-gray-400]="
+                stepStatuses()[step.id] === 'pending' && activeStep() !== step.id
+              "
+            >
+              @if (stepStatuses()[step.id] === 'completed') {
+                Concluído
+              } @else if (activeStep() === step.id) {
+                Em andamento
+              } @else {
+                Pendente
+              }
+            </span>
           </div>
         </div>
-        <div class="flex flex-col pt-1">
-          <span class="text-sm font-bold text-text-main dark:text-white">Regras e pontuação</span>
-          <span class="text-xs text-text-secondary">Concluído</span>
-        </div>
-      </div>
-      <!-- Step 2: Current -->
-      <div class="relative flex gap-4 pb-8 group">
-        <div class="step-connector"></div>
-        <div class="relative z-10 flex-none">
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-primary ring-4 ring-primary/20 text-[#FFF]"
-          >
-            <span class="material-symbols-outlined text-lg">schema</span>
-          </div>
-        </div>
-        <div class="flex flex-col pt-1">
-          <span class="text-sm font-bold text-text-main dark:text-white">Estrutura da disputa</span>
-          <span class="text-xs text-primary font-medium">Em andamento</span>
-        </div>
-      </div>
-      <!-- Step 3: Pending -->
-      <div class="relative flex gap-4 pb-8 group">
-        <div class="step-connector"></div>
-        <div class="relative z-10 flex-none">
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-200 dark:border-gray-700 bg-transparent text-gray-400"
-          >
-            <span class="text-sm font-bold">3</span>
-          </div>
-        </div>
-        <div class="flex flex-col pt-1">
-          <span class="text-sm font-medium text-gray-400 dark:text-gray-500"
-            >Times participantes</span
-          >
-          <span class="text-xs text-gray-400 dark:text-gray-600">Pendente</span>
-        </div>
-      </div>
-      <!-- Step 4: Pending -->
-      <div class="relative flex gap-4 group">
-        <div class="relative z-10 flex-none">
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-200 dark:border-gray-700 bg-transparent text-gray-400"
-          >
-            <span class="text-sm font-bold">4</span>
-          </div>
-        </div>
-        <div class="flex flex-col pt-1">
-          <span class="text-sm font-medium text-gray-400 dark:text-gray-500">Revisão final</span>
-          <span class="text-xs text-gray-400 dark:text-gray-600">Pendente</span>
-        </div>
-      </div>
+      }
     </div>
   </div>
-  <div class="mt-auto p-6 border-t border-[#e7f3ed] dark:border-surface-dark">
+
+  <!-- Help Section -->
+  <div class="p-6 border-t border-[#e7f3ed] dark:border-surface-dark pb-10">
     <div class="rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 p-4">
       <div class="flex items-start gap-3">
-        <span class="material-symbols-outlined text-primary text-xl">help</span>
+        <span class="material-symbols-outlined text-primary text-xl font-icon">help</span>
         <div>
           <p class="text-sm font-bold text-text-main dark:text-white mb-1">Precisa de ajuda?</p>
           <p class="text-xs text-text-secondary leading-relaxed">
             Confira nosso guia sobre os formatos de campeonato.
           </p>
-          <a class="mt-2 inline-block text-xs font-bold text-primary hover:underline" href="#"
-            >Ver Guia →</a
-          >
+          <a class="mt-2 inline-block text-xs font-bold text-primary hover:underline" href="#">
+            Ver Guia →
+          </a>
         </div>
       </div>
     </div>

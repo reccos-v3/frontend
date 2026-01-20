@@ -1,17 +1,28 @@
 <div class="flex h-screen w-full flex-col overflow-hidden">
   <app-setup-header />
   <div class="flex flex-1 overflow-hidden relative">
-    <app-setup-sidebar />
+    <app-setup-sidebar
+      [activeStep]="activeComponent()"
+      [stepStatuses]="stepStatuses()"
+      [progress]="progress()"
+    />
     <main
       class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-4 lg:p-8 relative"
     >
-      @switch (activeComponent()) { @case ('rules') {
-      <app-setup-rules (advanced)="advanced($event)" />
-      } @case ('format') {
-      <app-setup-format (advanced)="advanced($event)" />
-      } @case ('teams') {
-      <app-setup-add-teams (advanced)="advanced($event)" />
-      } }
+      @switch (activeComponent()) {
+        @case ('rules') {
+          <app-setup-rules (advanced)="advanced($event)" (dataUpdate)="updateData($event)" />
+        }
+        @case ('format') {
+          <app-setup-format (advanced)="advanced($event)" (dataUpdate)="updateData($event)" />
+        }
+        @case ('teams') {
+          <app-setup-add-teams (advanced)="advanced($event)" (dataUpdate)="updateData($event)" />
+        }
+        @case ('final-review') {
+          <app-setup-final-review [data]="setupData()" (advanced)="advanced($event)" />
+        }
+      }
     </main>
   </div>
 </div>

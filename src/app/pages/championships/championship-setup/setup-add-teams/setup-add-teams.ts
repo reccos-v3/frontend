@@ -1,4 +1,5 @@
-import { Component, output } from '@angular/core';
+import { Component, effect, output, signal } from '@angular/core';
+import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
 
 @Component({
   selector: 'app-setup-add-teams',
@@ -7,9 +8,11 @@ import { Component, output } from '@angular/core';
   styleUrl: './setup-add-teams.css',
 })
 export class SetupAddTeams {
-  advanced = output<'rules' | 'format' | 'teams'>();
+  advanced = output<SetupStep>();
+  valid = output<boolean>();
+  dataUpdate = output<Partial<IChampionshipSetupRequest>>();
 
-  teams = [
+  teams = signal([
     {
       name: 'Dragões Vermelhos FC',
       added: 'Adicionado hoje',
@@ -46,10 +49,49 @@ export class SetupAddTeams {
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuDoknDKA3e4vV02ecvt-sSd5nhjYrKyCW4D0TmvPFs1M1RP-yGGjdkyq2a4mmxezhnIVCqvCIV6Toq7Ldg1Cgg74YDUUD0GbcIjrIBGk47B4efQByAFTBLXRuICggBbhLx2ZTfdHrSVpC6aEpJ0TUXMAn83lAzvT5s9dlf8XL4x3Vjm3va2p1fZwUazFC-Qv64lPg4Yfp5KbeTo_4fNAWfGiNR1KXd30cLEnHPl5r7QwjV4X1AdBuuUAA8wT7WYvfp-gPaqc9pJxMs',
     },
-  ];
+  ]);
+
+  isValid = signal(false);
+
+  constructor() {
+    effect(
+      () => {
+        const valid = this.teams().length >= 2;
+        this.isValid.set(valid);
+        this.valid.emit(valid);
+      },
+      { allowSignalWrites: true },
+    );
+  }
 
   saveAndContinue() {
-    this.advanced.emit('rules');
+    if (this.isValid()) {
+      // In a real app, these would be IDs of actual selected teams
+      const dummyIds = [
+        'uuid-time-1',
+        'uuid-time-2',
+        'uuid-time-3',
+        'uuid-time-4',
+        'uuid-time-5',
+        'uuid-time-6',
+        'uuid-time-7',
+        'uuid-time-8',
+        'uuid-time-9',
+        'uuid-time-10',
+        'uuid-time-11',
+        'uuid-time-12',
+        'uuid-time-13',
+        'uuid-time-14',
+        'uuid-time-15',
+        'uuid-time-16',
+      ];
+      this.dataUpdate.emit({
+        teams: {
+          teamIds: dummyIds,
+        },
+      });
+      this.advanced.emit('final-review');
+    }
   }
 
   returnToPrevious() {

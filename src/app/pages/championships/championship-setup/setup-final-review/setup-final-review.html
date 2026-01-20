@@ -1,0 +1,60 @@
+<div
+  class="flex flex-col gap-8 max-w-[1000px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500"
+>
+  <div class="flex flex-col gap-2">
+    <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">Revisão Final</h2>
+    <p class="text-text-secondary dark:text-gray-400">
+      Confira todas as informações antes de finalizar a criação do seu campeonato.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Quick Summary Cards -->
+    <div
+      class="p-6 rounded-[2rem] bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm"
+    >
+      <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">gavel</span>
+        Regras e Pontuação
+      </h3>
+      <div class="space-y-3">
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Vitória:</span>
+          <span class="font-bold text-text-main dark:text-white">3 pts</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Empate:</span>
+          <span class="font-bold text-text-main dark:text-white">1 pt</span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="p-6 rounded-[2rem] bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm"
+    >
+      <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">category</span>
+        Formato
+      </h3>
+      <div class="text-sm font-bold text-text-main dark:text-white">Grupos + Mata-mata</div>
+    </div>
+  </div>
+
+  <!-- Final Actions -->
+  <div
+    class="flex items-center justify-between pt-8 border-t border-border-light dark:border-border-dark"
+  >
+    <button
+      (click)="returnToPrevious()"
+      class="px-8 h-12 rounded-full font-bold text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+    >
+      Voltar para Equipes
+    </button>
+    <button
+      (click)="confirmAndFinish()"
+      class="px-10 h-14 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all transform active:scale-95"
+    >
+      Finalizar e Criar Campeonato
+    </button>
+  </div>
+</div>

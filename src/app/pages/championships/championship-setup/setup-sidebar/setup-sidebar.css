@@ -1,12 +1,15 @@
-.step-connector {
-  position: absolute;
-  top: 24px;
-  left: 15px;
-  bottom: -24px;
-  width: 2px;
-  background-color: #e2e8f0;
-  z-index: 0;
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
 }
-.step-connector.active {
-  background-color: var(--color-primary);
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s infinite ease-in-out;
 }
