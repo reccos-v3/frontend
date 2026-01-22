@@ -1,4 +1,4 @@
-export type SetupStep = 'rules' | 'format' | 'teams' | 'final-review';
+export type SetupStep = 'rules' | 'format' | 'structure' | 'teams' | 'final_review';
 export type StepStatus = 'completed' | 'in-progress' | 'pending';
 
 export interface ISetupBasics {
@@ -21,12 +21,22 @@ export interface ISetupFormat {
   formatType: string;
 }
 
+export interface IPhaseConfig {
+  order: number;
+  name: string;
+  matchType: 'single' | 'home_away';
+  legs: number;
+  teamsCount: number;
+  isPreliminary: boolean;
+}
+
 export interface ISetupStructure {
   totalTeams: number;
   groupsCount: number;
   qualifiedPerGroup: number;
   knockoutStartPhase: string;
   firstPhaseType: string;
+  phaseConfigs?: IPhaseConfig[];
 }
 
 export interface ISetupTiebreakCriteria {

@@ -1,8 +1,9 @@
-import { Component, effect, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
 
 @Component({
   selector: 'app-setup-add-teams',
+  standalone: true,
   imports: [],
   templateUrl: './setup-add-teams.html',
   styleUrl: './setup-add-teams.css',
@@ -11,6 +12,7 @@ export class SetupAddTeams {
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  data = input<IChampionshipSetupRequest>();
 
   teams = signal([
     {
@@ -90,7 +92,7 @@ export class SetupAddTeams {
           teamIds: dummyIds,
         },
       });
-      this.advanced.emit('final-review');
+      this.advanced.emit('final_review');
     }
   }
 

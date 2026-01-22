@@ -1,60 +1,261 @@
-<div
-  class="flex flex-col gap-8 max-w-[1000px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500"
->
-  <div class="flex flex-col gap-2">
-    <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">Revisão Final</h2>
-    <p class="text-text-secondary dark:text-gray-400">
-      Confira todas as informações antes de finalizar a criação do seu campeonato.
-    </p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Quick Summary Cards -->
-    <div
-      class="p-6 rounded-[2rem] bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm"
-    >
-      <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary">gavel</span>
-        Regras e Pontuação
-      </h3>
-      <div class="space-y-3">
-        <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Vitória:</span>
-          <span class="font-bold text-text-main dark:text-white">3 pts</span>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 md:p-10 pb-32">
+  <div class="max-w-5xl mx-auto flex flex-col gap-8">
+    <!-- Critical Warning Banner -->
+    <app-alert
+      class="block mb-8"
+      type="error"
+      variant="left-accent"
+      icon="gpp_maybe"
+      title="Atenção: Ponto de não retorno"
+      message="Ao ativar o campeonato, as configurações de Regras e Estrutura serão bloqueadas permanentemente para garantir a integridade da competição. Certifique-se de que todos os detalhes abaixo estão corretos."
+    />
+    <div class="flex items-center justify-between">
+      <h3 class="text-xl font-bold text-slate-900 dark:text-white">Resumo do Setup</h3>
+      <button
+        class="text-primary hover:text-primary-dark text-sm font-medium flex items-center gap-1"
+      >
+        Expandir tudo
+        <span class="material-symbols-outlined text-[18px]">unfold_more</span>
+      </button>
+    </div>
+    <!-- Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Card 1: Regras -->
+      <div
+        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
+      >
+        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="text-slate-400 hover:text-primary p-1">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
         </div>
-        <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Empate:</span>
-          <span class="font-bold text-text-main dark:text-white">1 pt</span>
+        <div class="flex items-center gap-3 mb-6">
+          <div
+            class="size-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400"
+          >
+            <span class="material-symbols-outlined">sports_soccer</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white">Regras do Jogo</h4>
+            <p
+              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
+            >
+              Configurado
+            </p>
+          </div>
+        </div>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>Formato Society 7 vs 7</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>2 tempos de 25 minutos</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>Substituições ilimitadas (Volante)</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>2 cartões amarelos = suspensão</span>
+          </li>
+        </ul>
+      </div>
+      <!-- Card 2: Estrutura -->
+      <div
+        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
+      >
+        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="text-slate-400 hover:text-primary p-1">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-3 mb-6">
+          <div
+            class="size-10 rounded-full bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-400"
+          >
+            <span class="material-symbols-outlined">account_tree</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white">Estrutura</h4>
+            <p
+              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
+            >
+              Misto
+            </p>
+          </div>
+        </div>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>Fase de Grupos + Mata-mata</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>4 Grupos de 4 times (16 total)</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>Classificam 2 por grupo</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
+              >check_circle</span
+            >
+            <span>Final Única (Sem ida e volta)</span>
+          </li>
+        </ul>
+      </div>
+      <!-- Card 3: Times -->
+      <div
+        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
+      >
+        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="text-slate-400 hover:text-primary p-1">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-3 mb-6">
+          <div
+            class="size-10 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 dark:text-orange-400"
+          >
+            <span class="material-symbols-outlined">groups</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white">Participantes</h4>
+            <p
+              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
+            >
+              16/16 Vagas
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="flex -space-x-3 overflow-hidden py-1">
+            <img
+              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
+              data-alt="Team logo 1"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ6NRfI-ZjMTm9Axz44tYwEh3tRlilA6_NH_plPiNm1oZpp-LQMmsIKO3Hnt43vBD81T9_dLwCBlR19MQEaqjA0OI-loeST9H5-p5R2HwZCQRdsR-X8j2KEy5ur-Ow3E06BFURAKFJVSUguXjMEKdMGoY8HrCaT4rF1O9mfye6_hYgiCntYK9roOtw9ZX7jKVK_Nztb1t_JMS7gAFtdSDqbZ0hg1uU5__BZ0gFaXKAZ4BdKJmha9K4pzeRLBO-2QDON0fvpPjivCA"
+            />
+            <img
+              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
+              data-alt="Team logo 2"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAJdkAhSKKyOPv0g0QR-5bptKMzMXpxzAYAz3TnzeLMkeVAtuX-UzRiynpfDz41UcHjErU0zaqr-kc69PDfFB6P_HJh2NVwVknJLPdL8huzly_129yePExT-B_k_lkfgW_Ib8brUJg1kS691av5z29ssa1XvNrGO2RVbDJdggXjtNoVEsCZKnwVPMSqxn7pQJzoVQZCRwKpWLs3We2-2ZCklq2nCSCJptLXlnvaaFPC6Y9FWWdxsnTYTaNkA6j5HXNLavghEJdahs"
+            />
+            <img
+              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
+              data-alt="Team logo 3"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuANgK5-uPKcMHvmfYa1arkjvOCk_tO0lxB24zrBlsQZfjrPNgOuTgCxfea9vMszRSwYZdIOZwYCeG9YFEzUNhyKAPdPq3nLZSnpNswt41lQIonphb7y9rEh7OMw0ePfsnEjo7lhLixceXM8m4qoUfhs6ShNdZzEsgPqNC1t3DbrOEV2os__ayJfZ61VwO1Hj4FhN8tAhbx-tyBk1FtJQZBdUhSxK3-QDIdRvC4kdp-kZ5KMx6vj-bcj_F8wE_glFDheyqF8ACoLBD0"
+            />
+            <img
+              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
+              data-alt="Team logo 4"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_Z2EL92UtDh_-lo6HHpOzhf2qn4GU9u_Syzgz_s2ZPQvEDkJklA8bPGcG1FipDX98WRkgyYniXvLCiyDKf5MRLV3F9_EeihBkqoxWXtGK1_i5fGgGmkK9DBgEUwr5HbPWXJeWh-VhXGrvQBWXz9cjPv-3Dsj_YRRmKb2SHYwXoTZ11bwpO69-K_wt4LOuSfz_oGgUcJGB_PJTBRTEvutyiLdV5BBM1b33UvOlQRLmI_owJ6ca-ZXVwLNFjaCkyC7hWkYW3w-RIH4"
+            />
+            <div
+              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-400"
+            >
+              +12
+            </div>
+          </div>
+          <div
+            class="bg-slate-50 dark:bg-white/5 rounded-lg p-3 text-sm text-slate-600 dark:text-slate-300 flex items-center justify-between"
+          >
+            <span>Capitães cadastrados</span>
+            <span class="font-bold text-slate-900 dark:text-white">100%</span>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div
-      class="p-6 rounded-[2rem] bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark shadow-sm"
-    >
-      <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary">category</span>
-        Formato
-      </h3>
-      <div class="text-sm font-bold text-text-main dark:text-white">Grupos + Mata-mata</div>
+      <!-- Card 4: Ajustes Automáticos -->
+      <div
+        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
+      >
+        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="text-slate-400 hover:text-primary p-1">
+            <span class="material-symbols-outlined">settings</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-3 mb-6">
+          <div
+            class="size-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400"
+          >
+            <span class="material-symbols-outlined">tune</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white">Ajustes Automáticos</h4>
+            <p
+              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
+            >
+              Sistema
+            </p>
+          </div>
+        </div>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5">toggle_on</span>
+            <span>Sorteio de chaves automático</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5">toggle_on</span>
+            <span>Gerar tabela de jogos pós-sorteio</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5">toggle_on</span>
+            <span>Notificar capitães via E-mail</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-slate-400 dark:text-slate-500">
+            <span class="material-symbols-outlined text-[18px] mt-0.5">toggle_off</span>
+            <span>Publicar página do campeonato (Manter privado)</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-
-  <!-- Final Actions -->
-  <div
-    class="flex items-center justify-between pt-8 border-t border-border-light dark:border-border-dark"
+</div>
+<!-- Footer Action -->
+<div
+  class="sticky bottom-0 w-full bg-white dark:bg-surface-dark border-t border-[#e7f3ed] dark:border-white/10 p-4 md:px-10 md:py-6 flex items-center justify-between z-20"
+>
+  <button
+    class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium px-4 py-2 transition-colors"
   >
-    <button
-      (click)="returnToPrevious()"
-      class="px-8 h-12 rounded-full font-bold text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+    Voltar
+  </button>
+  <div class="flex items-center gap-4">
+    <span class="text-sm text-slate-500 dark:text-slate-400 hidden sm:inline-block"
+      >Última edição: Há 5 minutos</span
     >
-      Voltar para Equipes
-    </button>
+    <!-- Trigger for Modal -->
     <button
-      (click)="confirmAndFinish()"
-      class="px-10 h-14 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all transform active:scale-95"
+      (click)="openConfirmation()"
+      class="bg-primary hover:bg-primary-dark text-white font-bold text-base px-8 py-3 rounded-full shadow-lg shadow-primary/20 transition-all transform active:scale-95 flex items-center gap-2"
     >
-      Finalizar e Criar Campeonato
+      <span>Ativar Campeonato</span>
+      <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
     </button>
   </div>
 </div>
+
+<app-modal-setup-finish
+  [isOpen]="isModalOpen()"
+  leagueName="Copa Verão 2024"
+  (close)="isModalOpen.set(false)"
+  (confirm)="handleConfirm()"
+/>

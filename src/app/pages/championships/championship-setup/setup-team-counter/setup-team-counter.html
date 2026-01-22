@@ -1,0 +1,33 @@
+<div class="flex items-center gap-3 mb-4">
+  <div class="h-10 w-10 flex items-center justify-center bg-primary/10 rounded-lg">
+    <span class="material-symbols-outlined text-primary">{{ icon() }}</span>
+  </div>
+  <div>
+    <h3 class="font-bold text-main dark:text-white">{{ title() }}</h3>
+    <p class="text-xs text-secondary italic">{{ description() }}</p>
+  </div>
+</div>
+
+<div class="flex items-center justify-center gap-4 max-w-xs mx-auto text-center">
+  <button
+    (click)="updateValue.emit(-1)"
+    class="size-12 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-gray-100 text-main dark:text-white border border-gray-200 dark:border-gray-700 transition-colors active:scale-95"
+  >
+    <span class="material-symbols-outlined font-bold">remove</span>
+  </button>
+  <div class="flex-1">
+    <input
+      class="w-full text-center bg-transparent border-none font-bold text-4xl text-main dark:text-white focus:ring-0 p-0"
+      readonly
+      type="number"
+      [value]="value()"
+    />
+    <span class="text-[10px] text-info font-bold uppercase block mt-1">{{ label() }}</span>
+  </div>
+  <button
+    (click)="updateValue.emit(1)"
+    class="size-12 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-gray-100 text-main dark:text-white border border-gray-200 dark:border-gray-700 transition-colors active:scale-95"
+  >
+    <span class="material-symbols-outlined font-bold">add</span>
+  </button>
+</div>

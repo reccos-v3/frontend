@@ -11,15 +11,51 @@
     >
       @switch (activeComponent()) {
         @case ('rules') {
-          <app-setup-rules (advanced)="advanced($event)" (dataUpdate)="updateData($event)" />
+          <app-setup-rules
+            [data]="setupData()"
+            (advanced)="advanced($event)"
+            (dataUpdate)="updateData($event)"
+          />
         }
         @case ('format') {
-          <app-setup-format (advanced)="advanced($event)" (dataUpdate)="updateData($event)" />
+          <app-setup-format
+            [data]="setupData()"
+            (advanced)="advanced($event)"
+            (dataUpdate)="updateData($event)"
+          />
+        }
+        @case ('structure') {
+          <app-setup-format-knockout
+            [totalTeams]="setupData().structure?.totalTeams || 16"
+            (updatePhaseConfigs)="updatePhaseConfigs($event)"
+          />
+          <div class="mt-8 max-w-[1000px] mx-auto flex justify-end items-center relative z-50">
+            <button
+              type="button"
+              (click)="advanced('format')"
+              class="flex items-center gap-2 px-6 py-3 rounded-full text-secondary hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium text-sm"
+            >
+              <span class="material-symbols-outlined text-lg">arrow_back</span>
+              Voltar
+            </button>
+            <button
+              type="button"
+              (click)="advanced('teams')"
+              class="flex items-center gap-2 px-8 py-3 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 font-bold text-sm ml-4"
+            >
+              Próximo: Equipes
+              <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </button>
+          </div>
         }
         @case ('teams') {
-          <app-setup-add-teams (advanced)="advanced($event)" (dataUpdate)="updateData($event)" />
+          <app-setup-add-teams
+            [data]="setupData()"
+            (advanced)="advanced($event)"
+            (dataUpdate)="updateData($event)"
+          />
         }
-        @case ('final-review') {
+        @case ('final_review') {
           <app-setup-final-review [data]="setupData()" (advanced)="advanced($event)" />
         }
       }

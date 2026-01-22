@@ -1,0 +1,137 @@
+<div class="xl:col-span-2 space-y-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-secondary flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">layers</span>
+      Configuração por Fase
+    </h2>
+    <span class="text-xs text-gray-500">Ajuste individual por fase</span>
+  </div>
+
+  @if (hasPreliminary()) {
+    <app-alert
+      class="block mb-8"
+      type="warning"
+      variant="left-accent"
+      title="Aviso de Fase Preliminar"
+      message="Uma fase preliminar será criada automaticamente para ajustar a quantidade de equipes para uma potência de 2."
+    />
+  }
+
+  <div class="space-y-3">
+    @for (phase of phases(); track phase.order) {
+      <details
+        class="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all shadow-sm"
+        [open]="phase.order === 1"
+      >
+        <summary
+          class="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 dark:hover:bg-gray-700/50"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="size-10 rounded-lg bg-slate-100 dark:bg-gray-700 flex items-center justify-center text-slate-600 dark:text-gray-400 group-open:bg-primary group-open:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined">
+                {{
+                  phase.isPreliminary
+                    ? 'filter_alt'
+                    : phase.teamsCount === 2
+                      ? 'emoji_events'
+                      : phase.teamsCount === 4
+                        ? 'filter_4'
+                        : phase.teamsCount === 8
+                          ? 'filter_8'
+                          : 'layers'
+                }}
+              </span>
+            </div>
+            <div>
+              <h3 class="font-bold text-secondary dark:text-gray-200">{{ phase.name }}</h3>
+              <p class="text-xs text-text-secondary dark:text-gray-400">
+                {{ phase.teamsCount }} Equipes • {{ phase.teamsCount / 2 }} Confrontos
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">
+              {{ phase.matchType === 'single' ? 'Jogo Único' : 'Ida e Volta' }}
+            </span>
+            <span
+              class="material-symbols-outlined transition-transform group-open:rotate-180 dark:text-gray-400"
+              >expand_more</span
+            >
+          </div>
+        </summary>
+        <div class="px-5 pb-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div>
+              <label
+                class="block text-xs font-bold uppercase text-text-secondary dark:text-gray-400 mb-3"
+                >Tipo de jogo da fase</label
+              >
+              <div class="flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl">
+                <button
+                  (click)="toggleMatchType(phase.order, 'single')"
+                  class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+                  [class.bg-white]="phase.matchType === 'single'"
+                  [class.dark:bg-gray-600]="phase.matchType === 'single'"
+                  [class.shadow-sm]="phase.matchType === 'single'"
+                  [class.text-secondary]="phase.matchType === 'single'"
+                  [class.text-text-secondary]="phase.matchType !== 'single'"
+                >
+                  Jogo único
+                </button>
+                <button
+                  (click)="toggleMatchType(phase.order, 'home_away')"
+                  class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+                  [class.bg-primary]="phase.matchType === 'home_away'"
+                  [class.text-white]="phase.matchType === 'home_away'"
+                  [class.text-text-secondary]="phase.matchType !== 'home_away'"
+                >
+                  Ida e volta
+                </button>
+              </div>
+            </div>
+            <div
+              class="bg-slate-50 dark:bg-gray-700/30 p-4 rounded-xl border border-dashed border-gray-200 dark:border-gray-600"
+            >
+              <div class="flex items-start gap-2 mb-2">
+                <span
+                  class="material-symbols-outlined text-sm text-text-secondary dark:text-gray-400"
+                  >visibility</span
+                >
+                <span class="text-[11px] font-bold text-text-secondary dark:text-gray-400 uppercase"
+                  >Preview Dinâmico</span
+                >
+              </div>
+              <p class="text-sm text-secondary dark:text-gray-200 font-medium">
+                Esta fase terá
+                <span class="text-primary font-bold"
+                  >{{ (phase.teamsCount / 2) * phase.legs }} jogos</span
+                >
+              </p>
+              <p class="text-xs text-text-secondary dark:text-gray-400">
+                Formato:
+                {{
+                  phase.matchType === 'single'
+                    ? 'jogo único'
+                    : 'ida e volta (' + phase.legs + ' pernas)'
+                }}
+              </p>
+            </div>
+          </div>
+
+          @if (isSelectionInvalid(phase)) {
+            <p class="mt-4 text-xs text-red-500 font-bold flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">warning</span>
+              Ida e volta requer número par de equipes na fase.
+            </p>
+          }
+
+          <p class="mt-4 text-[11px] text-text-secondary dark:text-gray-400 italic">
+            “Esta configuração define apenas como os jogos serão gerados.”
+          </p>
+        </div>
+      </details>
+    }
+  </div>
+</div>

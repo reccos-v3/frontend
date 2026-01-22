@@ -1,0 +1,111 @@
+<div class="space-y-6">
+  <!-- Main Configuration Card: Total Teams -->
+  <div
+    class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm"
+  >
+    <app-setup-team-counter
+      title="Participantes da Liga"
+      description="Times que disputarão ponto a ponto"
+      icon="leaderboard"
+      [value]="totalTeams()"
+      (updateValue)="onUpdateTotalTeams($event)"
+    />
+  </div>
+
+  <!-- League Settings Card -->
+  <div
+    class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+  >
+    <h4
+      class="text-sm font-bold text-main dark:text-white mb-6 uppercase tracking-widest flex items-center gap-3"
+    >
+      <div class="h-8 w-8 flex items-center justify-center bg-primary/10 rounded-lg">
+        <span class="material-symbols-outlined text-primary text-lg">settings_suggest</span>
+      </div>
+      Dinâmica da Liga
+    </h4>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="space-y-3">
+        <label class="block text-xs font-bold text-secondary uppercase tracking-wider"
+          >Número de Rodadas</label
+        >
+        <div
+          class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600 transition-all hover:bg-white dark:hover:bg-gray-700 shadow-sm group"
+        >
+          <div
+            class="h-10 w-10 flex items-center justify-center bg-white dark:bg-gray-600 rounded-lg shadow-sm group-hover:bg-primary/5 transition-colors"
+          >
+            <span
+              class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors"
+              >calendar_today</span
+            >
+          </div>
+          <span class="font-black text-xl text-main dark:text-white">{{ totalRounds() }}</span>
+          <span class="text-xs text-secondary ml-auto italic">Rodadas total</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <label class="block text-xs font-bold text-secondary uppercase tracking-wider"
+          >Partidas por Time</label
+        >
+        <div
+          class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600 transition-all hover:bg-white dark:hover:bg-gray-700 shadow-sm group"
+        >
+          <div
+            class="h-10 w-10 flex items-center justify-center bg-white dark:bg-gray-600 rounded-lg shadow-sm group-hover:bg-primary/5 transition-colors"
+          >
+            <span
+              class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors"
+              >sports_soccer</span
+            >
+          </div>
+          <span class="font-black text-xl text-main dark:text-white">{{ gamesPerTeam() }}</span>
+          <span class="text-xs text-secondary ml-auto italic">Jogos/equipe</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
+      <div
+        class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl cursor-pointer hover:bg-primary/5 transition-all group border-2 border-transparent"
+        [class.border-primary/20]="isDoubleRound()"
+        (click)="toggleDoubleRound()"
+      >
+        <div class="relative inline-flex items-center mr-4">
+          <input type="checkbox" class="sr-only" [checked]="isDoubleRound()" />
+          <div
+            class="w-11 h-6 rounded-full transition-all duration-300 relative"
+            [class.bg-primary]="isDoubleRound()"
+            [class.bg-gray-200]="!isDoubleRound()"
+            [class.dark:bg-gray-600]="!isDoubleRound()"
+          >
+            <div
+              class="absolute top-[2px] left-[2px] bg-white border border-gray-300 rounded-full h-5 w-5 transition-all duration-300 shadow-sm"
+              [style.transform]="isDoubleRound() ? 'translateX(100%)' : 'translateX(0)'"
+            ></div>
+          </div>
+        </div>
+
+        <div class="flex-1">
+          <span
+            class="text-sm font-bold text-main dark:text-white group-hover:text-primary transition-colors"
+          >
+            Sistema de Turno e Returno
+          </span>
+          <p class="text-xs text-secondary">
+            {{ isDoubleRound() ? 'Habilita jogos de ida e volta' : 'Apenas jogos de ida' }}
+          </p>
+        </div>
+
+        <span
+          class="material-symbols-outlined text-primary transition-all"
+          [style.opacity]="isDoubleRound() ? '1' : '0.3'"
+        >
+          {{ isDoubleRound() ? 'check_circle' : 'radio_button_unchecked' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,120 +1,107 @@
 <div
-  class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 sticky top-4 overflow-hidden"
+  class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto"
 >
   <div
     class="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"
   >
     <h3 class="font-bold text-main dark:text-white text-sm">Resumo da Estrutura</h3>
-    @if(selectedFormat === 'knockout') {
-    <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
-      >Auto-gerado</span
-    >
-    } @else if(selectedFormat === 'round_robin') {
-    <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
-      >Pontos Corridos</span
-    >
+    @if (selectedFormat() === 'groups_knockout') {
+      <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
+        >Auto-gerado</span
+      >
+    } @else if (selectedFormat() === 'round_robin') {
+      <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
+        >Pontos Corridos</span
+      >
+    } @else if (selectedFormat() === 'knockout') {
+      <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
+        >Mata-mata Direto</span
+      >
     }
   </div>
 
-  @if(selectedFormat === 'knockout') {
-  <div class="p-6 flex flex-col gap-0 relative">
-    <!-- Connecting Line -->
-    <div class="absolute left-[31px] top-10 bottom-10 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
-    <!-- Phase 1 -->
-    <div class="relative flex gap-4 pb-8">
-      <div
-        class="z-10 bg-white dark:bg-gray-800 border-2 border-primary rounded-full size-4 mt-1 ring-4 ring-background-light dark:ring-background-dark"
-      ></div>
-      <div class="flex-1">
-        <div class="bg-gray-50 dark:bg-gray-800 border border-primary/30 p-3 rounded-lg">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-bold text-primary uppercase">Fase 1</span>
-            <span class="material-symbols-outlined text-primary text-sm">grid_view</span>
+  @if (selectedFormat() === 'groups_knockout' || selectedFormat() === 'knockout') {
+    <div class="p-6 flex flex-col gap-0 relative">
+      <!-- Connecting Line -->
+      <div class="absolute left-[31px] top-10 bottom-10 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+
+      @for (phase of phases(); track phase.title; let index = $index; let last = $last) {
+        <div class="relative flex gap-4" [class.pb-8]="!last">
+          <!-- Status indicator circle -->
+          <div
+            class="z-10 bg-white dark:bg-gray-800 border-2 rounded-full size-4 mt-1 ring-4 ring-background-light dark:ring-background-dark"
+            [class.border-primary]="phase.isMain"
+            [class.border-gray-300]="!phase.isMain && phase.title !== 'Grande Final'"
+            [class.dark:border-gray-600]="!phase.isMain && phase.title !== 'Grande Final'"
+            [class.border-yellow-400]="phase.title === 'Grande Final'"
+          ></div>
+
+          <div class="flex-1">
+            <div
+              class="p-3 rounded-lg border transition-colors"
+              [class.bg-gray-50]="phase.title !== 'Grande Final'"
+              [class.dark:bg-gray-800]="phase.title !== 'Grande Final'"
+              [class.border-primary/30]="phase.isMain"
+              [class.border-gray-200]="!phase.isMain && phase.title !== 'Grande Final'"
+              [class.dark:border-gray-700]="!phase.isMain && phase.title !== 'Grande Final'"
+              [class.bg-gradient-to-br]="phase.title === 'Grande Final'"
+              [class.from-yellow-50]="phase.title === 'Grande Final'"
+              [class.to-orange-50]="phase.title === 'Grande Final'"
+              [class.dark:from-yellow-900/10]="phase.title === 'Grande Final'"
+              [class.dark:to-orange-900/10]="phase.title === 'Grande Final'"
+              [class.border-yellow-200]="phase.title === 'Grande Final'"
+              [class.dark:border-yellow-800]="phase.title === 'Grande Final'"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold uppercase"
+                  [class.text-primary]="phase.isMain"
+                  [class.text-gray-500]="!phase.isMain && phase.title !== 'Grande Final'"
+                  [class.text-yellow-600]="phase.title === 'Grande Final'"
+                  >{{ phase.label }}</span
+                >
+                <span
+                  class="material-symbols-outlined text-sm"
+                  [class.text-primary]="phase.isMain"
+                  [class.text-gray-400]="!phase.isMain && phase.title !== 'Grande Final'"
+                  [class.text-yellow-500]="phase.title === 'Grande Final'"
+                  >{{ phase.icon }}</span
+                >
+              </div>
+              <p class="text-sm font-bold text-main dark:text-white">{{ phase.title }}</p>
+              @if (phase.description) {
+                <p class="text-xs text-secondary mt-1">{{ phase.description }}</p>
+              }
+              @if (phase.subDescription) {
+                <p class="text-xs text-secondary">{{ phase.subDescription }}</p>
+              }
+            </div>
           </div>
-          <p class="text-sm font-bold text-main dark:text-white">Fase de Grupos</p>
-          <p class="text-xs text-secondary mt-1">4 Grupos de 4 times</p>
-          <p class="text-xs text-secondary">Classificam 2 por grupo</p>
         </div>
-      </div>
+      }
     </div>
-    <!-- Phase 2 -->
-    <div class="relative flex gap-4 pb-8">
-      <div
-        class="z-10 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full size-4 mt-1 ring-4 ring-background-light dark:ring-background-dark"
-      ></div>
-      <div class="flex-1">
-        <div
-          class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 rounded-lg opacity-75"
-        >
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-bold text-gray-500 uppercase">Fase 2</span>
-            <span class="material-symbols-outlined text-gray-400 text-sm">filter_8</span>
-          </div>
-          <p class="text-sm font-bold text-main dark:text-white">Quartas de Final</p>
-          <p class="text-xs text-secondary mt-1">8 Times</p>
-          <p class="text-xs text-secondary">Mata-mata (Jogo único)</p>
-        </div>
-      </div>
+  } @else if (selectedFormat() === 'round_robin') {
+    <div class="p-6">
+      <ul class="space-y-3 text-sm">
+        <li class="flex items-center gap-3 text-text-main dark:text-white">
+          <span class="material-symbols-outlined text-primary text-lg">format_list_numbered</span>
+          <span class="font-semibold">Rodadas:</span> 19
+        </li>
+        <li class="flex items-center gap-3 text-text-main dark:text-white">
+          <span class="material-symbols-outlined text-primary text-lg">sports_soccer</span>
+          <span class="font-semibold">Partidas por Time:</span> 38
+        </li>
+        <li class="flex items-center gap-3 text-text-main dark:text-white">
+          <span class="material-symbols-outlined text-primary text-lg">compare_arrows</span>
+          <span class="font-semibold">Formato:</span> Turno e Returno
+        </li>
+        <li class="flex items-center gap-3 text-text-main dark:text-white">
+          <span class="material-symbols-outlined text-primary text-lg">info</span>
+          <span class="font-semibold">Critério de Desempate:</span>
+          Saldo de Gols
+        </li>
+      </ul>
     </div>
-    <!-- Phase 3 -->
-    <div class="relative flex gap-4 pb-8">
-      <div
-        class="z-10 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full size-4 mt-1 ring-4 ring-background-light dark:ring-background-dark"
-      ></div>
-      <div class="flex-1">
-        <div
-          class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 rounded-lg opacity-60"
-        >
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-bold text-gray-500 uppercase">Fase 3</span>
-            <span class="material-symbols-outlined text-gray-400 text-sm">filter_4</span>
-          </div>
-          <p class="text-sm font-bold text-main dark:text-white">Semifinal</p>
-          <p class="text-xs text-secondary mt-1">4 Times</p>
-        </div>
-      </div>
-    </div>
-    <!-- Phase 4 -->
-    <div class="relative flex gap-4">
-      <div
-        class="z-10 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full size-4 mt-1 ring-4 ring-background-light dark:ring-background-dark"
-      ></div>
-      <div class="flex-1">
-        <div
-          class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/10 dark:to-orange-900/10 border border-yellow-200 dark:border-yellow-800 p-3 rounded-lg"
-        >
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-bold text-yellow-600 uppercase">Final</span>
-            <span class="material-symbols-outlined text-yellow-500 text-sm">emoji_events</span>
-          </div>
-          <p class="text-sm font-bold text-main dark:text-white">Grande Final</p>
-          <p class="text-xs text-secondary mt-1">2 Times</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  } @else if(selectedFormat === 'round_robin') {
-  <div class="p-6">
-    <ul class="space-y-3 text-sm">
-      <li class="flex items-center gap-3 text-text-main dark:text-white">
-        <span class="material-symbols-outlined text-primary text-lg">format_list_numbered</span>
-        <span class="font-semibold">Rodadas:</span> 19
-      </li>
-      <li class="flex items-center gap-3 text-text-main dark:text-white">
-        <span class="material-symbols-outlined text-primary text-lg">sports_soccer</span>
-        <span class="font-semibold">Partidas por Time:</span> 38
-      </li>
-      <li class="flex items-center gap-3 text-text-main dark:text-white">
-        <span class="material-symbols-outlined text-primary text-lg">compare_arrows</span>
-        <span class="font-semibold">Formato:</span> Turno e Returno
-      </li>
-      <li class="flex items-center gap-3 text-text-main dark:text-white">
-        <span class="material-symbols-outlined text-primary text-lg">info</span>
-        <span class="font-semibold">Critério de Desempate:</span>
-        Saldo de Gols
-      </li>
-    </ul>
-  </div>
   }
 
   <div

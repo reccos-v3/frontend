@@ -1,0 +1,85 @@
+<div class="space-y-6">
+  <!-- Main Configuration Card: Total Teams -->
+  <div
+    class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm"
+  >
+    <app-setup-team-counter
+      title="Capacidade do Torneio"
+      description="Defina o número total de participantes"
+      icon="groups"
+      [value]="totalTeams()"
+      (updateValue)="onUpdateTotalTeams($event)"
+    />
+  </div>
+
+  <!-- Secondary Configuration Grid: Group Details -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div
+      class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
+    >
+      <label class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
+        >Quantidade de Grupos</label
+      >
+      <div class="flex items-center gap-4">
+        <div
+          class="h-10 w-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+        >
+          <span class="material-symbols-outlined text-blue-500">grid_view</span>
+        </div>
+        <div class="relative flex-1">
+          <button
+            (click)="updateGroupsCount.emit(-1)"
+            class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
+          >
+            <span class="material-symbols-outlined text-sm">remove</span>
+          </button>
+          <input
+            class="w-full text-center bg-transparent border-gray-200 dark:border-gray-700 rounded-xl font-bold dark:text-white py-2"
+            readonly
+            [value]="groupsCount()"
+          />
+          <button
+            (click)="updateGroupsCount.emit(1)"
+            class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
+          >
+            <span class="material-symbols-outlined text-sm">add</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
+    >
+      <label class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
+        >Classificados por Grupo</label
+      >
+      <div class="flex items-center gap-4">
+        <div
+          class="h-10 w-10 flex items-center justify-center bg-green-50 dark:bg-green-900/20 rounded-lg"
+        >
+          <span class="material-symbols-outlined text-green-500">done_all</span>
+        </div>
+        <div class="relative flex-1">
+          <button
+            (click)="updateQualified.emit(-1)"
+            class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
+          >
+            <span class="material-symbols-outlined text-sm">remove</span>
+          </button>
+          <input
+            class="w-full text-center bg-transparent border-gray-200 dark:border-gray-700 rounded-xl font-bold dark:text-white py-2"
+            readonly
+            [value]="qualifiedPerGroup()"
+          />
+          <button
+            (click)="updateQualified.emit(1)"
+            class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
+          >
+            <span class="material-symbols-outlined text-sm">add</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

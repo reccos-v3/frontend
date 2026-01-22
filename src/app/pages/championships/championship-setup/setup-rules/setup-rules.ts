@@ -3,6 +3,7 @@ import {
   computed,
   effect,
   inject,
+  input,
   output,
   PLATFORM_ID,
   signal,
@@ -36,6 +37,7 @@ export class SetupRules implements OnInit {
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  data = input<IChampionshipSetupRequest>();
 
   // Basics
   name = signal('');
@@ -74,6 +76,31 @@ export class SetupRules implements OnInit {
     effect(() => {
       this.valid.emit(this.isValid());
     });
+
+    // Restaurar critérios de desempate quando o catálogo estiver carregado
+    effect(
+      () => {
+        const available = this.availableTiebreaks();
+        const initialTiebreaks = this.data()?.tiebreaks?.criteria;
+
+        if (available.length > 0 && initialTiebreaks && initialTiebreaks.length > 0) {
+          const restored = initialTiebreaks
+            .map((c) => available.find((a) => a.id.toString() === c.criteriaId))
+            .filter((t): t is ITiebreakResponse => !!t);
+
+          if (restored.length > 0) {
+            // Garantir que POINTS seja o primeiro se existir
+            const pointsIndex = restored.findIndex((t) => t.code === 'POINTS');
+            if (pointsIndex > 0) {
+              const points = restored.splice(pointsIndex, 1)[0];
+              restored.unshift(points);
+            }
+            this.tiebreaks.set(restored);
+          }
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   ngOnInit() {
@@ -82,6 +109,25 @@ export class SetupRules implements OnInit {
       this.getAllTiebreaks();
       this.getModalities();
       this.getSeasons();
+
+      // Restaurar dados básicos e regras
+      const initial = this.data();
+      if (initial?.basics) {
+        this.name.set(initial.basics.name || '');
+        this.modalityId.set(initial.basics.modalityId || '');
+        this.gender.set(initial.basics.gender || 'MALE');
+        this.type.set(initial.basics.type || 'SEASONAL');
+        this.seasonId.set(initial.basics.seasonId || '');
+      }
+
+      if (initial?.rules) {
+        this.rulesForm.patchValue({
+          pointsWin: initial.rules.pointsWin,
+          pointsDraw: initial.rules.pointsDraw,
+          pointsLoss: initial.rules.pointsLoss,
+          hasHomeAway: initial.rules.hasHomeAway,
+        });
+      }
     }
   }
 

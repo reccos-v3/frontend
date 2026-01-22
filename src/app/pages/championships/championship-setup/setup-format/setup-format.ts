@@ -1,26 +1,51 @@
-import { Component, effect, output, signal } from '@angular/core';
+import { Component, effect, input, OnInit, output, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
 import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
-import { SetupKnockoutGroup } from '../setup-knockout-group/setup-knockout-group';
 import { SetupSidebarFormat } from '../setup-sidebar-format/setup-sidebar-format';
-import { SetupSystemFormat } from '../setup-system-format/setup-system-format';
+import { SetupFormatSelection } from '../setup-format-selection/setup-format-selection';
+import { AppAlert } from '../../../../components/alert/alert';
+
+interface IFormat {
+  id: 'groups_knockout' | 'knockout' | 'round_robin';
+  icon: string;
+  label: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-setup-format',
-  imports: [SetupKnockoutGroup, SetupSidebarFormat, SetupSystemFormat],
+  standalone: true,
+  imports: [SetupSidebarFormat, SetupFormatSelection, AppAlert],
   templateUrl: './setup-format.html',
   styleUrl: './setup-format.css',
 })
-export class SetupFormat {
+export class SetupFormat implements OnInit {
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  data = input<IChampionshipSetupRequest>();
 
-  selectedFormat = signal<string>('groups_knockout');
+  selectedFormat = signal<IFormat['id']>('groups_knockout');
   totalTeams = signal(16);
   groupsCount = signal(4);
   qualifiedPerGroup = signal(2);
   knockoutStartPhase = signal('QUARTER_FINALS');
   firstPhaseType = signal('GROUPS');
+
+  // Debounced signals for sidebar
+  debouncedFormat = toSignal(toObservable(this.selectedFormat).pipe(debounceTime(500)), {
+    initialValue: this.selectedFormat(),
+  });
+  debouncedTotalTeams = toSignal(toObservable(this.totalTeams).pipe(debounceTime(500)), {
+    initialValue: this.totalTeams(),
+  });
+  debouncedGroupsCount = toSignal(toObservable(this.groupsCount).pipe(debounceTime(500)), {
+    initialValue: this.groupsCount(),
+  });
+  debouncedQualified = toSignal(toObservable(this.qualifiedPerGroup).pipe(debounceTime(500)), {
+    initialValue: this.qualifiedPerGroup(),
+  });
 
   isValid = signal(false);
 
@@ -35,7 +60,21 @@ export class SetupFormat {
     );
   }
 
-  formats = [
+  ngOnInit() {
+    const initial = this.data();
+    if (initial?.format) {
+      this.selectedFormat.set(initial.format.formatType.toLowerCase() as IFormat['id']);
+    }
+    if (initial?.structure) {
+      this.totalTeams.set(initial.structure.totalTeams);
+      this.groupsCount.set(initial.structure.groupsCount);
+      this.qualifiedPerGroup.set(initial.structure.qualifiedPerGroup);
+      this.knockoutStartPhase.set(initial.structure.knockoutStartPhase);
+      this.firstPhaseType.set(initial.structure.firstPhaseType);
+    }
+  }
+
+  formats: IFormat[] = [
     {
       id: 'groups_knockout',
       icon: 'grid_view',
@@ -82,7 +121,12 @@ export class SetupFormat {
           firstPhaseType: this.firstPhaseType(),
         },
       });
-      this.advanced.emit('teams');
+
+      if (this.selectedFormat() === 'round_robin') {
+        this.advanced.emit('teams');
+      } else {
+        this.advanced.emit('structure');
+      }
     }
   }
 

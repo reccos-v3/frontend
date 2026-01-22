@@ -23,7 +23,8 @@ export class SetupSidebar {
   steps: SidebarStep[] = [
     { id: 'rules', label: 'Regras', description: 'Defina os critérios e pontuação' },
     { id: 'format', label: 'Formato', description: 'Escolha o sistema de disputa' },
+    { id: 'structure', label: 'Estrutura', description: 'Mata-mata e chaves' },
     { id: 'teams', label: 'Equipes', description: 'Adicione os participantes' },
-    { id: 'final-review', label: 'Revisão', description: 'Confirme todas as configurações' },
+    { id: 'final_review', label: 'Revisão', description: 'Confirme todas as configurações' },
   ];
 }

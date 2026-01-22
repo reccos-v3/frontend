@@ -1,0 +1,61 @@
+<div class="space-y-6">
+  <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+    <app-setup-team-counter
+      title="Número de Times na Chave"
+      description="Defina a quantidade de participantes no mata-mata"
+      icon="trophy"
+      [value]="totalTeams()"
+      (updateValue)="onUpdateTotalTeams($event)"
+    />
+  </div>
+
+  <!-- Knockout Settings -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div
+      class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
+    >
+      <label class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
+        >Formato de Início</label
+      >
+      <div class="relative">
+        <select
+          class="w-full appearance-none bg-gray-100 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 text-main dark:text-white py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+        >
+          <option>Sorteio Direto da Chave</option>
+          <option>Rodada Preliminar</option>
+          <option>Classificação por Ranking</option>
+        </select>
+        <div
+          class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-secondary"
+        >
+          <span class="material-symbols-outlined text-sm">expand_more</span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
+    >
+      <label class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
+        >Sorteio de Byes</label
+      >
+      <div class="relative">
+        <button
+          class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg text-main dark:text-white"
+        >
+          <span class="material-symbols-outlined text-sm">remove</span>
+        </button>
+        <input
+          class="w-full text-center bg-transparent border-gray-200 dark:border-gray-700 rounded-xl font-bold dark:text-white py-2"
+          type="number"
+          value="0"
+        />
+        <button
+          class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg text-main dark:text-white"
+        >
+          <span class="material-symbols-outlined text-sm">add</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

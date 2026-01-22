@@ -5,16 +5,27 @@ import { SetupRules } from './setup-rules/setup-rules';
 import { SetupFormat } from './setup-format/setup-format';
 import { SetupAddTeams } from './setup-add-teams/setup-add-teams';
 import { SetupFinalReview } from './setup-final-review/setup-final-review';
-import { SetupStep, StepStatus, IChampionshipSetupRequest } from './setup-types';
+import { SetupStep, StepStatus, IChampionshipSetupRequest, IPhaseConfig } from './setup-types';
+
+import { SetupFormatKnockout } from './setup-format-knockout/setup-format-knockout';
 
 @Component({
   selector: 'app-championship-setup',
-  imports: [SetupHeader, SetupSidebar, SetupRules, SetupFormat, SetupAddTeams, SetupFinalReview],
+  standalone: true,
+  imports: [
+    SetupHeader,
+    SetupSidebar,
+    SetupRules,
+    SetupFormat,
+    SetupFormatKnockout,
+    SetupAddTeams,
+    SetupFinalReview,
+  ],
   templateUrl: './championship-setup.html',
   styleUrl: './championship-setup.css',
 })
 export class ChampionshipSetup {
-  activeComponent = signal<SetupStep>('rules');
+  activeComponent = signal<SetupStep>('format');
   setupData = signal<IChampionshipSetupRequest>({
     activate: false,
   });
@@ -22,8 +33,9 @@ export class ChampionshipSetup {
   stepStatuses = signal<Record<SetupStep, StepStatus>>({
     rules: 'in-progress',
     format: 'pending',
+    structure: 'pending',
     teams: 'pending',
-    'final-review': 'pending',
+    final_review: 'pending',
   });
 
   progress = computed(() => {
@@ -33,8 +45,14 @@ export class ChampionshipSetup {
   });
 
   advanced(component: SetupStep) {
+    // Check if we should skip structure for round_robin
+    if (component === 'structure' && this.setupData().format?.formatType === 'ROUND_ROBIN') {
+      this.advanced('teams');
+      return;
+    }
+
     // Update previous step to completed if moving forward
-    const steps: SetupStep[] = ['rules', 'format', 'teams', 'final-review'];
+    const steps: SetupStep[] = ['rules', 'format', 'structure', 'teams', 'final_review'];
     const currentIndex = steps.indexOf(this.activeComponent());
     const nextIndex = steps.indexOf(component);
 
@@ -64,5 +82,20 @@ export class ChampionshipSetup {
         : prev.tiebreaks,
       teams: data.teams ? ({ ...(prev.teams || {}), ...data.teams } as any) : prev.teams,
     }));
+  }
+
+  updatePhaseConfigs(configs: IPhaseConfig[]) {
+    this.updateData({
+      structure: {
+        ...(this.setupData().structure || {
+          totalTeams: 16,
+          groupsCount: 4,
+          qualifiedPerGroup: 2,
+          knockoutStartPhase: 'QUARTER_FINALS',
+          firstPhaseType: 'GROUPS',
+        }),
+        phaseConfigs: configs,
+      },
+    });
   }
 }

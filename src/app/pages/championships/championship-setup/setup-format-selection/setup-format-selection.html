@@ -1,0 +1,47 @@
+<h2 class="text-lg font-bold text-main dark:text-white mb-4 flex items-center gap-2">
+  <span class="material-symbols-outlined text-primary">format_list_bulleted</span>
+  Formato do Campeonato
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  @for (format of formats; track format.id) {
+    <label class="relative cursor-pointer group" (click)="changeFormat(format.id)">
+      <input
+        class="peer sr-only"
+        name="format"
+        type="radio"
+        [value]="format.id"
+        [checked]="selectedFormat() === format.id"
+      />
+      <div
+        class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all h-full flex flex-col items-center text-center gap-3"
+      >
+        <div
+          class="size-16 rounded-full bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center text-main dark:text-white group-hover:scale-110 transition-transform"
+        >
+          <span class="material-symbols-outlined">{{ format.icon }}</span>
+        </div>
+        <div>
+          <span class="block text-sm font-bold text-main dark:text-white mb-1">{{
+            format.label
+          }}</span>
+          <span class="block text-xs text-secondary">{{ format.description }}</span>
+        </div>
+      </div>
+      <div
+        class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+      >
+        <span class="material-symbols-outlined text-xl">check_circle</span>
+      </div>
+    </label>
+  }
+</div>
+<!-- Group Configuration Inputs -->
+<app-setup-system-format
+  [format]="selectedFormat()"
+  [groupsCount]="groupsCount()"
+  [qualifiedPerGroup]="qualifiedPerGroup()"
+  [totalTeams]="totalTeams()"
+  (updateGroupsCount)="changeGroupsCount($event)"
+  (updateQualified)="changeQualified($event)"
+  (updateTotalTeams)="changeTotalTeams($event)"
+/>
