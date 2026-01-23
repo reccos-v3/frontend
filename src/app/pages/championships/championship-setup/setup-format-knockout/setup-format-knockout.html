@@ -68,22 +68,31 @@
                 class="block text-xs font-bold uppercase text-text-secondary dark:text-gray-400 mb-3"
                 >Tipo de jogo da fase</label
               >
-              <div class="flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl">
-                <button
-                  (click)="toggleMatchType(phase.order, 'single')"
-                  class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+              <div class="relative flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl isolate">
+                <!-- Slider Background -->
+                <div
+                  class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-lg shadow-sm transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)]"
+                  [class.translate-x-0]="phase.matchType === 'single'"
+                  [class.translate-x-full]="phase.matchType === 'home_away'"
                   [class.bg-white]="phase.matchType === 'single'"
                   [class.dark:bg-gray-600]="phase.matchType === 'single'"
-                  [class.shadow-sm]="phase.matchType === 'single'"
+                  [class.bg-primary]="phase.matchType === 'home_away'"
+                ></div>
+
+                <button
+                  type="button"
+                  (click)="toggleMatchType(phase.order, 'single')"
+                  class="relative z-10 flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-colors duration-300"
                   [class.text-secondary]="phase.matchType === 'single'"
+                  [class.dark:text-white]="phase.matchType === 'single'"
                   [class.text-text-secondary]="phase.matchType !== 'single'"
                 >
                   Jogo único
                 </button>
                 <button
+                  type="button"
                   (click)="toggleMatchType(phase.order, 'home_away')"
-                  class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
-                  [class.bg-primary]="phase.matchType === 'home_away'"
+                  class="relative z-10 flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-colors duration-300"
                   [class.text-white]="phase.matchType === 'home_away'"
                   [class.text-text-secondary]="phase.matchType !== 'home_away'"
                 >

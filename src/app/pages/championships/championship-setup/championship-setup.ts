@@ -6,26 +6,18 @@ import { SetupFormat } from './setup-format/setup-format';
 import { SetupAddTeams } from './setup-add-teams/setup-add-teams';
 import { SetupFinalReview } from './setup-final-review/setup-final-review';
 import { SetupStep, StepStatus, IChampionshipSetupRequest, IPhaseConfig } from './setup-types';
-
-import { SetupFormatKnockout } from './setup-format-knockout/setup-format-knockout';
+import { IPhase } from './setup-sidebar-format/setup-sidebar-format';
 
 @Component({
   selector: 'app-championship-setup',
   standalone: true,
-  imports: [
-    SetupHeader,
-    SetupSidebar,
-    SetupRules,
-    SetupFormat,
-    SetupFormatKnockout,
-    SetupAddTeams,
-    SetupFinalReview,
-  ],
+  imports: [SetupHeader, SetupSidebar, SetupRules, SetupFormat, SetupAddTeams, SetupFinalReview],
   templateUrl: './championship-setup.html',
   styleUrl: './championship-setup.css',
 })
 export class ChampionshipSetup {
   activeComponent = signal<SetupStep>('format');
+  sidebarPhases = signal<IPhase[]>([]);
   setupData = signal<IChampionshipSetupRequest>({
     activate: false,
   });
@@ -33,7 +25,6 @@ export class ChampionshipSetup {
   stepStatuses = signal<Record<SetupStep, StepStatus>>({
     rules: 'in-progress',
     format: 'pending',
-    structure: 'pending',
     teams: 'pending',
     final_review: 'pending',
   });
@@ -45,14 +36,8 @@ export class ChampionshipSetup {
   });
 
   advanced(component: SetupStep) {
-    // Check if we should skip structure for round_robin
-    if (component === 'structure' && this.setupData().format?.formatType === 'ROUND_ROBIN') {
-      this.advanced('teams');
-      return;
-    }
-
     // Update previous step to completed if moving forward
-    const steps: SetupStep[] = ['rules', 'format', 'structure', 'teams', 'final_review'];
+    const steps: SetupStep[] = ['rules', 'format', 'teams', 'final_review'];
     const currentIndex = steps.indexOf(this.activeComponent());
     const nextIndex = steps.indexOf(component);
 
@@ -84,18 +69,8 @@ export class ChampionshipSetup {
     }));
   }
 
-  updatePhaseConfigs(configs: IPhaseConfig[]) {
-    this.updateData({
-      structure: {
-        ...(this.setupData().structure || {
-          totalTeams: 16,
-          groupsCount: 4,
-          qualifiedPerGroup: 2,
-          knockoutStartPhase: 'QUARTER_FINALS',
-          firstPhaseType: 'GROUPS',
-        }),
-        phaseConfigs: configs,
-      },
-    });
+  handlePhases(phases: IPhase[]) {
+    this.sidebarPhases.set(phases);
+    console.log('Phases received in ChampionshipSetup:', phases);
   }
 }

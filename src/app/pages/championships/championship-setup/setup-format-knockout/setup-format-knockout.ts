@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input, output, signal } from '@angular/core';
 import { AppAlert } from '../../../../components/alert/alert';
 import { IPhaseConfig } from '../setup-types';
+import { IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 
 @Component({
   selector: 'app-setup-format-knockout',
@@ -12,6 +13,7 @@ import { IPhaseConfig } from '../setup-types';
 })
 export class SetupFormatKnockout {
   totalTeams = input.required<number>();
+  externalPhases = input<IPhase[]>([]);
   updatePhaseConfigs = output<IPhaseConfig[]>();
 
   // Overrides state: Map phase order to config overrides

@@ -1,6 +1,6 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output, effect } from '@angular/core';
 
-interface IPhase {
+export interface IPhase {
   label: string;
   title: string;
   description?: string;
@@ -22,6 +22,7 @@ export class SetupSidebarFormat {
   totalTeams = input(16);
   groupsCount = input(4);
   qualifiedPerGroup = input(2);
+  phasesChange = output<IPhase[]>();
 
   phases = computed(() => {
     const format = this.selectedFormat();
@@ -100,4 +101,10 @@ export class SetupSidebarFormat {
 
     return phases;
   });
+
+  constructor() {
+    effect(() => {
+      this.phasesChange.emit(this.phases());
+    });
+  }
 }

@@ -1,10 +1,11 @@
 import { Component, effect, input, OnInit, output, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
-import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
-import { SetupSidebarFormat } from '../setup-sidebar-format/setup-sidebar-format';
+import { SetupStep, IChampionshipSetupRequest, IPhaseConfig } from '../setup-types';
+import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 import { SetupFormatSelection } from '../setup-format-selection/setup-format-selection';
 import { AppAlert } from '../../../../components/alert/alert';
+import { SetupFormatKnockout } from '../setup-format-knockout/setup-format-knockout';
 
 interface IFormat {
   id: 'groups_knockout' | 'knockout' | 'round_robin';
@@ -16,7 +17,7 @@ interface IFormat {
 @Component({
   selector: 'app-setup-format',
   standalone: true,
-  imports: [SetupSidebarFormat, SetupFormatSelection, AppAlert],
+  imports: [SetupSidebarFormat, SetupFormatSelection, AppAlert, SetupFormatKnockout],
   templateUrl: './setup-format.html',
   styleUrl: './setup-format.css',
 })
@@ -24,6 +25,7 @@ export class SetupFormat implements OnInit {
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  phasesChange = output<IPhase[]>();
   data = input<IChampionshipSetupRequest>();
 
   selectedFormat = signal<IFormat['id']>('groups_knockout');
@@ -32,6 +34,15 @@ export class SetupFormat implements OnInit {
   qualifiedPerGroup = signal(2);
   knockoutStartPhase = signal('QUARTER_FINALS');
   firstPhaseType = signal('GROUPS');
+
+  // Internal state for wizard step
+  internalStep = signal<'selection' | 'configuration'>('selection');
+
+  // Store phases from sidebar to pass to knockout config
+  storedPhases = signal<IPhase[]>([]);
+
+  // Store phase configs from knockout config
+  phaseConfigs = signal<IPhaseConfig[]>([]);
 
   // Debounced signals for sidebar
   debouncedFormat = toSignal(toObservable(this.selectedFormat).pipe(debounceTime(500)), {
@@ -109,28 +120,57 @@ export class SetupFormat implements OnInit {
 
   saveAndContinue() {
     if (this.isValid()) {
-      this.dataUpdate.emit({
-        format: {
-          formatType: this.selectedFormat().toUpperCase(),
-        },
-        structure: {
-          totalTeams: this.totalTeams(),
-          groupsCount: this.groupsCount(),
-          qualifiedPerGroup: this.qualifiedPerGroup(),
-          knockoutStartPhase: this.knockoutStartPhase(),
-          firstPhaseType: this.firstPhaseType(),
-        },
-      });
+      const currentFormat = this.selectedFormat();
 
-      if (this.selectedFormat() === 'round_robin') {
+      // If we are in selection mode
+      if (this.internalStep() === 'selection') {
+        if (currentFormat === 'round_robin') {
+          // Round robin goes directly to teams
+          this.emitDataUpdate();
+          this.advanced.emit('teams');
+        } else {
+          // Others go to configuration
+          this.internalStep.set('configuration');
+        }
+      }
+      // If we are in configuration mode
+      else {
+        this.emitDataUpdate();
         this.advanced.emit('teams');
-      } else {
-        this.advanced.emit('structure');
       }
     }
   }
 
+  emitDataUpdate() {
+    this.dataUpdate.emit({
+      format: {
+        formatType: this.selectedFormat().toUpperCase(),
+      },
+      structure: {
+        totalTeams: this.totalTeams(),
+        groupsCount: this.groupsCount(),
+        qualifiedPerGroup: this.qualifiedPerGroup(),
+        knockoutStartPhase: this.knockoutStartPhase(),
+        firstPhaseType: this.firstPhaseType(),
+        phaseConfigs: this.phaseConfigs().length > 0 ? this.phaseConfigs() : undefined,
+      },
+    });
+  }
+
+  updatePhaseConfigs(configs: IPhaseConfig[]) {
+    this.phaseConfigs.set(configs);
+  }
+
   returnToPrevious() {
-    this.advanced.emit('rules');
+    if (this.internalStep() === 'configuration') {
+      this.internalStep.set('selection');
+    } else {
+      this.advanced.emit('rules');
+    }
+  }
+
+  handlePhasesChange(phases: IPhase[]) {
+    this.storedPhases.set(phases);
+    this.phasesChange.emit(phases);
   }
 }

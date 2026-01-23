@@ -1,4 +1,4 @@
-export type SetupStep = 'rules' | 'format' | 'structure' | 'teams' | 'final_review';
+export type SetupStep = 'rules' | 'format' | 'teams' | 'final_review';
 export type StepStatus = 'completed' | 'in-progress' | 'pending';
 
 export interface ISetupBasics {
