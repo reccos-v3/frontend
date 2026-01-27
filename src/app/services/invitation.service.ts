@@ -76,7 +76,7 @@ export class InvitationService {
   /**
    * Busca lista paginada de convites
    */
-  getInvitations(page: number = 0, size: number = 10): Observable<IPage<IInvitation>> {
+  getInvitations(page = 0, size = 10): Observable<IPage<IInvitation>> {
     const federationId = this.tokenService.getFederationId();
 
     return this.http

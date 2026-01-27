@@ -121,14 +121,14 @@
     </h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       @for (action of quickActions(); track action.label) {
-      <button class="text-left w-full h-full cursor-pointer" [routerLink]="action.route">
-        <app-action-card
-          [title]="action.label"
-          [description]="action.description"
-          [icon]="action.icon"
-          [color]="action.color || 'primary'"
-        ></app-action-card>
-      </button>
+        <button class="text-left w-full h-full cursor-pointer" [routerLink]="action.route">
+          <app-action-card
+            [title]="action.label"
+            [description]="action.description"
+            [icon]="action.icon"
+            [color]="action.color || 'primary'"
+          ></app-action-card>
+        </button>
       }
     </div>
   </section>

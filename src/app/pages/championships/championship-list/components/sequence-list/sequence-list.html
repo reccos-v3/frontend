@@ -1,84 +1,93 @@
 <main class="w-full space-y-8">
   <!-- Aguardando Ação (DRAFT/CONFIGURING) -->
   @if (itemsPending().length > 0) {
-  <section>
-    <h2 class="font-display font-bold text-xl text-dark-blue dark:text-white mb-6">
-      Aguardando Ação
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (item of itemsPending(); track item.id) {
-      <ng-container *ngTemplateOutlet="cardTemplate; context: { $implicit: item }"></ng-container>
-      }
-    </div>
-  </section>
+    <section>
+      <h2 class="font-display font-bold text-xl text-dark-blue dark:text-white mb-6">
+        Aguardando Ação
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of itemsPending(); track item.id) {
+          <ng-container
+            *ngTemplateOutlet="cardTemplate; context: { $implicit: item }"
+          ></ng-container>
+        }
+      </div>
+    </section>
   }
 
   <!-- Ativos (ACTIVE) -->
   @if (itemsActive().length > 0) {
-  <section>
-    <h2 class="font-display font-bold text-2xl text-dark-blue dark:text-white mb-6">Ativos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (item of itemsActive(); track item.id) {
-      <ng-container *ngTemplateOutlet="cardTemplate; context: { $implicit: item }"></ng-container>
-      }
-    </div>
-  </section>
+    <section>
+      <h2 class="font-display font-bold text-2xl text-dark-blue dark:text-white mb-6">Ativos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of itemsActive(); track item.id) {
+          <ng-container
+            *ngTemplateOutlet="cardTemplate; context: { $implicit: item }"
+          ></ng-container>
+        }
+      </div>
+    </section>
   }
 
   <!-- Concluídos (FINISHED) -->
   @if (itemsFinished().length > 0) {
-  <section>
-    <h2 class="font-display font-bold text-2xl text-dark-blue dark:text-white mb-6">Concluídos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (item of itemsFinished(); track item.id) {
-      <ng-container *ngTemplateOutlet="cardTemplate; context: { $implicit: item }"></ng-container>
-      }
+    <section>
+      <h2 class="font-display font-bold text-2xl text-dark-blue dark:text-white mb-6">
+        Concluídos
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of itemsFinished(); track item.id) {
+          <ng-container
+            *ngTemplateOutlet="cardTemplate; context: { $implicit: item }"
+          ></ng-container>
+        }
+      </div>
+    </section>
+  }
+  @if (data().length === 0) {
+    <div class="flex flex-col items-center justify-center py-20 text-text-muted">
+      <span class="material-symbols-outlined text-6xl mb-4">inventory_2</span>
+      <p class="text-lg">Nenhum campeonato encontrado.</p>
     </div>
-  </section>
-  } @if (data().length === 0) {
-  <div class="flex flex-col items-center justify-center py-20 text-text-muted">
-    <span class="material-symbols-outlined text-6xl mb-4">inventory_2</span>
-    <p class="text-lg">Nenhum campeonato encontrado.</p>
-  </div>
   }
 
   <!-- Pagination -->
   @if (pagination() && (pagination()?.totalPages ?? 0) > 1) {
-  <div class="flex justify-center pt-8">
-    <nav
-      class="flex items-center gap-1 bg-surface-light dark:bg-surface-dark rounded-lg p-1 border border-gray-100/50 dark:border-gray-800/40 shadow-sm"
-    >
-      <button
-        (click)="goToPage((pagination()?.currentPage ?? 1) - 1)"
-        [disabled]="pagination()?.currentPage === 0"
-        class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-neutral-gray/50 dark:hover:bg-gray-700 text-text-muted dark:text-gray-400 disabled:opacity-50 transition-colors"
+    <div class="flex justify-center pt-8">
+      <nav
+        class="flex items-center gap-1 bg-surface-light dark:bg-surface-dark rounded-lg p-1 border border-gray-100/50 dark:border-gray-800/40 shadow-sm"
       >
-        <span class="material-symbols-outlined text-lg">chevron_left</span>
-      </button>
+        <button
+          (click)="goToPage((pagination()?.currentPage ?? 1) - 1)"
+          [disabled]="pagination()?.currentPage === 0"
+          class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-neutral-gray/50 dark:hover:bg-gray-700 text-text-muted dark:text-gray-400 disabled:opacity-50 transition-colors"
+        >
+          <span class="material-symbols-outlined text-lg">chevron_left</span>
+        </button>
 
-      @for (page of getPages(); track page) {
-      <button
-        (click)="goToPage(page)"
-        [class]="
-          pagination()?.currentPage === page
-            ? 'bg-primary text-white shadow-sm'
-            : 'hover:bg-neutral-gray/50 dark:hover:bg-gray-700 text-text-muted dark:text-gray-400'
-        "
-        class="w-10 h-10 flex items-center justify-center rounded-md font-medium text-sm transition-colors"
-      >
-        {{ page + 1 }}
-      </button>
-      }
+        @for (page of getPages(); track page) {
+          <button
+            (click)="goToPage(page)"
+            [class]="
+              pagination()?.currentPage === page
+                ? 'bg-primary text-white shadow-sm'
+                : 'hover:bg-neutral-gray/50 dark:hover:bg-gray-700 text-text-muted dark:text-gray-400'
+            "
+            class="w-10 h-10 flex items-center justify-center rounded-md font-medium text-sm transition-colors"
+          >
+            {{ page + 1 }}
+          </button>
+        }
 
-      <button
-        (click)="goToPage((pagination()?.currentPage ?? 0) + 1)"
-        [disabled]="pagination()?.currentPage === (pagination()?.totalPages ?? 0) - 1"
-        class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-neutral-gray/50 dark:hover:bg-gray-700 text-text-muted dark:text-gray-400 disabled:opacity-50 transition-colors"
-      >
-        <span class="material-symbols-outlined text-lg">chevron_right</span>
-      </button>
-    </nav>
-  </div>
+        <button
+          (click)="goToPage((pagination()?.currentPage ?? 0) + 1)"
+          [disabled]="pagination()?.currentPage === (pagination()?.totalPages ?? 0) - 1"
+          class="w-10 h-10 flex items-center justify-center rounded-md hover:bg-neutral-gray/50 dark:hover:bg-gray-700 text-text-muted dark:text-gray-400 disabled:opacity-50 transition-colors"
+        >
+          <span class="material-symbols-outlined text-lg">chevron_right</span>
+        </button>
+      </nav>
+    </div>
   }
 </main>
 
@@ -121,12 +130,12 @@
             "
           >
             @if (config.pulse) {
-            <span
-              class="w-1.5 h-1.5 rounded-full animate-pulse"
-              [class]="'bg-' + config.color"
-            ></span>
+              <span
+                class="w-1.5 h-1.5 rounded-full animate-pulse"
+                [class]="'bg-' + config.color"
+              ></span>
             } @else {
-            <span class="material-symbols-outlined text-[14px]">{{ config.icon }}</span>
+              <span class="material-symbols-outlined text-[14px]">{{ config.icon }}</span>
             }
             {{ config.label }}
           </span>
@@ -158,10 +167,10 @@
         </div>
 
         @if (item.status === 'CONFIGURING' || item.status === 'DRAFT') {
-        <div class="w-full bg-neutral-gray dark:bg-gray-700 rounded-full h-1.5 mt-2">
-          <!-- Mock progress for now or use actual progress if available -->
-          <div class="bg-alert-yellow h-1.5 rounded-full" [style.width.%]="40"></div>
-        </div>
+          <div class="w-full bg-neutral-gray dark:bg-gray-700 rounded-full h-1.5 mt-2">
+            <!-- Mock progress for now or use actual progress if available -->
+            <div class="bg-alert-yellow h-1.5 rounded-full" [style.width.%]="40"></div>
+          </div>
         }
       </div>
 

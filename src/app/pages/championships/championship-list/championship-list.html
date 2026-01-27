@@ -28,21 +28,21 @@
   <!-- Quick Stats Row -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     @for (card of statCards(); track card.label) {
-    <div
-      class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100/50 dark:border-gray-800/40 flex items-center gap-4 text-left"
-    >
       <div
-        class="size-12 rounded-full flex items-center justify-center {{ card.bgClass }} {{
-          card.iconClass
-        }}"
+        class="bg-white dark:bg-surface-dark px-4 py-6 rounded-xl shadow-sm border border-gray-100/50 dark:border-gray-800/40 flex items-center gap-4 text-left"
       >
-        <span class="material-symbols-outlined icon-filled">{{ card.icon }}</span>
+        <div
+          class="size-12 rounded-full flex items-center justify-center {{ card.bgClass }} {{
+            card.iconClass
+          }}"
+        >
+          <span class="material-symbols-outlined icon-filled">{{ card.icon }}</span>
+        </div>
+        <div>
+          <p class="text-sm text-text-muted font-medium">{{ card.label }}</p>
+          <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ card.value }}</p>
+        </div>
       </div>
-      <div>
-        <p class="text-sm text-text-muted font-medium">{{ card.label }}</p>
-        <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ card.value }}</p>
-      </div>
-    </div>
     }
   </div>
   <!-- Toolbar: Search & Filters -->
@@ -151,22 +151,22 @@
   </div>
   <!-- Content Views -->
   @if (currentView() === 'table') {
-  <app-table-list
-    [columns]="columns()"
-    [data]="data()"
-    [actions]="actions()"
-    [pagination]="pagination()"
-    emptyMessage="Nenhum campeonato encontrado."
-  />
+    <app-table-list
+      [columns]="columns()"
+      [data]="data()"
+      [actions]="actions()"
+      [pagination]="pagination()"
+      emptyMessage="Nenhum campeonato encontrado."
+    />
   } @else if (currentView() === 'sequence') {
-  <app-sequence-list
-    [data]="data()"
-    [pagination]="pagination()"
-    (onEdit)="editChampionship($event)"
-    (onDelete)="deleteChampionship($event)"
-    (onManage)="viewChampionship($event)"
-  />
+    <app-sequence-list
+      [data]="data()"
+      [pagination]="pagination()"
+      (onEdit)="editChampionship($event)"
+      (onDelete)="deleteChampionship($event)"
+      (onManage)="viewChampionship($event)"
+    />
   } @else if (currentView() === 'step') {
-  <app-step-list />
+    <app-step-list />
   }
 </main>

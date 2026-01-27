@@ -16,7 +16,7 @@ export class ErrorHandlerUtil {
   static handleApiError(
     error: HttpErrorResponse,
     toastService: ToastService,
-    defaultMessage: string = 'Ocorreu um erro. Tente novamente.'
+    defaultMessage = 'Ocorreu um erro. Tente novamente.',
   ): void {
     try {
       const apiError = error.error as IApiError;
@@ -48,7 +48,7 @@ export class ErrorHandlerUtil {
    */
   static extractErrorMessage(
     error: HttpErrorResponse,
-    defaultMessage: string = 'Ocorreu um erro. Tente novamente.'
+    defaultMessage = 'Ocorreu um erro. Tente novamente.',
   ): string {
     try {
       const apiError = error.error as IApiError;

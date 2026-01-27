@@ -38,42 +38,42 @@
         </thead>
         <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
           @for (champ of recentChampionships(); track champ.id) {
-          <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-            <td class="py-4 px-4">
-              <div class="flex items-center gap-3">
-                <div
-                  class="size-8 rounded flex items-center justify-center"
-                  [style.background-color]="champ.iconBg"
-                  [style.color]="champ.iconColor"
+            <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+              <td class="py-4 px-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="size-8 rounded flex items-center justify-center"
+                    [style.background-color]="champ.iconBg"
+                    [style.color]="champ.iconColor"
+                  >
+                    <span class="material-symbols-outlined text-sm">{{ champ.icon }}</span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-slate-900 dark:text-white">
+                      {{ champ.name }}
+                    </p>
+                    <p class="text-xs text-slate-500">{{ champ.category }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="py-4 px-4 text-sm text-slate-600 dark:text-slate-300">{{ champ.date }}</td>
+              <td class="py-4 px-4">
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
+                  [style.background-color]="champ.statusBg"
+                  [style.color]="champ.statusColor"
+                  [style.border-color]="champ.statusBorder"
+                  >{{ champ.statusLabel }}</span
                 >
-                  <span class="material-symbols-outlined text-sm">{{ champ.icon }}</span>
-                </div>
-                <div>
-                  <p class="text-sm font-bold text-slate-900 dark:text-white">
-                    {{ champ.name }}
-                  </p>
-                  <p class="text-xs text-slate-500">{{ champ.category }}</p>
-                </div>
-              </div>
-            </td>
-            <td class="py-4 px-4 text-sm text-slate-600 dark:text-slate-300">{{ champ.date }}</td>
-            <td class="py-4 px-4">
-              <span
-                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
-                [style.background-color]="champ.statusBg"
-                [style.color]="champ.statusColor"
-                [style.border-color]="champ.statusBorder"
-                >{{ champ.statusLabel }}</span
-              >
-            </td>
-            <td class="py-4 px-4 text-right">
-              <button
-                class="text-slate-400 hover:text-primary-dark dark:hover:text-primary transition-colors p-1"
-              >
-                <span class="material-symbols-outlined">{{ champ.actionIcon }}</span>
-              </button>
-            </td>
-          </tr>
+              </td>
+              <td class="py-4 px-4 text-right">
+                <button
+                  class="text-slate-400 hover:text-primary-dark dark:hover:text-primary transition-colors p-1"
+                >
+                  <span class="material-symbols-outlined">{{ champ.actionIcon }}</span>
+                </button>
+              </td>
+            </tr>
           }
         </tbody>
       </table>

@@ -255,7 +255,7 @@ export class SetupRules implements OnInit {
           })),
         },
       });
-      this.advanced.emit('format');
+      this.advanced.emit('periods');
     }
   }
 }

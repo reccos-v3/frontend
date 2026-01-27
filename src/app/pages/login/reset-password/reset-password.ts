@@ -75,7 +75,7 @@ export class ResetPassword implements OnInit, OnDestroy {
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
       },
-      { validators: this.passwordMatchValidator }
+      { validators: this.passwordMatchValidator },
     );
   }
 
@@ -231,7 +231,7 @@ export class ResetPassword implements OnInit, OnDestroy {
         .resetPassword({ token, newPassword: password })
         .pipe(
           delay(1500), // Artificial delay for better UX
-          finalize(() => this.isSubmitting.set(false))
+          finalize(() => this.isSubmitting.set(false)),
         )
         .subscribe({
           next: () => {

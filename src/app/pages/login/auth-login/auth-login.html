@@ -127,19 +127,19 @@
 
         <!-- Error Message -->
         @if (errorMessage) {
-        <div class="p-4 bg-red-50 border border-red-200 rounded-xl">
-          <p class="text-sm text-red-600">{{ errorMessage }}</p>
-        </div>
+          <div class="p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p class="text-sm text-red-600">{{ errorMessage }}</p>
+          </div>
         }
 
         <!-- Submit Button -->
         <button class="submit-button" type="submit" [disabled]="loginForm.invalid || isLoading">
           @if (isLoading) {
-          <span>Entrando...</span>
-          <span class="material-symbols-outlined text-sm animate-spin">sync</span>
+            <span>Entrando...</span>
+            <span class="material-symbols-outlined text-sm animate-spin">sync</span>
           } @else {
-          <span>Entrar na Plataforma</span>
-          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            <span>Entrar na Plataforma</span>
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
           }
         </button>
       </form>

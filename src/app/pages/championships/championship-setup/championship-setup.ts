@@ -1,4 +1,4 @@
-import { Component, computed, output, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { Component, computed, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SetupHeader } from './setup-header/setup-header';
 import { SetupSidebar } from './setup-sidebar/setup-sidebar';
@@ -10,7 +10,6 @@ import {
   SetupStep,
   StepStatus,
   IChampionshipSetupRequest,
-  IPhaseConfig,
 } from '../../../interfaces/setup-types.interface';
 import { IPhase } from './setup-sidebar-format/setup-sidebar-format';
 import { SetupPeriods } from './setup-periods/setup-periods';
@@ -89,16 +88,60 @@ export class ChampionshipSetup implements OnInit {
     this.setupData.update((prev) => ({
       ...prev,
       ...data,
-      basics: data.basics ? ({ ...(prev.basics || {}), ...data.basics } as any) : prev.basics,
-      rules: data.rules ? ({ ...(prev.rules || {}), ...data.rules } as any) : prev.rules,
-      format: data.format ? ({ ...(prev.format || {}), ...data.format } as any) : prev.format,
+      basics: data.basics
+        ? ({ ...(prev.basics || {}), ...data.basics } as IChampionshipSetupRequest['basics'])
+        : prev.basics,
+      rules: data.rules
+        ? ({ ...(prev.rules || {}), ...data.rules } as IChampionshipSetupRequest['rules'])
+        : prev.rules,
+      format: data.format
+        ? ({ ...(prev.format || {}), ...data.format } as IChampionshipSetupRequest['format'])
+        : prev.format,
       structure: data.structure
-        ? ({ ...(prev.structure || {}), ...data.structure } as any)
+        ? ({
+            ...(prev.structure || {}),
+            ...data.structure,
+          } as IChampionshipSetupRequest['structure'])
         : prev.structure,
+      championshipPeriod: data.championshipPeriod
+        ? ({
+            ...(prev.championshipPeriod || {}),
+            ...data.championshipPeriod,
+          } as IChampionshipSetupRequest['championshipPeriod'])
+        : prev.championshipPeriod,
+      registrationPeriod: data.registrationPeriod
+        ? ({
+            ...(prev.registrationPeriod || {}),
+            ...data.registrationPeriod,
+          } as IChampionshipSetupRequest['registrationPeriod'])
+        : prev.registrationPeriod,
       tiebreaks: data.tiebreaks
-        ? ({ ...(prev.tiebreaks || {}), ...data.tiebreaks } as any)
+        ? ({
+            ...(prev.tiebreaks || {}),
+            ...data.tiebreaks,
+          } as IChampionshipSetupRequest['tiebreaks'])
         : prev.tiebreaks,
-      teams: data.teams ? ({ ...(prev.teams || {}), ...data.teams } as any) : prev.teams,
+      teams: data.teams
+        ? ({ ...(prev.teams || {}), ...data.teams } as IChampionshipSetupRequest['teams'])
+        : prev.teams,
+      activationPolicy: data.activationPolicy
+        ? ({
+            ...(prev.activationPolicy || {}),
+            ...data.activationPolicy,
+          } as IChampionshipSetupRequest['activationPolicy'])
+        : prev.activationPolicy,
+      postActivationRules: data.postActivationRules
+        ? ({
+            ...(prev.postActivationRules || {}),
+            ...data.postActivationRules,
+          } as IChampionshipSetupRequest['postActivationRules'])
+        : prev.postActivationRules,
+      schedulePreferences: data.schedulePreferences
+        ? ({
+            ...(prev.schedulePreferences || {}),
+            ...data.schedulePreferences,
+          } as IChampionshipSetupRequest['schedulePreferences'])
+        : prev.schedulePreferences,
     }));
   }
 

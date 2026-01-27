@@ -11,12 +11,14 @@
       </div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- RANGE DATES -->
       <div class="lg:col-span-2 space-y-6">
-        <app-period-range-dates />
+        <app-period-range-dates
+          (validForm)="isValid.set($event)"
+          (periodValues)="handlePeriodValues($event)"
+        />
       </div>
       <div class="lg:col-span-1">
-        <app-period-sidebar />
+        <app-period-sidebar [tempValues]="tempValues()" />
       </div>
     </div>
     <div
@@ -35,6 +37,9 @@
           Salvar Rascunho
         </button>
         <button
+          (click)="saveAndContinue()"
+          [disabled]="!isValid()"
+          [class.opacity-50]="!isValid()"
           class="px-10 py-2.5 rounded-lg bg-[#1E7F4F] text-white font-bold text-sm hover:bg-[#16633D] transition-all shadow-md flex items-center gap-2"
         >
           Próximo: Regras

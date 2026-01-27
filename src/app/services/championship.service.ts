@@ -36,10 +36,7 @@ export class ChampionshipService {
       );
   }
 
-  getChampionshipsByFederation(
-    page: number = 0,
-    size: number = 10,
-  ): Observable<IPage<IChampionshipResponse>> {
+  getChampionshipsByFederation(page = 0, size = 10): Observable<IPage<IChampionshipResponse>> {
     const federationId = this.tokenService.getFederationId();
     if (!federationId) {
       return of({

@@ -120,7 +120,7 @@ export class ManageInvitations implements OnInit {
   }
 
   renderRoleCell(row: IInvitation): string {
-    const roleColors: { [key: string]: string } = {
+    const roleColors: Record<string, string> = {
       FEDERATION_OWNER: 'bg-blue-50 text-blue-700 border-blue-100',
       FEDERATION_ADMIN: 'bg-purple-50 text-purple-700 border-purple-100',
       ORGANIZER: 'bg-green-50 text-green-700 border-green-100',
@@ -137,7 +137,7 @@ export class ManageInvitations implements OnInit {
   }
 
   renderStatusCell(row: IInvitation): string {
-    const statusConfig: { [key: string]: { color: string; bg: string; label: string } } = {
+    const statusConfig: Record<string, { color: string; bg: string; label: string }> = {
       PENDING: { color: 'text-amber-600', bg: 'bg-amber-500', label: 'Pendente' },
       ACTIVE: { color: 'text-primary', bg: 'bg-primary', label: 'Ativo' },
       EXPIRED: { color: 'text-red-600', bg: 'bg-red-500', label: 'Expirado' },

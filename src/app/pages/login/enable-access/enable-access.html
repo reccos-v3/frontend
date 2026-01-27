@@ -37,7 +37,9 @@
         </div>
       </div>
 
-      <h2 class="hidden lg:block text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 lg:mb-6">
+      <h2
+        class="hidden lg:block text-3xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 lg:mb-6"
+      >
         Você foi <br />
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400"
           >convocado!</span
@@ -59,7 +61,9 @@
         ></div>
 
         <div class="flex items-center gap-4 mb-5 relative">
-          <div class="size-11 flex items-center justify-center bg-white/10 rounded-full flex-shrink-0">
+          <div
+            class="size-11 flex items-center justify-center bg-white/10 rounded-full flex-shrink-0"
+          >
             <span class="material-symbols-outlined text-green-400">verified_user</span>
           </div>
           <div>
@@ -102,13 +106,17 @@
   </div>
 
   <!-- Right Panel - Activation Form -->
-  <div class="lg:h-screen lg:overflow-y-auto flex-1 bg-white relative flex flex-col justify-start order-2 lg:order-2">
+  <div
+    class="lg:h-screen lg:overflow-y-auto flex-1 bg-white relative flex flex-col justify-start order-2 lg:order-2"
+  >
     <div class="absolute inset-0 bg-pattern opacity-40 pointer-events-none"></div>
 
     <div class="w-full max-w-lg mx-auto px-6 py-12 lg:px-10 relative z-10">
       <div class="mb-8 lg:mb-10">
         <h3 class="text-xl lg:text-2xl font-bold text-secondary mb-2">Ativar Acesso</h3>
-        <p class="text-sm text-gray-500">Preencha as credenciais de segurança para validar seu convite.</p>
+        <p class="text-sm text-gray-500">
+          Preencha as credenciais de segurança para validar seu convite.
+        </p>
       </div>
 
       <form [formGroup]="activationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
@@ -133,21 +141,21 @@
               placeholder="xxx-xxxx-xx"
             />
             @if (isValidating()) {
-            <div
-              class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400"
-            >
-              <span class="material-symbols-outlined animate-spin">sync</span>
-            </div>
+              <div
+                class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400"
+              >
+                <span class="material-symbols-outlined animate-spin">sync</span>
+              </div>
             } @else if (isValid()) {
-            <div
-              class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-green-600"
-            >
-              <span class="material-symbols-outlined">check_circle</span>
-            </div>
+              <div
+                class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-green-600"
+              >
+                <span class="material-symbols-outlined">check_circle</span>
+              </div>
             }
           </div>
           @if (validationError()) {
-          <p class="text-xs text-alert-red mt-1">{{ validationError() }}</p>
+            <p class="text-xs text-alert-red mt-1">{{ validationError() }}</p>
           }
         </div>
 
@@ -193,9 +201,11 @@
               "
             />
           </div>
-          @if (activationForm.get('documentValue')?.hasError('cpfInvalid') &&
-          activationForm.get('documentValue')?.touched) {
-          <p class="text-xs text-alert-red mt-1">CPF inválido</p>
+          @if (
+            activationForm.get('documentValue')?.hasError('cpfInvalid') &&
+            activationForm.get('documentValue')?.touched
+          ) {
+            <p class="text-xs text-alert-red mt-1">CPF inválido</p>
           }
         </div>
 
@@ -235,11 +245,11 @@
             <!-- Password Strength Indicator -->
             <div class="flex gap-1.5 pt-1">
               @for (i of [1, 2, 3, 4]; track i) {
-              <div
-                class="h-1.5 flex-1 rounded-full transition-colors"
-                [class.bg-green-500]="i <= passwordStrength().level"
-                [class.bg-gray-200]="i > passwordStrength().level"
-              ></div>
+                <div
+                  class="h-1.5 flex-1 rounded-full transition-colors"
+                  [class.bg-green-500]="i <= passwordStrength().level"
+                  [class.bg-gray-200]="i > passwordStrength().level"
+                ></div>
               }
             </div>
 
@@ -312,16 +322,18 @@
                 }}</span>
               </button>
             </div>
-            @if (activationForm.hasError('passwordMismatch') &&
-            activationForm.get('confirmPassword')?.touched) {
-            <p class="text-xs text-alert-red mt-1">As senhas não coincidem</p>
+            @if (
+              activationForm.hasError('passwordMismatch') &&
+              activationForm.get('confirmPassword')?.touched
+            ) {
+              <p class="text-xs text-alert-red mt-1">As senhas não coincidem</p>
             }
           </div>
         </div>
 
         <div class="pt-4">
           @if (submitError()) {
-          <p class="text-sm text-alert-red mb-3 text-center font-medium">{{ submitError() }}</p>
+            <p class="text-sm text-alert-red mb-3 text-center font-medium">{{ submitError() }}</p>
           }
 
           <button
@@ -330,13 +342,13 @@
             class="w-full h-14 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 text-lg group disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
           >
             @if (isSubmitting()) {
-            <span class="material-symbols-outlined animate-spin">sync</span>
-            <span>Ativando...</span>
+              <span class="material-symbols-outlined animate-spin">sync</span>
+              <span>Ativando...</span>
             } @else {
-            <span>Ativar acesso</span>
-            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform"
-              >arrow_forward</span
-            >
+              <span>Ativar acesso</span>
+              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform"
+                >arrow_forward</span
+              >
             }
           </button>
         </div>

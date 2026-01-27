@@ -28,7 +28,7 @@ interface QuickAction {
 export class FederationDashboard {
   protected federationName = signal('Federação Paulista de Tênis');
   protected federationLogo = signal(
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBrgzo9hPrjutjPsxrUPM1NVbpE_O3k2DOELP4d3RVUlzMRf1ukO-p1mdFdYclsBi9_Rj4hkbIEgUljz0uqn78IQ3svsqBdiheqK4R7AZmF7w7nJ8ecHf_wNisu84vmj40nz4H8esHqJaNOm2IDMthXreQV7D7r3qDbEMvlUdBuGnW5Mouo4gbpbK35yy_bfyItm94Wjrpp1XC4afVUVmVaw5-vKw13owagVfhajmURfJjLsrthwKFvIgKgFP0dfwJCE-RgB6uMJB0'
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBrgzo9hPrjutjPsxrUPM1NVbpE_O3k2DOELP4d3RVUlzMRf1ukO-p1mdFdYclsBi9_Rj4hkbIEgUljz0uqn78IQ3svsqBdiheqK4R7AZmF7w7nJ8ecHf_wNisu84vmj40nz4H8esHqJaNOm2IDMthXreQV7D7r3qDbEMvlUdBuGnW5Mouo4gbpbK35yy_bfyItm94Wjrpp1XC4afVUVmVaw5-vKw13owagVfhajmURfJjLsrthwKFvIgKgFP0dfwJCE-RgB6uMJB0',
   );
   protected championshipCount = signal(12);
   protected userCount = signal(45);

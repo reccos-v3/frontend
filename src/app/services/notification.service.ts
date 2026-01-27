@@ -18,7 +18,7 @@ export class NotificationService {
    */
   show(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info'): void {
     const notification: INotification = { message, type };
-    
+
     // Salva no sessionStorage para persistir após redirecionamento
     if (typeof window !== 'undefined' && window.sessionStorage) {
       sessionStorage.setItem(this.NOTIFICATION_KEY, JSON.stringify(notification));
@@ -48,4 +48,3 @@ export class NotificationService {
     }
   }
 }
-

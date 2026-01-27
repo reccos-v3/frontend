@@ -4,9 +4,8 @@
   aria-atomic="true"
 >
   @for (toast of toasts(); track toast.id) {
-  <div class="pointer-events-auto">
-    <app-toast [toast]="toast" [toastService]="toastService" />
-  </div>
+    <div class="pointer-events-auto">
+      <app-toast [toast]="toast" [toastService]="toastService" />
+    </div>
   }
 </div>
-

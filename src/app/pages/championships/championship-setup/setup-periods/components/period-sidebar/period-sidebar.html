@@ -1,43 +1,73 @@
-<div class="sticky top-24 space-y-4">
+<div class="sticky top-0 space-y-4">
   <div
-    class="bg-white dark:bg-[#1A2C24] border border-[#E5E7EB] dark:border-[#1A2C24] rounded-xl p-6 shadow-sm"
+    class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-200 rounded-xl p-6 shadow-sm mb-6"
   >
-    <h4 class="text-sm font-bold text-[#111814] dark:text-white mb-4 uppercase tracking-wider">
+    <h4 class="text-sm font-bold text-primary dark:text-white mb-4 uppercase tracking-wider">
       Resumo do Cronograma
     </h4>
     <div class="space-y-4">
       <div class="flex gap-3">
-        <div class="mt-1 w-2 h-2 rounded-full bg-[#1E7F4F]"></div>
+        <div class="mt-1 w-2 h-2 rounded-full bg-primary"></div>
         <div>
-          <p class="text-xs font-bold">Inscrições</p>
-          <p class="text-[11px] text-[#618975]">01/05/2024 até 25/05/2024</p>
+          <p class="text-md font-bold">Inscrições</p>
+          <p class="text-[12px] text-primary">
+            {{ tempValues()?.registrationPeriod?.startAt | date: 'dd/MM/yyyy' }} -
+            {{ tempValues()?.registrationPeriod?.endAt | date: 'dd/MM/yyyy' }}
+          </p>
         </div>
       </div>
       <div class="flex gap-3">
-        <div class="mt-1 w-2 h-2 rounded-full bg-[#1E7F4F] opacity-40"></div>
+        <div class="mt-1 w-2 h-2 rounded-full bg-gray-500"></div>
         <div>
-          <p class="text-xs font-bold">Início dos Jogos</p>
-          <p class="text-[11px] text-[#618975]">01/06/2024</p>
+          <p class="text-md font-bold">Início dos Jogos</p>
+          <p class="text-[12px] text-primary">
+            {{ tempValues()?.championshipPeriod?.startDate | date: 'dd/MM/yyyy' }}
+          </p>
         </div>
       </div>
       <div class="flex gap-3">
-        <div class="mt-1 w-2 h-2 rounded-full bg-[#D64545]"></div>
+        <div class="mt-1 w-2 h-2 rounded-full bg-danger"></div>
         <div>
-          <p class="text-xs font-bold">Grande Final</p>
-          <p class="text-[11px] text-[#618975]">Previsão: 15/12/2024</p>
+          <p class="text-md font-bold">Fim dos jogos</p>
+          <p class="text-[12px] text-primary">
+            Previsão: {{ tempValues()?.championshipPeriod?.endDate | date: 'dd/MM/yyyy' }}
+          </p>
         </div>
       </div>
     </div>
   </div>
-  <div
-    class="bg-white dark:bg-[#1A2C24] border border-[#E5E7EB] dark:border-[#1A2C24] rounded-xl p-4 shadow-sm"
-  >
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-[10px] font-bold uppercase text-[#618975]">Progresso do Setup</span>
-      <span class="text-[10px] font-bold text-[#1E7F4F]">35%</span>
+
+  <div class="rounded-xl border border-[#2ecc70]/20 bg-[#2ecc70]/5 p-6 space-y-4">
+    <div class="flex items-center gap-2 text-[#2ecc70]">
+      <span class="material-symbols-outlined">warning</span>
+      <p class="text-base font-bold leading-tight uppercase tracking-wide">Impacto da Decisão</p>
     </div>
-    <div class="w-full bg-gray-100 dark:bg-gray-800 h-1.5 rounded-full overflow-hidden">
-      <div class="bg-[#1E7F4F] h-full w-[35%] rounded-full transition-all"></div>
+    <div class="space-y-3">
+      <p class="text-[#121714] text-[15px] dark:text-gray-200 font-normal leading-relaxed mb-6">
+        As datas definidas aqui são críticas. Após o encerramento em
+        <span class="font-bold">15/06/2024</span>:
+      </p>
+      <ul class="space-y-2">
+        <li class="flex items-start gap-2 text-sm text-[#4a5f53] dark:text-gray-400">
+          <span class="material-symbols-outlined text-[#2ecc70] text-[18px]">check_circle</span>
+          <span>O sistema bloqueará automaticamente novos registros.</span>
+        </li>
+        <li class="flex items-start gap-2 text-sm text-[#4a5f53] dark:text-gray-400">
+          <span class="material-symbols-outlined text-[#2ecc70] text-[18px]">check_circle</span>
+          <span>O módulo de chaveamento (tabela) será habilitado imediatamente.</span>
+        </li>
+        <li class="flex items-start gap-2 text-sm text-[#4a5f53] dark:text-gray-400">
+          <span class="material-symbols-outlined text-[#2ecc70] text-[18px]">check_circle</span>
+          <span>Esta ação é irreversível para manter a integridade da tabela oficial.</span>
+        </li>
+      </ul>
     </div>
+    <a
+      class="pt-2 text-sm font-bold flex items-center gap-2 text-primary hover:gap-3 transition-all cursor-pointer"
+      href="#"
+    >
+      Saiba mais sobre bloqueios
+      <span class="material-symbols-outlined text-[20px]">arrow_right_alt</span>
+    </a>
   </div>
 </div>

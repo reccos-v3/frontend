@@ -26,7 +26,11 @@ export class ToastService {
    * @param type Tipo do toast
    * @param duration Duração em milissegundos (padrão: 5000ms)
    */
-  show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', duration: number = 5000): void {
+  show(
+    message: string,
+    type: 'success' | 'error' | 'warning' | 'info' = 'info',
+    duration = 5000,
+  ): void {
     const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const toast: IToast = { id, message, type, duration };
 
@@ -75,4 +79,3 @@ export class ToastService {
     this.show(message, 'info', duration);
   }
 }
-

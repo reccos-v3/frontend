@@ -33,7 +33,7 @@ export class AuthService {
       catchError((error) => {
         console.error('Erro no login:', error);
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -45,7 +45,7 @@ export class AuthService {
       catchError((error) => {
         console.error('Erro na recuperação de senha:', error);
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -55,13 +55,13 @@ export class AuthService {
   validatePasswordResetToken(token: string): Observable<IValidateResetTokenResponse> {
     return this.http
       .get<IValidateResetTokenResponse>(
-        `${environment.apiUrl}/auth/password/reset/${token}/validate`
+        `${environment.apiUrl}/auth/password/reset/${token}/validate`,
       )
       .pipe(
         catchError((error) => {
           console.error('Erro na validação do token:', error);
           return throwError(() => error);
-        })
+        }),
       );
   }
 
@@ -73,7 +73,7 @@ export class AuthService {
       catchError((error) => {
         console.error('Erro na redefinição de senha:', error);
         return throwError(() => error);
-      })
+      }),
     );
   }
 

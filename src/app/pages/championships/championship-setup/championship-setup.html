@@ -18,7 +18,11 @@
           />
         }
         @case ('periods') {
-          <app-setup-periods />
+          <app-setup-periods
+            [data]="setupData()"
+            (advanced)="advanced($event)"
+            (dataUpdate)="updateData($event)"
+          />
         }
         @case ('format') {
           <app-setup-format

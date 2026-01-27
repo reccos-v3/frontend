@@ -66,7 +66,7 @@ export class EnableAccess implements OnInit {
     },
     {
       validators: [this.passwordMatchValidator()],
-    }
+    },
   );
 
   // Strength UI state derived from form value
@@ -134,7 +134,7 @@ export class EnableAccess implements OnInit {
 
   // Helper patterns
   protected federationName = computed(
-    () => this.validationData()?.federationName || 'Aguardando validação...'
+    () => this.validationData()?.federationName || 'Aguardando validação...',
   );
   protected roleName = computed(() => this.validationData()?.roleName || 'Aguardando validação...');
 

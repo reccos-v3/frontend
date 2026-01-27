@@ -5,9 +5,7 @@ export interface IApiError {
   status: number;
   message: string;
   timestamp: string;
-  errors?: {
-    [key: string]: string;
-  };
+  errors?: Record<string, string>;
 }
 
 /**

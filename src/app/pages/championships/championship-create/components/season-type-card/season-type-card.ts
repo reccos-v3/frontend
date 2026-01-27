@@ -36,8 +36,8 @@ export class SeasonTypeCard {
   seasons = input<ISeasonResponse[]>([]);
   modalities = input<IModalityResponse[]>([]);
   // Local properties for ngModel binding
-  localSeasonStart: string = '';
-  localSeasonEnd: string = '';
+  localSeasonStart = '';
+  localSeasonEnd = '';
 
   seasonChange = output<string>();
   seasonNameChange = output<string>();

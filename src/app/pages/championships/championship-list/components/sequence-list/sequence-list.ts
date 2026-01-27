@@ -16,7 +16,7 @@ export class SequenceList {
 
   // Filtros computados por status
   itemsPending = computed(() =>
-    this.data().filter((item) => ['DRAFT', 'CONFIGURING'].includes(item.status))
+    this.data().filter((item) => ['DRAFT', 'CONFIGURING'].includes(item.status)),
   );
 
   itemsActive = computed(() => this.data().filter((item) => item.status === 'ACTIVE'));

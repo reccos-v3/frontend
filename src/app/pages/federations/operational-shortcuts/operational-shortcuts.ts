@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './operational-shortcuts.html',
   styleUrl: './operational-shortcuts.css',
 })
-export class OperationalShortcuts {
-
-}
+export class OperationalShortcuts {}

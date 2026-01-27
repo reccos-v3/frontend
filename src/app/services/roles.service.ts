@@ -161,7 +161,7 @@ export class RolesService {
         console.error('Erro ao buscar roles:', error);
         // Retorna array vazio em caso de erro
         return of([]);
-      })
+      }),
     );
   }
 
@@ -191,7 +191,7 @@ export class RolesService {
       catchError((error) => {
         console.error('Erro ao buscar roles da API:', error);
         return of([]);
-      })
+      }),
     );
   }
 
@@ -203,7 +203,7 @@ export class RolesService {
     return this.getAllRoles().pipe(
       tap((roles) => {
         this.setCache(roles);
-      })
+      }),
     );
   }
 }

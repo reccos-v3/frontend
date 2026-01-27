@@ -41,18 +41,18 @@ export class ForgotPassword {
         .forgotPassword(email)
         .pipe(
           delay(1500),
-          finalize(() => (this.isLoading = false))
+          finalize(() => (this.isLoading = false)),
         )
         .subscribe({
           next: () => {
             this.toastService.success(
-              'Se o e-mail informado estiver em nossa base, você receberá um link para redefinição em instantes. Verifique também sua caixa de spam.'
+              'Se o e-mail informado estiver em nossa base, você receberá um link para redefinição em instantes. Verifique também sua caixa de spam.',
             );
             this.resetForm.reset();
           },
           error: (error) => {
             this.toastService.error(
-              'Erro ao enviar email de recuperação. Verifique se o email está correto.'
+              'Erro ao enviar email de recuperação. Verifique se o email está correto.',
             );
             console.error('Error sending recovery email:', error);
           },

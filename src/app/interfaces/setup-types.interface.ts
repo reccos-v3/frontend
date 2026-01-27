@@ -49,6 +49,41 @@ export interface ISetupTeams {
   teamIds: string[];
 }
 
+export interface ISetupChampionshipPeriod {
+  startDate: string;
+  endDate: string;
+}
+
+export interface ISetupRegistrationPeriod {
+  startAt: string;
+  endAt: string;
+}
+
+export interface IActivationPolicy {
+  mode: 'MANUAL' | 'AUTOMATIC';
+  autoActivateAt: string | null;
+}
+
+export interface IPostActivationRules {
+  allowTeamChanges: boolean;
+  allowScheduleChanges: boolean;
+  allowRuleChanges: boolean;
+}
+
+export interface ISchedulePreferences {
+  allowedWeekDays: (
+    | 'MONDAY'
+    | 'TUESDAY'
+    | 'WEDNESDAY'
+    | 'THURSDAY'
+    | 'FRIDAY'
+    | 'SATURDAY'
+    | 'SUNDAY'
+  )[];
+  preferredTimeSlots: ('MORNING' | 'AFTERNOON' | 'EVENING')[];
+  avoidHolidays: boolean;
+}
+
 export interface IChampionshipSetupRequest {
   basics?: ISetupBasics;
   rules?: ISetupRules;
@@ -56,5 +91,10 @@ export interface IChampionshipSetupRequest {
   structure?: ISetupStructure;
   tiebreaks?: ISetupTiebreaks;
   teams?: ISetupTeams;
+  championshipPeriod?: ISetupChampionshipPeriod;
+  registrationPeriod?: ISetupRegistrationPeriod;
   activate?: boolean;
+  activationPolicy?: IActivationPolicy;
+  postActivationRules?: IPostActivationRules;
+  schedulePreferences?: ISchedulePreferences;
 }

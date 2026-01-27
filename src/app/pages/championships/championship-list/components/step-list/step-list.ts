@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './step-list.html',
   styleUrl: './step-list.css',
 })
-export class StepList {
-
-}
+export class StepList {}

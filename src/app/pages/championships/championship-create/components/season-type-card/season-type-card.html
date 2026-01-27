@@ -23,7 +23,7 @@
       <span class="material-symbols-outlined">{{ config().icon }}</span>
     </div>
     @if (isSelected()) {
-    <span class="material-symbols-outlined text-primary rounded-full p-0.5">check_circle</span>
+      <span class="material-symbols-outlined text-primary rounded-full p-0.5">check_circle</span>
     }
   </div>
   <h3 class="font-bold text-text-main mb-1">{{ config().title }}</h3>
@@ -32,76 +32,76 @@
   </p>
 
   @if (config().customContent === 'select') {
-  <div class="mt-auto pt-4 border-t border-neutral-border">
-    <select
-      class="w-full bg-white border border-neutral-border rounded-md py-2 px-3 text-xs text-text-main outline-none"
-      [value]="season()"
-      (change)="onSeasonChange($any($event.target).value)"
-      [disabled]="!isSelected() || seasons().length === 0"
-      required
-    >
-      <option value="" disabled>
-        {{ seasons().length > 0 ? 'Selecione uma temporada' : 'Nenhuma temporada disponível' }}
-      </option>
-      @for (season of seasons(); track season.id) {
-      <option value="{{ season.id }}">{{ season.name }} - {{ season.status }}</option>
+    <div class="mt-auto pt-4 border-t border-neutral-border">
+      <select
+        class="w-full bg-white border border-neutral-border rounded-md py-2 px-3 text-xs text-text-main outline-none"
+        [value]="season()"
+        (change)="onSeasonChange($any($event.target).value)"
+        [disabled]="!isSelected() || seasons().length === 0"
+        required
+      >
+        <option value="" disabled>
+          {{ seasons().length > 0 ? 'Selecione uma temporada' : 'Nenhuma temporada disponível' }}
+        </option>
+        @for (season of seasons(); track season.id) {
+          <option value="{{ season.id }}">{{ season.name }} - {{ season.status }}</option>
+        }
+      </select>
+      @if (isSelected() && missingExistingSeason()) {
+        <p class="mt-1 text-[10px] text-red-500">Selecione uma temporada.</p>
       }
-    </select>
-    @if (isSelected() && missingExistingSeason()) {
-    <p class="mt-1 text-[10px] text-red-500">Selecione uma temporada.</p>
-    }
-  </div>
+    </div>
   }
 
   @if (config().customContent === 'inputs') {
-  <div
-    class="mt-auto space-y-2 transition-opacity"
-    [class.opacity-40]="!isSelected()"
-    [class.opacity-100]="isSelected()"
-    [class.group-hover:opacity-100]="!isSelected()"
-  >
-    <input
-      class="w-full bg-white border border-neutral-border rounded-md h-10 px-3 text-xs text-text-main outline-none"
-      placeholder="Nome da Temporada"
-      type="text"
-      [value]="seasonName()"
-      (input)="onSeasonNameChange($any($event.target).value)"
-      [disabled]="!isSelected()"
-      required
-    />
-    <div class="grid grid-cols-2 gap-2">
+    <div
+      class="mt-auto space-y-2 transition-opacity"
+      [class.opacity-40]="!isSelected()"
+      [class.opacity-100]="isSelected()"
+      [class.group-hover:opacity-100]="!isSelected()"
+    >
       <input
         class="w-full bg-white border border-neutral-border rounded-md h-10 px-3 text-xs text-text-main outline-none"
-        type="date"
-        [(ngModel)]="localSeasonStart"
-        (ngModelChange)="onSeasonStartChange($event)"
+        placeholder="Nome da Temporada"
+        type="text"
+        [value]="seasonName()"
+        (input)="onSeasonNameChange($any($event.target).value)"
         [disabled]="!isSelected()"
         required
       />
-      <input
-        class="w-full bg-white border border-neutral-border rounded-md h-10 px-3 text-xs text-text-main outline-none"
-        type="date"
-        [(ngModel)]="localSeasonEnd"
-        (ngModelChange)="onSeasonEndChange($event)"
-        [disabled]="!isSelected()"
-        required
-      />
+      <div class="grid grid-cols-2 gap-2">
+        <input
+          class="w-full bg-white border border-neutral-border rounded-md h-10 px-3 text-xs text-text-main outline-none"
+          type="date"
+          [(ngModel)]="localSeasonStart"
+          (ngModelChange)="onSeasonStartChange($event)"
+          [disabled]="!isSelected()"
+          required
+        />
+        <input
+          class="w-full bg-white border border-neutral-border rounded-md h-10 px-3 text-xs text-text-main outline-none"
+          type="date"
+          [(ngModel)]="localSeasonEnd"
+          (ngModelChange)="onSeasonEndChange($event)"
+          [disabled]="!isSelected()"
+          required
+        />
+      </div>
+      @if (isSelected() && missingNewSeason()) {
+        <p class="text-[10px] text-red-500">Preencha nome, início e fim da temporada.</p>
+      }
     </div>
-    @if (isSelected() && missingNewSeason()) {
-    <p class="text-[10px] text-red-500">Preencha nome, início e fim da temporada.</p>
-    }
-  </div>
   }
 
   @if (config().customContent === 'badge') {
-  <div class="mt-auto">
-    <span
-      class="text-[10px] font-bold transition-colors"
-      [class.text-neutral-gray/50]="!isSelected()"
-      [class.text-text-main]="isSelected()"
-      [class.group-hover:text-text-main]="!isSelected()"
-      >{{ config().badgeText }}</span
-    >
-  </div>
+    <div class="mt-auto">
+      <span
+        class="text-[10px] font-bold transition-colors"
+        [class.text-neutral-gray/50]="!isSelected()"
+        [class.text-text-main]="isSelected()"
+        [class.group-hover:text-text-main]="!isSelected()"
+        >{{ config().badgeText }}</span
+      >
+    </div>
   }
 </div>

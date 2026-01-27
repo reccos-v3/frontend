@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   protected readonly userAvatar = signal(
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuAHjfwf-3_IyBw_Q9Fyczy56NVcUr-YX-qEdXYq9pmQEKSyvIf0HqM_K5UErPAGzw1PmkH4SRO9BzB_IiH8kt4QHD-TDDTusf5-14R7QlyT8xIas338znUk_JmtRHBbuhb9oHPSybgm_1Q-6OiGSWK6MWtBxah24Zgh83jzqHV9B83SgGW_DQLMehAd0ZlKt2-UjubLO55OK6UyWssBtXBPYBzGb5e74apDS8p_nT6Kg-qqZ67VpUAgZ2S2Rq2qfliJ3uVSO49b-Xw'
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuAHjfwf-3_IyBw_Q9Fyczy56NVcUr-YX-qEdXYq9pmQEKSyvIf0HqM_K5UErPAGzw1PmkH4SRO9BzB_IiH8kt4QHD-TDDTusf5-14R7QlyT8xIas338znUk_JmtRHBbuhb9oHPSybgm_1Q-6OiGSWK6MWtBxah24Zgh83jzqHV9B83SgGW_DQLMehAd0ZlKt2-UjubLO55OK6UyWssBtXBPYBzGb5e74apDS8p_nT6Kg-qqZ67VpUAgZ2S2Rq2qfliJ3uVSO49b-Xw',
   );
   protected readonly userName = signal('Roberto Silva');
   protected readonly userRole = signal('Presidente');
@@ -72,11 +72,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.router.events
         .pipe(
           filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-          map((event) => event.url.split('?')[0])
+          map((event) => event.url.split('?')[0]),
         )
         .subscribe((url) => {
           this.currentUrl.set(url);
-        })
+        }),
     );
   }
 

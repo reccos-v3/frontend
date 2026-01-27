@@ -18,7 +18,7 @@ export class ModalityService {
       catchError((error) => {
         console.error('Erro ao buscar modalidades:', error);
         return throwError(() => error);
-      })
+      }),
     );
   }
 }

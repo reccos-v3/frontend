@@ -10,6 +10,7 @@ module.exports = {
         'primary-dark': '#16623F',
         'primary-light': '#13ec80',
         accent: '#2FA36B',
+        'accent-light': '#2ecc70',
 
         // Base
         secondary: '#0F1F2D',

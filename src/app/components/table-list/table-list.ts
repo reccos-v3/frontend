@@ -81,7 +81,7 @@ export class TableList<T = any> {
 
     // Mostra até 5 páginas
     let start = Math.max(0, currentPage - 2);
-    let end = Math.min(totalPages, start + 5);
+    const end = Math.min(totalPages, start + 5);
 
     // Ajusta o início se estiver no final
     if (end - start < 5) {
@@ -146,7 +146,7 @@ export class TableList<T = any> {
   /**
    * Obtém classes CSS para a ação baseado na variante
    */
-  getActionClasses(variant: string = 'default'): string {
+  getActionClasses(variant = 'default'): string {
     const baseClasses = 'p-1.5 rounded-md text-text-muted transition-colors';
 
     switch (variant) {

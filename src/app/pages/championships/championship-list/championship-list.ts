@@ -119,7 +119,7 @@ export class ChampionshipList implements OnInit {
 
   // Métodos de renderização
   renderChampionshipName(row: IChampionshipResponse): string {
-    const gradientColors: { [key: string]: string } = {
+    const gradientColors: Record<string, string> = {
       ACTIVE: 'from-blue-500 to-indigo-600',
       CONFIG: 'from-green-500 to-emerald-600',
       DRAFT: 'bg-orange-100 dark:bg-orange-700 border border-orange-200 dark:border-orange-600',
@@ -150,7 +150,7 @@ export class ChampionshipList implements OnInit {
   }
 
   renderModality(row: IChampionshipResponse): string {
-    const modalityIcons: { [key: string]: string } = {
+    const modalityIcons: Record<string, string> = {
       Futsal: 'sports_soccer',
       Futebol: 'sports_soccer',
       Vôlei: 'sports_volleyball',
@@ -177,9 +177,10 @@ export class ChampionshipList implements OnInit {
   }
 
   renderStatus(row: IChampionshipResponse): string {
-    const statusConfig: {
-      [key: string]: { bg: string; text: string; border: string; dot: string; icon?: string };
-    } = {
+    const statusConfig: Record<
+      string,
+      { bg: string; text: string; border: string; dot: string; icon?: string }
+    > = {
       ACTIVE: {
         bg: 'bg-primary/10',
         text: 'text-green-700 dark:text-green-400',
@@ -208,7 +209,7 @@ export class ChampionshipList implements OnInit {
     };
 
     const config = statusConfig[row.status] || statusConfig['DRAFT'];
-    const labels: { [key: string]: string } = {
+    const labels: Record<string, string> = {
       ACTIVE: 'Ativo',
       CONFIG: 'Configuração',
       DRAFT: 'Rascunho',
@@ -231,7 +232,7 @@ export class ChampionshipList implements OnInit {
     `;
   }
 
-  getChampionships(page: number = 0) {
+  getChampionships(page = 0) {
     this.championshipService.getChampionshipsByFederation(page).subscribe({
       next: (response) => {
         this.data.set(response.content);

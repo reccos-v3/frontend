@@ -1,10 +1,10 @@
 <div
-  class="bg-white dark:bg-[#1A2C24] p-6 rounded-xl border border-[#E5E7EB] dark:border-[#1A2C24] shadow-sm"
+  class="bg-white dark:bg-[#1A2C24] p-6 rounded-xl border border-[#E5E7EB] dark:border-[#1A2C24] shadow-sm mb-6"
 >
   <div class="flex justify-between items-start mb-6">
     <div>
       <h3 class="text-lg font-bold flex items-center gap-2">
-        <span class="material-symbols-outlined text-[#1E7F4F]">calendar_today</span>
+        <span class="material-symbols-outlined text-[#2FA36B]">calendar_today</span>
         Período do Campeonato
       </h3>
       <p class="text-xs text-[#618975] mt-1">
@@ -20,45 +20,53 @@
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="flex flex-col gap-2">
-      <label
-        class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1"
-      >
-        Data de Início
-        <span class="text-[#D64545] text-sm">*</span>
-      </label>
-      <input
-        class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-        type="date"
-        value="2024-06-01"
-      />
+  <form [formGroup]="championshipPeriodForm">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="flex flex-col gap-2">
+        <label
+          for="startDate"
+          class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1"
+        >
+          Data de Início
+          <span class="text-[#D64545] text-sm">*</span>
+        </label>
+        <input
+          class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+          type="date"
+          id="startDate"
+          formControlName="startDate"
+          [min]="minDate"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label
+          for="endDate"
+          class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1"
+        >
+          Data de Término
+          <span class="text-[#D64545] text-sm">*</span>
+        </label>
+        <input
+          class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+          type="date"
+          id="endDate"
+          formControlName="endDate"
+          [min]="minDate"
+        />
+        <p class="text-[10px] text-[#D64545] font-medium hidden">
+          A data final deve ser posterior à data inicial
+        </p>
+      </div>
     </div>
-    <div class="flex flex-col gap-2">
-      <label
-        class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1"
-      >
-        Data de Término
-        <span class="text-[#D64545] text-sm">*</span>
-      </label>
-      <input
-        class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-        type="date"
-        value="2024-12-15"
-      />
-      <p class="text-[10px] text-[#D64545] font-medium hidden">
-        A data final deve ser posterior à data inicial
-      </p>
-    </div>
-  </div>
+  </form>
 </div>
 <div
-  class="bg-white dark:bg-[#1A2C24] p-6 rounded-xl border border-[#E5E7EB] dark:border-[#1A2C24] shadow-sm relative overflow-hidden transition-all border-l-4 border-l-[#1E7F4F]"
+  class="bg-white dark:bg-[#1A2C24] p-6 rounded-xl border border-[#E5E7EB] dark:border-[#1A2C24] shadow-sm relative overflow-hidden transition-all border-l-4 border-l-[#2FA36B]"
 >
   <div class="flex justify-between items-center mb-6">
     <div>
       <h3 class="text-lg font-bold flex items-center gap-2">
-        <span class="material-symbols-outlined text-[#1E7F4F]">edit_note</span>
+        <span class="material-symbols-outlined text-[#2FA36B]">edit_note</span>
         Período de Inscrição
       </h3>
       <p class="text-xs text-[#618975] mt-1">
@@ -76,28 +84,37 @@
     </div>
   </div>
   <div class="space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="flex flex-col gap-2">
-        <label class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider"
-          >Início das Inscrições</label
-        >
-        <input
-          class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-          type="date"
-          value="2024-05-01"
-        />
+    <form [formGroup]="registrationPeriodForm">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex flex-col gap-2">
+          <label
+            for="startAtRegistrationPeriod"
+            class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider"
+            >Início das Inscrições</label
+          >
+          <input
+            class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+            type="date"
+            formControlName="startAt"
+            [min]="minDate"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label
+            for="endAtRegistrationPeriod"
+            class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider"
+            >Fim das Inscrições</label
+          >
+          <input
+            class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+            type="date"
+            id="endAtRegistrationPeriod"
+            formControlName="endAt"
+            [min]="minDate"
+          />
+        </div>
       </div>
-      <div class="flex flex-col gap-2">
-        <label class="text-[#111814] dark:text-white text-xs font-bold uppercase tracking-wider"
-          >Fim das Inscrições</label
-        >
-        <input
-          class="w-full p-4 h-14 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-          type="date"
-          value="2024-05-25"
-        />
-      </div>
-    </div>
+    </form>
     <p class="text-xs text-[#618975] flex items-center gap-2 italic">
       <span class="material-symbols-outlined text-[16px]">info</span>
       Após o encerramento das inscrições, não será mais possível adicionar ou remover equipes.
@@ -108,7 +125,9 @@
       variant="left-accent"
       icon="warning"
       title="Impacto da Decisão"
-      message="As inscrições encerram em <span class='font-bold underline'>25/05/2024</span>. Após esta data, novos registros serão bloqueados e o módulo de chaveamento será habilitado. Esta ação é irreversível para manter a integridade da tabela oficial."
+      message="As inscrições encerram em <span class='font-bold underline'>{{
+        registrationPeriodForm.get('endAt')?.value | date: 'dd/MM/yyyy'
+      }}</span>. Após esta data, novos registros serão bloqueados e o módulo de chaveamento será habilitado. Esta ação é irreversível para manter a integridade da tabela oficial."
     />
   </div>
   <div class="hidden">
