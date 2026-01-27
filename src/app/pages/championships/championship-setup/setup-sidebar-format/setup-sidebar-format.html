@@ -5,11 +5,11 @@
     class="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"
   >
     <h3 class="font-bold text-main dark:text-white text-sm">Resumo da Estrutura</h3>
-    @if (selectedFormat() === 'groups_knockout') {
+    @if (selectedFormat() === 'groups_and_knockout') {
       <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
         >Auto-gerado</span
       >
-    } @else if (selectedFormat() === 'round_robin') {
+    } @else if (selectedFormat() === 'points') {
       <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
         >Pontos Corridos</span
       >
@@ -20,7 +20,7 @@
     }
   </div>
 
-  @if (selectedFormat() === 'groups_knockout' || selectedFormat() === 'knockout') {
+  @if (selectedFormat() === 'groups_and_knockout' || selectedFormat() === 'knockout') {
     <div class="p-6 flex flex-col gap-0 relative">
       <!-- Connecting Line -->
       <div class="absolute left-[31px] top-10 bottom-10 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
@@ -80,7 +80,7 @@
         </div>
       }
     </div>
-  } @else if (selectedFormat() === 'round_robin') {
+  } @else if (selectedFormat() === 'points') {
     <div class="p-6">
       <ul class="space-y-3 text-sm">
         <li class="flex items-center gap-3 text-text-main dark:text-white">

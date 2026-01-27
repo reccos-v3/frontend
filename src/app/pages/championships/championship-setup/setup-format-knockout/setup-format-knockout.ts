@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, output, signal } from '@angular/core';
 import { AppAlert } from '../../../../components/alert/alert';
-import { IPhaseConfig } from '../setup-types';
+import { IPhaseConfig } from '../../../../interfaces/setup-types.interface';
 import { IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 
 @Component({
@@ -14,7 +14,6 @@ import { IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 export class SetupFormatKnockout {
   totalTeams = input.required<number>();
   externalPhases = input<IPhase[]>([]);
-  updatePhaseConfigs = output<IPhaseConfig[]>();
 
   // Overrides state: Map phase order to config overrides
   overrides = signal<Record<number, Partial<IPhaseConfig>>>({});
@@ -85,7 +84,6 @@ export class SetupFormatKnockout {
         matchType: type,
       },
     }));
-    this.updatePhaseConfigs.emit(this.phases());
   }
 
   isSelectionInvalid(phase: IPhaseConfig): boolean {

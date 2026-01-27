@@ -1,5 +1,5 @@
 @switch (format()) {
-  @case ('groups_knockout') {
+  @case ('groups_and_knockout') {
     <app-setup-groups-knockout
       [groupsCount]="groupsCount()"
       [qualifiedPerGroup]="qualifiedPerGroup()"
@@ -12,7 +12,7 @@
   @case ('knockout') {
     <app-setup-knockout [totalTeams]="totalTeams()" (updateTotalTeams)="changeTotalTeams($event)" />
   }
-  @case ('round_robin') {
+  @case ('points') {
     <app-setup-round-robin
       [totalTeams]="totalTeams()"
       (updateTotalTeams)="changeTotalTeams($event)"

@@ -1,22 +1,38 @@
-import { Component, computed, output, signal } from '@angular/core';
+import { Component, computed, output, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { SetupHeader } from './setup-header/setup-header';
 import { SetupSidebar } from './setup-sidebar/setup-sidebar';
 import { SetupRules } from './setup-rules/setup-rules';
 import { SetupFormat } from './setup-format/setup-format';
 import { SetupAddTeams } from './setup-add-teams/setup-add-teams';
 import { SetupFinalReview } from './setup-final-review/setup-final-review';
-import { SetupStep, StepStatus, IChampionshipSetupRequest, IPhaseConfig } from './setup-types';
+import {
+  SetupStep,
+  StepStatus,
+  IChampionshipSetupRequest,
+  IPhaseConfig,
+} from '../../../interfaces/setup-types.interface';
 import { IPhase } from './setup-sidebar-format/setup-sidebar-format';
+import { SetupPeriods } from './setup-periods/setup-periods';
 
 @Component({
   selector: 'app-championship-setup',
   standalone: true,
-  imports: [SetupHeader, SetupSidebar, SetupRules, SetupFormat, SetupAddTeams, SetupFinalReview],
+  imports: [
+    SetupHeader,
+    SetupSidebar,
+    SetupRules,
+    SetupFormat,
+    SetupAddTeams,
+    SetupFinalReview,
+    SetupPeriods,
+  ],
   templateUrl: './championship-setup.html',
   styleUrl: './championship-setup.css',
 })
-export class ChampionshipSetup {
-  activeComponent = signal<SetupStep>('format');
+export class ChampionshipSetup implements OnInit {
+  private platformId = inject(PLATFORM_ID);
+  activeComponent = signal<SetupStep>('periods');
   sidebarPhases = signal<IPhase[]>([]);
   setupData = signal<IChampionshipSetupRequest>({
     activate: false,
@@ -24,6 +40,7 @@ export class ChampionshipSetup {
 
   stepStatuses = signal<Record<SetupStep, StepStatus>>({
     rules: 'in-progress',
+    periods: 'pending',
     format: 'pending',
     teams: 'pending',
     final_review: 'pending',
@@ -35,9 +52,25 @@ export class ChampionshipSetup {
     return Math.round((completedCount / statuses.length) * 100);
   });
 
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedBasics = localStorage.getItem('championshipSetupBasics');
+      if (storedBasics) {
+        try {
+          const basics = JSON.parse(storedBasics);
+          this.updateData({ basics });
+          // Limpar após o uso para evitar dados persistentes indesejados
+          sessionStorage.removeItem('championshipSetupBasics');
+        } catch (e) {
+          console.error('Erro ao processar dados do sessionStorage:', e);
+        }
+      }
+    }
+  }
+
   advanced(component: SetupStep) {
     // Update previous step to completed if moving forward
-    const steps: SetupStep[] = ['rules', 'format', 'teams', 'final_review'];
+    const steps: SetupStep[] = ['rules', 'periods', 'format', 'teams', 'final_review'];
     const currentIndex = steps.indexOf(this.activeComponent());
     const nextIndex = steps.indexOf(component);
 
@@ -67,6 +100,10 @@ export class ChampionshipSetup {
         : prev.tiebreaks,
       teams: data.teams ? ({ ...(prev.teams || {}), ...data.teams } as any) : prev.teams,
     }));
+  }
+
+  finalReview() {
+    console.log('this.setupData()', this.setupData());
   }
 
   handlePhases(phases: IPhase[]) {

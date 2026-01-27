@@ -14,7 +14,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { TiebreakService } from '../../../../services/tiebreak.service';
 import { ITiebreakResponse } from '../../../../interfaces/tiebreak.interface';
-import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
+import { SetupStep, IChampionshipSetupRequest } from '../../../../interfaces/setup-types.interface';
 import { ModalityService } from '../../../../services/modality.service';
 import { SeasonService } from '../../../../services/season.service';
 import { IModalityResponse } from '../../../../interfaces/modality.interface';
@@ -42,7 +42,7 @@ export class SetupRules implements OnInit {
   // Basics
   name = signal('');
   modalityId = signal('');
-  gender = signal('MALE');
+  gender = signal('MASCULINO');
   type = signal('SEASONAL');
   seasonId = signal('');
 
@@ -247,7 +247,6 @@ export class SetupRules implements OnInit {
           pointsDraw: formValues.pointsDraw,
           pointsLoss: formValues.pointsLoss,
           hasHomeAway: formValues.hasHomeAway,
-          tieBreakerOrder: this.tiebreaks().map((t) => t.id.toString()),
         },
         tiebreaks: {
           criteria: this.tiebreaks().map((t, index) => ({

@@ -189,7 +189,14 @@ export class ChampionshipCreate implements OnInit {
   }
 
   goToSetup(): void {
-    // Navigate to the setup rules page
+    const basicInfo = {
+      name: this.formData.name,
+      gender: this.formData.gender,
+      modalityId: this.formData.modality,
+      seasonId: this.formData.season || '',
+      type: this.formData.seasonType === 'standalone' ? 'AVULSO' : 'SEASONAL',
+    };
+    localStorage.setItem('championshipSetupBasics', JSON.stringify(basicInfo));
     this.router.navigate(['/admin/championships/setup', this.championshipId()]);
   }
 
@@ -228,7 +235,6 @@ export class ChampionshipCreate implements OnInit {
   getSeasonsByFederationId() {
     this.seasonService.getSeasonsByFederationId().subscribe({
       next: (response) => {
-        console.log('Temporadas:', response);
         this.seasons.set(response);
         // Se não houver temporadas, força seleção de "new" para evitar card inútil
         if (response.length === 0 && this.formData.seasonType === 'existing') {
@@ -249,7 +255,6 @@ export class ChampionshipCreate implements OnInit {
     };
     this.seasonService.createSeason(seasonRequest).subscribe({
       next: (response) => {
-        console.log('Temporada criada:', response);
         this.formData.season = response.id;
         setTimeout(() => {
           this.createObjectToApi();

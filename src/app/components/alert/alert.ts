@@ -16,9 +16,7 @@ import { Component, computed, input } from '@angular/core';
             {{ title() }}
           </p>
         }
-        <p class="text-sm leading-relaxed" [ngClass]="messageClasses()">
-          {{ message() }}
-        </p>
+        <p class="text-sm leading-relaxed" [ngClass]="messageClasses()" [innerHTML]="message()"></p>
       </div>
     </div>
   `,

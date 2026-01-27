@@ -1,4 +1,4 @@
-export type SetupStep = 'rules' | 'format' | 'teams' | 'final_review';
+export type SetupStep = 'rules' | 'periods' | 'format' | 'teams' | 'final_review';
 export type StepStatus = 'completed' | 'in-progress' | 'pending';
 
 export interface ISetupBasics {
@@ -14,7 +14,6 @@ export interface ISetupRules {
   pointsDraw: number;
   pointsLoss: number;
   hasHomeAway: boolean;
-  tieBreakerOrder: string[]; // Codes or IDs of tiebreakers
 }
 
 export interface ISetupFormat {
@@ -34,9 +33,7 @@ export interface ISetupStructure {
   totalTeams: number;
   groupsCount: number;
   qualifiedPerGroup: number;
-  knockoutStartPhase: string;
   firstPhaseType: string;
-  phaseConfigs?: IPhaseConfig[];
 }
 
 export interface ISetupTiebreakCriteria {

@@ -1,5 +1,5 @@
 import { Component, inject, input, output, signal } from '@angular/core';
-import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
+import { SetupStep, IChampionshipSetupRequest } from '../../../../interfaces/setup-types.interface';
 import { ChampionshipService } from '../../../../services/championship.service';
 import { ToastService } from '../../../../services/toast.service';
 import { Router } from '@angular/router';
@@ -20,6 +20,7 @@ export class SetupFinalReview {
 
   data = input.required<IChampionshipSetupRequest>();
   advanced = output<SetupStep>();
+  finalReview = output();
 
   isModalOpen = signal(false);
 
@@ -30,6 +31,7 @@ export class SetupFinalReview {
   handleConfirm() {
     console.log('Campeonato Ativado!');
     this.isModalOpen.set(false);
+    this.finalReview.emit();
     // Sua lógica de ativação aqui
   }
 

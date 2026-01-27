@@ -17,6 +17,9 @@
             (dataUpdate)="updateData($event)"
           />
         }
+        @case ('periods') {
+          <app-setup-periods />
+        }
         @case ('format') {
           <app-setup-format
             [data]="setupData()"
@@ -33,7 +36,11 @@
           />
         }
         @case ('final_review') {
-          <app-setup-final-review [data]="setupData()" (advanced)="advanced($event)" />
+          <app-setup-final-review
+            [data]="setupData()"
+            (finalReview)="finalReview()"
+            (advanced)="advanced($event)"
+          />
         }
       }
     </main>

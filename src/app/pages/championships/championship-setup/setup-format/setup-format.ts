@@ -1,14 +1,18 @@
 import { Component, effect, input, OnInit, output, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
-import { SetupStep, IChampionshipSetupRequest, IPhaseConfig } from '../setup-types';
+import {
+  SetupStep,
+  IChampionshipSetupRequest,
+  IPhaseConfig,
+} from '../../../../interfaces/setup-types.interface';
 import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 import { SetupFormatSelection } from '../setup-format-selection/setup-format-selection';
 import { AppAlert } from '../../../../components/alert/alert';
 import { SetupFormatKnockout } from '../setup-format-knockout/setup-format-knockout';
 
 interface IFormat {
-  id: 'groups_knockout' | 'knockout' | 'round_robin';
+  id: 'groups_and_knockout' | 'knockout' | 'points';
   icon: string;
   label: string;
   description: string;
@@ -28,11 +32,10 @@ export class SetupFormat implements OnInit {
   phasesChange = output<IPhase[]>();
   data = input<IChampionshipSetupRequest>();
 
-  selectedFormat = signal<IFormat['id']>('groups_knockout');
+  selectedFormat = signal<IFormat['id']>('groups_and_knockout');
   totalTeams = signal(16);
   groupsCount = signal(4);
   qualifiedPerGroup = signal(2);
-  knockoutStartPhase = signal('QUARTER_FINALS');
   firstPhaseType = signal('GROUPS');
 
   // Internal state for wizard step
@@ -40,9 +43,6 @@ export class SetupFormat implements OnInit {
 
   // Store phases from sidebar to pass to knockout config
   storedPhases = signal<IPhase[]>([]);
-
-  // Store phase configs from knockout config
-  phaseConfigs = signal<IPhaseConfig[]>([]);
 
   // Debounced signals for sidebar
   debouncedFormat = toSignal(toObservable(this.selectedFormat).pipe(debounceTime(500)), {
@@ -80,14 +80,13 @@ export class SetupFormat implements OnInit {
       this.totalTeams.set(initial.structure.totalTeams);
       this.groupsCount.set(initial.structure.groupsCount);
       this.qualifiedPerGroup.set(initial.structure.qualifiedPerGroup);
-      this.knockoutStartPhase.set(initial.structure.knockoutStartPhase);
       this.firstPhaseType.set(initial.structure.firstPhaseType);
     }
   }
 
   formats: IFormat[] = [
     {
-      id: 'groups_knockout',
+      id: 'groups_and_knockout',
       icon: 'grid_view',
       label: 'Grupos + Mata-mata',
       description: 'Copa do Mundo',
@@ -99,7 +98,7 @@ export class SetupFormat implements OnInit {
       description: 'Copa do Brasil',
     },
     {
-      id: 'round_robin',
+      id: 'points',
       icon: 'leaderboard',
       label: 'Pontos Corridos',
       description: 'Brasileirão',
@@ -124,7 +123,7 @@ export class SetupFormat implements OnInit {
 
       // If we are in selection mode
       if (this.internalStep() === 'selection') {
-        if (currentFormat === 'round_robin') {
+        if (currentFormat === 'points') {
           // Round robin goes directly to teams
           this.emitDataUpdate();
           this.advanced.emit('teams');
@@ -150,15 +149,9 @@ export class SetupFormat implements OnInit {
         totalTeams: this.totalTeams(),
         groupsCount: this.groupsCount(),
         qualifiedPerGroup: this.qualifiedPerGroup(),
-        knockoutStartPhase: this.knockoutStartPhase(),
         firstPhaseType: this.firstPhaseType(),
-        phaseConfigs: this.phaseConfigs().length > 0 ? this.phaseConfigs() : undefined,
       },
     });
-  }
-
-  updatePhaseConfigs(configs: IPhaseConfig[]) {
-    this.phaseConfigs.set(configs);
   }
 
   returnToPrevious() {

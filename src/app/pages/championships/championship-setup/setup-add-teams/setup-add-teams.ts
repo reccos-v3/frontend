@@ -1,5 +1,5 @@
 import { Component, effect, input, output, signal } from '@angular/core';
-import { SetupStep, IChampionshipSetupRequest } from '../setup-types';
+import { SetupStep, IChampionshipSetupRequest } from '../../../../interfaces/setup-types.interface';
 
 @Component({
   selector: 'app-setup-add-teams',

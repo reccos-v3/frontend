@@ -12,6 +12,7 @@ import {
 } from '../../../interfaces/championship.interface';
 import { IPage } from '../../../interfaces/page.interface';
 import { ToastService } from '../../../services/toast.service';
+import { ISetupBasics } from '../../../interfaces/setup-types.interface';
 export type ViewMode = 'table' | 'sequence' | 'step';
 
 @Component({
@@ -141,8 +142,8 @@ export class ChampionshipList implements OnInit {
             ${row.name}
           </span>
           <span class="text-xs text-slate-500">${row.teamsCount} Equipes • ${
-      row.gender.charAt(0).toUpperCase() + row.gender.slice(1).toLocaleLowerCase()
-    }</span>
+            row.gender.charAt(0).toUpperCase() + row.gender.slice(1).toLocaleLowerCase()
+          }</span>
         </div>
       </div>
     `;
@@ -252,14 +253,14 @@ export class ChampionshipList implements OnInit {
   calculateStatistics(response: IPage<IChampionshipResponse>) {
     const totalChampionships = response.totalElements;
     const totalInProgress = response.content.filter(
-      (championship) => championship.status === 'IN_PROGRESS'
+      (championship) => championship.status === 'IN_PROGRESS',
     ).length;
     const totalDrafts = response.content.filter(
-      (championship) => championship.status === 'DRAFT'
+      (championship) => championship.status === 'DRAFT',
     ).length;
     const totalTeams = response.content.reduce(
       (total, championship) => total + championship.teamsCount,
-      0
+      0,
     );
 
     this.statistics.set({
@@ -283,7 +284,6 @@ export class ChampionshipList implements OnInit {
   }
 
   editChampionship(row: IChampionshipResponse): void {
-    console.log('Editar campeonato:', row);
     this.router.navigate(['/admin/championships/edit', row.id]);
   }
 

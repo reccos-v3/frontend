@@ -18,7 +18,7 @@ export interface IPhase {
   styleUrl: './setup-sidebar-format.css',
 })
 export class SetupSidebarFormat {
-  selectedFormat = input<'groups_knockout' | 'knockout' | 'round_robin'>('knockout');
+  selectedFormat = input<'groups_and_knockout' | 'knockout' | 'points'>('knockout');
   totalTeams = input(16);
   groupsCount = input(4);
   qualifiedPerGroup = input(2);
@@ -28,11 +28,11 @@ export class SetupSidebarFormat {
     const format = this.selectedFormat();
     const phases: IPhase[] = [];
 
-    if (format === 'round_robin') return [];
+    if (format === 'points') return [];
 
     let knockoutTeams = 0;
 
-    if (format === 'groups_knockout') {
+    if (format === 'groups_and_knockout') {
       phases.push({
         label: 'Fase 1',
         title: 'Fase de Grupos',
@@ -84,7 +84,7 @@ export class SetupSidebarFormat {
       currentTeams = Math.floor(currentTeams / 2);
     }
 
-    const baseIndex = format === 'groups_knockout' ? 2 : 1;
+    const baseIndex = format === 'groups_and_knockout' ? 2 : 1;
     knockoutPhasesList.forEach((phase, index) => {
       if (phase.title === 'Grande Final') {
         phase.label = 'Final';

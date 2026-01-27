@@ -43,7 +43,6 @@ export interface IChampionshipResponse {
     pointsWin: number;
     pointsDraw: number;
     pointsLoss: number;
-    tieBreakerOrder: string[];
     hasHomeAway: boolean;
   } | null;
   progress: {

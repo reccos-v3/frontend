@@ -12,7 +12,7 @@ import { SetupRoundRobin } from '../setup-round-robin/setup-round-robin';
   styleUrl: './setup-system-format.css',
 })
 export class SetupSystemFormat {
-  format = input<string>('groups_knockout');
+  format = input<string>('groups_and_knockout');
 
   groupsCount = input.required<number>();
   qualifiedPerGroup = input.required<number>();
