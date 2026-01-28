@@ -1,32 +1,79 @@
-<div class="flex items-center gap-3 mb-4">
-  <div class="h-10 w-10 flex items-center justify-center bg-primary/10 rounded-lg">
-    <span class="material-symbols-outlined text-primary">{{ icon() }}</span>
+<div class="flex items-center justify-between mb-4">
+  <div class="flex items-center gap-3">
+    <div class="h-10 w-10 flex items-center justify-center bg-primary/10 rounded-lg">
+      <span class="material-symbols-outlined text-primary">{{ icon() }}</span>
+    </div>
+    <div>
+      <h3 class="font-bold text-main dark:text-white">{{ title() }}</h3>
+      <p class="text-xs text-secondary italic">{{ description() }}</p>
+    </div>
   </div>
-  <div>
-    <h3 class="font-bold text-main dark:text-white">{{ title() }}</h3>
-    <p class="text-xs text-secondary italic">{{ description() }}</p>
+
+  <!-- Mode Selector -->
+  <div
+    class="relative flex bg-gray-100 dark:bg-gray-800/50 p-1 rounded-xl border border-gray-200 dark:border-gray-700/50"
+  >
+    <!-- Sliding Background -->
+    <div
+      class="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white dark:bg-gray-700 rounded-lg shadow-sm transition-all duration-300 ease-out z-0"
+      [class.translate-x-0]="!manualInput()"
+      [class.translate-x-full]="manualInput()"
+    ></div>
+
+    <button
+      (click)="manualInput.set(false)"
+      class="relative z-10 px-3 py-1.5 flex items-center gap-2 rounded-lg transition-colors group"
+      [class.text-primary]="!manualInput()"
+      [class.text-secondary]="manualInput()"
+    >
+      <span class="material-symbols-outlined text-[18px] transition-transform group-hover:scale-110"
+        >ads_click</span
+      >
+      <span class="text-[10px] font-bold uppercase tracking-tighter">Ajuste</span>
+    </button>
+
+    <button
+      (click)="manualInput.set(true)"
+      class="relative z-10 px-3 py-1.5 flex items-center gap-2 rounded-lg transition-colors group"
+      [class.text-primary]="manualInput()"
+      [class.text-secondary]="!manualInput()"
+    >
+      <span class="material-symbols-outlined text-[18px] transition-transform group-hover:scale-110"
+        >keyboard</span
+      >
+      <span class="text-[10px] font-bold uppercase tracking-tighter">Manual</span>
+    </button>
   </div>
 </div>
 
 <div class="flex items-center justify-center gap-4 max-w-xs mx-auto text-center">
   <button
     (click)="updateValue.emit(-1)"
-    class="size-12 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-gray-100 text-main dark:text-white border border-gray-200 dark:border-gray-700 transition-colors active:scale-95"
+    [disabled]="manualInput()"
+    class="size-12 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-gray-100 text-main dark:text-white border border-gray-200 dark:border-gray-700 transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
   >
     <span class="material-symbols-outlined font-bold">remove</span>
   </button>
-  <div class="flex-1">
+  <div
+    class="flex-1 transition-all"
+    [class.ring-2]="manualInput()"
+    [class.ring-primary/20]="manualInput()"
+    [class.bg-primary/5]="manualInput()"
+    [class.rounded-xl]="manualInput()"
+  >
     <input
-      class="w-full text-center bg-transparent border-none font-bold text-4xl text-main dark:text-white focus:ring-0 p-0"
-      readonly
+      class="w-full text-center bg-transparent border border-transparent outline-none focus:border-gray-100 focus:ring-0 font-bold text-4xl text-main dark:text-white rounded-xl p-2 transition-all"
+      [readonly]="!manualInput()"
       type="number"
       [value]="value()"
+      (input)="setAbsoluteValue($event)"
     />
     <span class="text-[10px] text-info font-bold uppercase block mt-1">{{ label() }}</span>
   </div>
   <button
     (click)="updateValue.emit(1)"
-    class="size-12 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-gray-100 text-main dark:text-white border border-gray-200 dark:border-gray-700 transition-colors active:scale-95"
+    [disabled]="manualInput()"
+    class="size-12 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-gray-100 text-main dark:text-white border border-gray-200 dark:border-gray-700 transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
   >
     <span class="material-symbols-outlined font-bold">add</span>
   </button>
