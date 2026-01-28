@@ -5,6 +5,9 @@ const angular = require('angular-eslint');
 const prettier = require('eslint-plugin-prettier/recommended');
 
 module.exports = tseslint.config(
+  // =========================
+  // Typescript (.ts)
+  // =========================
   {
     files: ['**/*.ts'],
     extends: [
@@ -16,6 +19,7 @@ module.exports = tseslint.config(
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      // Angular selectors
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -32,9 +36,20 @@ module.exports = tseslint.config(
           style: 'kebab-case',
         },
       ],
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+
+      // Prettier — força LF globalmente
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'lf',
+        },
+      ],
     },
   },
+
+  // =========================
+  // Angular Templates (.html)
+  // =========================
   {
     files: ['**/*.html'],
     extends: [
@@ -43,7 +58,13 @@ module.exports = tseslint.config(
       prettier,
     ],
     rules: {
-      'prettier/prettier': ['error', { parser: 'angular' }],
+      'prettier/prettier': [
+        'error',
+        {
+          parser: 'angular',
+          endOfLine: 'lf',
+        },
+      ],
     },
   },
 );

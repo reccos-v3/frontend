@@ -7,6 +7,74 @@
     <span class="text-xs text-gray-500">Ajuste individual por fase</span>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <!-- Default Legs -->
+    <div
+      class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700"
+    >
+      <span class="block text-xs font-bold uppercase text-text-secondary dark:text-gray-400 mb-3"
+        >Padrão de Jogos</span
+      >
+      <div class="flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl">
+        <button
+          type="button"
+          (click)="updateDefaultLegs(1)"
+          class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+          [class.bg-white]="defaultLegs() === 1"
+          [class.shadow-sm]="defaultLegs() === 1"
+          [class.text-primary]="defaultLegs() === 1"
+          [class.text-text-secondary]="defaultLegs() !== 1"
+        >
+          Jogo Único
+        </button>
+        <button
+          type="button"
+          (click)="updateDefaultLegs(2)"
+          class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+          [class.bg-white]="defaultLegs() === 2"
+          [class.shadow-sm]="defaultLegs() === 2"
+          [class.text-primary]="defaultLegs() === 2"
+          [class.text-text-secondary]="defaultLegs() !== 2"
+        >
+          Ida e Volta
+        </button>
+      </div>
+    </div>
+
+    <!-- Default Advance Rule -->
+    <div
+      class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700"
+    >
+      <span class="block text-xs font-bold uppercase text-text-secondary dark:text-gray-400 mb-3"
+        >Padrão de Desempate</span
+      >
+      <div class="flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl">
+        <button
+          type="button"
+          (click)="updateDefaultAdvanceRule('REGULAR_OR_PENALTIES')"
+          class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+          [class.bg-white]="defaultAdvanceRule() === 'REGULAR_OR_PENALTIES'"
+          [class.shadow-sm]="defaultAdvanceRule() === 'REGULAR_OR_PENALTIES'"
+          [class.text-primary]="defaultAdvanceRule() === 'REGULAR_OR_PENALTIES'"
+          [class.text-text-secondary]="defaultAdvanceRule() !== 'REGULAR_OR_PENALTIES'"
+        >
+          Normal/Pênaltis
+        </button>
+        <button
+          type="button"
+          (click)="updateDefaultAdvanceRule('AGGREGATE_OR_PENALTIES')"
+          class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all"
+          [class.bg-white]="defaultAdvanceRule() === 'AGGREGATE_OR_PENALTIES'"
+          [class.shadow-sm]="defaultAdvanceRule() === 'AGGREGATE_OR_PENALTIES'"
+          [class.text-primary]="defaultAdvanceRule() === 'AGGREGATE_OR_PENALTIES'"
+          [class.text-text-secondary]="defaultAdvanceRule() !== 'AGGREGATE_OR_PENALTIES'"
+        >
+          Agregado/Pênaltis
+        </button>
+      </div>
+    </div>
+  </div>
+
   @if (hasPreliminary()) {
     <app-alert
       class="block mb-8"
@@ -65,10 +133,14 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div>
               <label
+                for="type-game-{{ phase.order }}"
                 class="block text-xs font-bold uppercase text-text-secondary dark:text-gray-400 mb-3"
                 >Tipo de jogo da fase</label
               >
-              <div class="relative flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl isolate">
+              <div
+                class="relative flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl isolate"
+                id="type-game-{{ phase.order }}"
+              >
                 <!-- Slider Background -->
                 <div
                   class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-lg shadow-sm transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)]"
@@ -100,6 +172,41 @@
                 </button>
               </div>
             </div>
+
+            <div>
+              <label
+                for="advance-rule-{{ phase.order }}"
+                class="block text-xs font-bold uppercase text-text-secondary dark:text-gray-400 mb-3"
+                >Regra de Desempate</label
+              >
+              <div
+                class="relative flex bg-slate-100 dark:bg-gray-700 p-1 rounded-xl isolate"
+                id="advance-rule-{{ phase.order }}"
+              >
+                <button
+                  type="button"
+                  (click)="toggleAdvanceRule(phase.order, 'REGULAR_OR_PENALTIES')"
+                  class="relative z-10 flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-colors duration-300"
+                  [class.bg-white]="phase.advanceRule === 'REGULAR_OR_PENALTIES'"
+                  [class.shadow-sm]="phase.advanceRule === 'REGULAR_OR_PENALTIES'"
+                  [class.text-primary]="phase.advanceRule === 'REGULAR_OR_PENALTIES'"
+                  [class.text-text-secondary]="phase.advanceRule !== 'REGULAR_OR_PENALTIES'"
+                >
+                  Normal
+                </button>
+                <button
+                  type="button"
+                  (click)="toggleAdvanceRule(phase.order, 'AGGREGATE_OR_PENALTIES')"
+                  class="relative z-10 flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-colors duration-300"
+                  [class.bg-white]="phase.advanceRule === 'AGGREGATE_OR_PENALTIES'"
+                  [class.shadow-sm]="phase.advanceRule === 'AGGREGATE_OR_PENALTIES'"
+                  [class.text-primary]="phase.advanceRule === 'AGGREGATE_OR_PENALTIES'"
+                  [class.text-text-secondary]="phase.advanceRule !== 'AGGREGATE_OR_PENALTIES'"
+                >
+                  Agregado
+                </button>
+              </div>
+            </div>
             <div
               class="bg-slate-50 dark:bg-gray-700/30 p-4 rounded-xl border border-dashed border-gray-200 dark:border-gray-600"
             >
@@ -125,6 +232,12 @@
                     ? 'jogo único'
                     : 'ida e volta (' + phase.legs + ' pernas)'
                 }}
+              </p>
+              <p
+                class="text-[10px] text-text-secondary dark:text-gray-400 mt-1 uppercase font-bold"
+              >
+                Critério:
+                {{ phase.advanceRule === 'REGULAR_OR_PENALTIES' ? 'Tempo Regular' : 'Agregado' }}
               </p>
             </div>
           </div>

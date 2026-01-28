@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { AppAlert } from '../../../../components/alert/alert';
-import { IPhaseConfig } from '../../../../interfaces/setup-types.interface';
+import { IKnockoutConfig, IPhaseConfig } from '../../../../interfaces/setup-types.interface';
 import { IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 
 @Component({
@@ -14,6 +14,12 @@ import { IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 export class SetupFormatKnockout {
   totalTeams = input.required<number>();
   externalPhases = input<IPhase[]>([]);
+  knockoutConfigChange = output<IKnockoutConfig>();
+
+  defaultLegs = signal<number>(1);
+  defaultAdvanceRule = signal<'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES'>(
+    'REGULAR_OR_PENALTIES',
+  );
 
   // Overrides state: Map phase order to config overrides
   overrides = signal<Record<number, Partial<IPhaseConfig>>>({});
@@ -59,11 +65,14 @@ export class SetupFormatKnockout {
       else if (currentTeams === 16) name = 'Oitavas de Final';
       else name = `${result.length + 1}ª Fase`;
 
+      const matchType = override.matchType || (this.defaultLegs() === 2 ? 'home_away' : 'single');
+
       result.push({
         order: order++,
         name: name,
-        matchType: override.matchType || 'single',
-        legs: override.matchType === 'home_away' ? 2 : 1,
+        matchType: matchType,
+        legs: override.legs || (matchType === 'home_away' ? 2 : 1),
+        advanceRule: override.advanceRule || this.defaultAdvanceRule(),
         teamsCount: currentTeams,
         isPreliminary: false,
       });
@@ -74,6 +83,28 @@ export class SetupFormatKnockout {
     return result;
   });
 
+  constructor() {
+    effect(() => {
+      const phases = this.phases();
+      const config: IKnockoutConfig = {
+        defaultLegs: this.defaultLegs(),
+        defaultAdvanceRule: this.defaultAdvanceRule(),
+        phases: phases
+          .filter(
+            (p) =>
+              p.legs !== (this.defaultLegs() === 2 ? 2 : 1) ||
+              p.advanceRule !== this.defaultAdvanceRule(),
+          )
+          .map((p) => ({
+            phaseOrder: p.order,
+            legs: p.legs,
+            advanceRule: p.advanceRule || this.defaultAdvanceRule(),
+          })),
+      };
+      this.knockoutConfigChange.emit(config);
+    });
+  }
+
   hasPreliminary = computed(() => this.phases().some((p) => p.isPreliminary));
 
   toggleMatchType(phaseOrder: number, type: 'single' | 'home_away') {
@@ -82,8 +113,32 @@ export class SetupFormatKnockout {
       [phaseOrder]: {
         ...prev[phaseOrder],
         matchType: type,
+        legs: type === 'home_away' ? 2 : 1,
       },
     }));
+  }
+
+  toggleAdvanceRule(phaseOrder: number, rule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES') {
+    this.overrides.update((prev) => ({
+      ...prev,
+      [phaseOrder]: {
+        ...prev[phaseOrder],
+        advanceRule: rule,
+      },
+    }));
+  }
+
+  updateDefaultLegs(legs: number) {
+    this.defaultLegs.set(legs);
+    if (legs === 2) {
+      this.defaultAdvanceRule.set('AGGREGATE_OR_PENALTIES');
+    } else {
+      this.defaultAdvanceRule.set('REGULAR_OR_PENALTIES');
+    }
+  }
+
+  updateDefaultAdvanceRule(rule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES') {
+    this.defaultAdvanceRule.set(rule);
   }
 
   isSelectionInvalid(phase: IPhaseConfig): boolean {

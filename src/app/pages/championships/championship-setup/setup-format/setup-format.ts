@@ -5,11 +5,13 @@ import {
   SetupStep,
   IChampionshipSetupRequest,
   ISchedulePreferences,
+  IKnockoutConfig,
 } from '../../../../interfaces/setup-types.interface';
 import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
-import { SetupFormatSelection } from '../setup-format-selection/setup-format-selection';
+import { SetupChampionshipFormat } from '../setup-championship-format/setup-championship-format';
 import { AppAlert } from '../../../../components/alert/alert';
 import { SetupFormatKnockout } from '../setup-format-knockout/setup-format-knockout';
+import { FormatCalendarPreferences } from '../format-calendar-preferences/format-calendar-preferences';
 
 interface IFormat {
   id: 'groups_and_knockout' | 'knockout' | 'points';
@@ -21,7 +23,13 @@ interface IFormat {
 @Component({
   selector: 'app-setup-format',
   standalone: true,
-  imports: [SetupSidebarFormat, SetupFormatSelection, AppAlert, SetupFormatKnockout],
+  imports: [
+    SetupSidebarFormat,
+    SetupChampionshipFormat,
+    AppAlert,
+    SetupFormatKnockout,
+    FormatCalendarPreferences,
+  ],
   templateUrl: './setup-format.html',
   styleUrl: './setup-format.css',
 })
@@ -48,6 +56,7 @@ export class SetupFormat implements OnInit {
 
   // Store phases from sidebar to pass to knockout config
   storedPhases = signal<IPhase[]>([]);
+  knockoutConfig = signal<IKnockoutConfig | undefined>(undefined);
 
   // Debounced signals for sidebar
   debouncedFormat = toSignal(toObservable(this.selectedFormat).pipe(debounceTime(500)), {
@@ -153,6 +162,7 @@ export class SetupFormat implements OnInit {
     this.dataUpdate.emit({
       format: {
         formatType: this.selectedFormat().toUpperCase(),
+        knockoutConfig: this.knockoutConfig(),
       },
       structure: {
         totalTeams: this.totalTeams(),
@@ -175,5 +185,9 @@ export class SetupFormat implements OnInit {
   handlePhasesChange(phases: IPhase[]) {
     this.storedPhases.set(phases);
     this.phasesChange.emit(phases);
+  }
+
+  handleKnockoutConfigChange(config: IKnockoutConfig) {
+    this.knockoutConfig.set(config);
   }
 }

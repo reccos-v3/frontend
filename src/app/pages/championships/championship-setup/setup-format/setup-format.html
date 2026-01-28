@@ -21,7 +21,7 @@
       >
         @switch (internalStep()) {
           @case ('selection') {
-            <app-setup-knockout
+            <app-setup-championship-format
               [selectedFormat]="selectedFormat()"
               [groupsCount]="groupsCount()"
               [qualifiedPerGroup]="qualifiedPerGroup()"
@@ -30,13 +30,17 @@
               (updateGroupsCount)="updateGroupsCount($event)"
               (updateQualified)="updateQualified($event)"
               (updateTotalTeams)="updateTotalTeams($event)"
-              (updateSchedulePreferences)="updateSchedulePreferences($event)"
+            />
+
+            <app-format-calendar-preferences
+              (updatePreferences)="updateSchedulePreferences($event)"
             />
           }
           @case ('configuration') {
             <app-setup-format-knockout
               [totalTeams]="totalTeams()"
               [externalPhases]="storedPhases()"
+              (knockoutConfigChange)="handleKnockoutConfigChange($event)"
             />
           }
         }

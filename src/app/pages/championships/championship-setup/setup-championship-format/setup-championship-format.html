@@ -1,0 +1,70 @@
+<div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+  <button
+    (click)="toggleExpansion()"
+    class="w-full px-8 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+  >
+    <div class="text-left">
+      <h3 class="text-lg font-bold text-primary dark:text-white">Formato do Campeonato</h3>
+      <p class="text-sm text-secondary dark:text-gray-400">
+        Escolha como os times competirão entre si.
+      </p>
+    </div>
+    <span
+      class="material-symbols-outlined text-primary transition-transform duration-300"
+      [class.rotate-180]="isExpanded"
+    >
+      expand_more
+    </span>
+  </button>
+
+  @if (isExpanded) {
+    <div class="px-8 pb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        @for (format of formats; track format.id) {
+          <label [for]="format.id + '-championship'" class="relative cursor-pointer group">
+            <input
+              class="peer sr-only"
+              [id]="format.id + '-championship'"
+              name="format-championship"
+              type="radio"
+              [value]="format.id"
+              [checked]="selectedFormat() === format.id"
+              (change)="changeFormat(format.id)"
+            />
+            <div
+              class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all h-full flex flex-col items-center text-center gap-3"
+            >
+              <div
+                class="size-16 rounded-full bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center text-main dark:text-white group-hover:scale-110 transition-transform"
+              >
+                <span class="material-symbols-outlined">{{ format.icon }}</span>
+              </div>
+              <div>
+                <span class="block text-sm font-bold text-main dark:text-white mb-1">{{
+                  format.label
+                }}</span>
+                <span class="block text-xs text-secondary">{{ format.description }}</span>
+              </div>
+            </div>
+            <div
+              class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+            >
+              <span class="material-symbols-outlined text-xl">check_circle</span>
+            </div>
+          </label>
+        }
+      </div>
+
+      <!-- Group Configuration Inputs -->
+      <app-setup-system-format
+        [format]="selectedFormat()"
+        [groupsCount]="groupsCount()"
+        [qualifiedPerGroup]="qualifiedPerGroup()"
+        [totalTeams]="totalTeams()"
+        (updateGroupsCount)="changeGroupsCount($event)"
+        (updateQualified)="changeQualified($event)"
+        (updateTotalTeams)="changeTotalTeams($event)"
+      />
+    </div>
+  }
+</div>

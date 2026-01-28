@@ -18,6 +18,19 @@ export interface ISetupRules {
 
 export interface ISetupFormat {
   formatType: string;
+  knockoutConfig?: IKnockoutConfig;
+}
+
+export interface IKnockoutConfig {
+  defaultLegs: number;
+  defaultAdvanceRule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
+  phases: IPhaseOverride[];
+}
+
+export interface IPhaseOverride {
+  phaseOrder: number;
+  legs: number;
+  advanceRule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
 }
 
 export interface IPhaseConfig {
@@ -25,6 +38,7 @@ export interface IPhaseConfig {
   name: string;
   matchType: 'single' | 'home_away';
   legs: number;
+  advanceRule?: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
   teamsCount: number;
   isPreliminary: boolean;
 }
