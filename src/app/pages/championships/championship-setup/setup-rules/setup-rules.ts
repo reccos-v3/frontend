@@ -42,7 +42,7 @@ export class SetupRules implements OnInit {
   // Basics
   name = signal('');
   modalityId = signal('');
-  gender = signal('MASCULINO');
+  gender = signal('MALE');
   type = signal('SEASONAL');
   seasonId = signal('');
 

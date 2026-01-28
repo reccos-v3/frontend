@@ -1,0 +1,153 @@
+<div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mt-6">
+  <button
+    (click)="toggleExpansion()"
+    class="w-full px-8 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+  >
+    <div class="text-left">
+      <h3 class="text-lg font-bold text-primary dark:text-white">
+        Preferências de Agenda (opcional)
+      </h3>
+      <p class="text-sm text-secondary dark:text-gray-400">
+        Ajude o sistema a organizar os jogos de forma mais conveniente.
+      </p>
+    </div>
+    <span
+      class="material-symbols-outlined text-primary transition-transform duration-300"
+      [class.rotate-180]="isExpanded"
+    >
+      expand_more
+    </span>
+  </button>
+
+  @if (isExpanded) {
+    <div class="px-8 pb-8 space-y-8">
+      <div>
+        <span class="block text-sm font-bold text-secondary dark:text-white mb-4"
+          >Dias preferidos da semana</span
+        >
+        <div class="flex flex-wrap gap-3">
+          @for (day of weekDays; track day.id) {
+            <label
+              class="flex items-center gap-2 px-4 py-2 border rounded-full cursor-pointer transition-all group"
+              [class.border-primary]="day.selected"
+              [class.bg-primary/5]="day.selected"
+              [class.border-gray-200]="!day.selected"
+              [class.dark:border-gray-600]="!day.selected"
+              [class.hover:border-primary]="true"
+            >
+              <input
+                type="checkbox"
+                class="sr-only"
+                [checked]="day.selected"
+                (change)="toggleDay(day.id)"
+              />
+              <div
+                class="size-5 rounded-full border flex items-center justify-center transition-all"
+                [class.border-primary]="day.selected"
+                [class.bg-primary]="day.selected"
+                [class.border-gray-300]="!day.selected"
+                [class.dark:border-gray-500]="!day.selected"
+              >
+                @if (day.selected) {
+                  <span class="material-symbols-outlined text-white text-sm !text-[14px]"
+                    >check</span
+                  >
+                }
+              </div>
+              <span
+                class="text-sm font-medium transition-colors"
+                [class.text-primary]="day.selected"
+                [class.text-gray-500]="!day.selected"
+                [class.dark:text-gray-400]="!day.selected"
+                >{{ day.label }}</span
+              >
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <span class="block text-sm font-bold text-secondary dark:text-white mb-4"
+            >Períodos do dia</span
+          >
+          <div class="space-y-3">
+            @for (slot of timeSlots; track slot.id) {
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  class="sr-only"
+                  [checked]="slot.selected"
+                  (change)="toggleTimeSlot(slot.id)"
+                />
+                <div
+                  class="size-5 rounded-full border flex items-center justify-center transition-all"
+                  [class.border-primary]="slot.selected"
+                  [class.bg-primary]="slot.selected"
+                  [class.border-gray-300]="!slot.selected"
+                  [class.dark:border-gray-500]="!slot.selected"
+                >
+                  @if (slot.selected) {
+                    <span class="material-symbols-outlined text-white text-sm !text-[14px]"
+                      >check</span
+                    >
+                  }
+                </div>
+                <span
+                  class="text-sm font-medium transition-colors group-hover:text-primary"
+                  [class.text-primary]="slot.selected"
+                  [class.text-gray-500]="!slot.selected"
+                  [class.dark:text-gray-400]="!slot.selected"
+                  >{{ slot.label }}</span
+                >
+              </label>
+            }
+          </div>
+        </div>
+
+        <div>
+          <span class="block text-sm font-bold text-secondary dark:text-white mb-4"
+            >Restrições adicionais</span
+          >
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              class="sr-only"
+              [checked]="avoidHolidays"
+              (change)="toggleHolidays()"
+            />
+            <div
+              class="size-5 rounded-full border flex items-center justify-center transition-all"
+              [class.border-primary]="avoidHolidays"
+              [class.bg-primary]="avoidHolidays"
+              [class.border-gray-300]="!avoidHolidays"
+              [class.dark:border-gray-500]="!avoidHolidays"
+            >
+              @if (avoidHolidays) {
+                <span class="material-symbols-outlined text-white text-sm !text-[14px] leading-none"
+                  >check</span
+                >
+              }
+            </div>
+            <span
+              class="text-sm font-medium transition-colors group-hover:text-primary"
+              [class.text-primary]="avoidHolidays"
+              [class.text-gray-500]="!avoidHolidays"
+              [class.dark:text-gray-400]="!avoidHolidays"
+              >Evitar feriados</span
+            >
+          </label>
+        </div>
+      </div>
+
+      <div
+        class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg"
+      >
+        <p class="text-xs text-medium-blue dark:text-blue-300 leading-relaxed">
+          O sistema tentará priorizar essas preferências ao gerar a tabela, mas ajustes podem ser
+          necessários para garantir o andamento do campeonato.
+        </p>
+      </div>
+    </div>
+  }
+</div>

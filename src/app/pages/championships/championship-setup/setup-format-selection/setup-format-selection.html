@@ -4,13 +4,15 @@
 </h2>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
   @for (format of formats; track format.id) {
-    <label class="relative cursor-pointer group" (click)="changeFormat(format.id)">
+    <label [for]="format.id" class="relative cursor-pointer group">
       <input
         class="peer sr-only"
+        [id]="format.id"
         name="format"
         type="radio"
         [value]="format.id"
         [checked]="selectedFormat() === format.id"
+        (change)="changeFormat(format.id)"
       />
       <div
         class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all h-full flex flex-col items-center text-center gap-3"
@@ -45,3 +47,5 @@
   (updateQualified)="changeQualified($event)"
   (updateTotalTeams)="changeTotalTeams($event)"
 />
+
+<app-format-calendar-preferences (updatePreferences)="changeSchedulePreferences($event)" />

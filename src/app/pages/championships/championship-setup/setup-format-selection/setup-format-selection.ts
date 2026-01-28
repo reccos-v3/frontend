@@ -1,5 +1,7 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { SetupSystemFormat } from '../setup-system-format/setup-system-format';
+import { FormatCalendarPreferences } from '../format-calendar-preferences/format-calendar-preferences';
+import { ISchedulePreferences } from '../../../../interfaces/setup-types.interface';
 
 interface IFormat {
   id: 'groups_and_knockout' | 'knockout' | 'points';
@@ -9,9 +11,9 @@ interface IFormat {
 }
 
 @Component({
-  selector: 'app-setup--knockout',
+  selector: 'app-setup-knockout',
   standalone: true,
-  imports: [SetupSystemFormat],
+  imports: [SetupSystemFormat, FormatCalendarPreferences],
   templateUrl: './setup-format-selection.html',
 })
 export class SetupFormatSelection {
@@ -24,6 +26,7 @@ export class SetupFormatSelection {
   updateGroupsCount = output<number>();
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
+  updateSchedulePreferences = output<ISchedulePreferences>();
 
   formats: IFormat[] = [
     {
@@ -60,5 +63,9 @@ export class SetupFormatSelection {
 
   changeTotalTeams(val: number) {
     this.updateTotalTeams.emit(val);
+  }
+
+  changeSchedulePreferences(preferences: ISchedulePreferences) {
+    this.updateSchedulePreferences.emit(preferences);
   }
 }

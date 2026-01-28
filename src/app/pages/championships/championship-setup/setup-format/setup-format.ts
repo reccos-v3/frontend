@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs';
 import {
   SetupStep,
   IChampionshipSetupRequest,
-  IPhaseConfig,
+  ISchedulePreferences,
 } from '../../../../interfaces/setup-types.interface';
 import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 import { SetupFormatSelection } from '../setup-format-selection/setup-format-selection';
@@ -37,6 +37,11 @@ export class SetupFormat implements OnInit {
   groupsCount = signal(4);
   qualifiedPerGroup = signal(2);
   firstPhaseType = signal('GROUPS');
+  schedulePreferences = signal<ISchedulePreferences>({
+    allowedWeekDays: [],
+    preferredTimeSlots: [],
+    avoidHolidays: false,
+  });
 
   // Internal state for wizard step
   internalStep = signal<'selection' | 'configuration'>('selection');
@@ -117,6 +122,10 @@ export class SetupFormat implements OnInit {
     this.totalTeams.update((c) => Math.max(2, c + val));
   }
 
+  updateSchedulePreferences(preferences: ISchedulePreferences) {
+    this.schedulePreferences.set(preferences);
+  }
+
   saveAndContinue() {
     if (this.isValid()) {
       const currentFormat = this.selectedFormat();
@@ -151,6 +160,7 @@ export class SetupFormat implements OnInit {
         qualifiedPerGroup: this.qualifiedPerGroup(),
         firstPhaseType: this.firstPhaseType(),
       },
+      schedulePreferences: this.schedulePreferences(),
     });
   }
 

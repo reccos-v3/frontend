@@ -18,7 +18,7 @@ export interface IChampionshipResponse {
     description: string;
     active: boolean;
   };
-  gender: string;
+  gender: 'MALE' | 'FEMALE' | 'MIXED';
   type: string;
   season: {
     id: string;

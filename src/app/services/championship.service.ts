@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { catchError, Observable, throwError } from 'rxjs';
-import { IAuth } from '../interfaces/auth.interface';
 import { IChampionshipRequest, IChampionshipResponse } from '../interfaces/championship.interface';
 import { IPage } from '../interfaces/page.interface';
 import { TokenService } from './token.service';
@@ -40,12 +39,12 @@ export class ChampionshipService {
     const federationId = this.tokenService.getFederationId();
     if (!federationId) {
       return of({
-        content: [],
+        content: [] as IChampionshipResponse[],
         totalElements: 0,
         totalPages: 0,
         size: size,
         number: page,
-      } as any);
+      } as IPage<IChampionshipResponse>);
     }
 
     return this.http

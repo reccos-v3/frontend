@@ -7,21 +7,22 @@ import {
   SeasonTypeCardConfig,
   SeasonType,
 } from './components/season-type-card/season-type-card';
-import { IChampionshipRequest } from '../../../interfaces/championship.interface';
-import { Observable } from 'rxjs';
+import {
+  IChampionshipRequest,
+  IChampionshipResponse,
+} from '../../../interfaces/championship.interface';
 import { ChampionshipService } from '../../../services/championship.service';
 import { SeasonService } from '../../../services/season.service';
 import { ISeasonRequest, ISeasonResponse } from '../../../interfaces/season.interface';
-import { IAuth } from '../../../interfaces/auth.interface';
 import { ModalityService } from '../../../services/modality.service';
 import { IModalityResponse } from '../../../interfaces/modality.interface';
 import { ToastService } from '../../../services/toast.service';
-import { seasonTypeCards } from '../../../utils/mocks/season-type-cards';
+import { IApiError } from '../../../interfaces/error.interface';
 
 interface ChampionshipFormData {
   name: string;
   modality: string;
-  gender: 'MASCULINO' | 'FEMININO' | 'MISTO';
+  gender: 'MALE' | 'FEMALE' | 'MIXED';
   seasonType: 'existing' | 'new' | 'standalone';
   season: string | null;
   seasonName?: string;
@@ -48,7 +49,7 @@ export class ChampionshipCreate implements OnInit {
   formData: ChampionshipFormData = {
     name: '',
     modality: '',
-    gender: 'MASCULINO',
+    gender: 'MALE',
     seasonType: 'existing',
     season: null,
     seasonName: '',
@@ -60,14 +61,15 @@ export class ChampionshipCreate implements OnInit {
   saveSuccess = signal(false);
   isEditMode = signal(false);
   championshipId = signal<string | null>(null);
+  showValidationErrors = signal(false);
 
   modalities = signal<IModalityResponse[]>([]);
   seasons = signal<ISeasonResponse[]>([]);
 
   genderOptions = [
-    { value: 'MASCULINO', label: 'Masculino' },
-    { value: 'FEMININO', label: 'Feminino' },
-    { value: 'MISTO', label: 'Misto' },
+    { value: 'MALE', label: 'Masculino' },
+    { value: 'FEMALE', label: 'Feminino' },
+    { value: 'MIXED', label: 'Misto' },
   ];
 
   seasonTypeCards: SeasonTypeCardConfig[] = [
@@ -116,8 +118,9 @@ export class ChampionshipCreate implements OnInit {
         const seasonType: SeasonType = championship.season ? 'existing' : 'standalone';
         this.formData = {
           name: championship.name,
-          modality: championship.modality?.id || (championship as any).modalityId || '',
-          gender: (championship.gender || 'MASCULINO').toUpperCase() as any,
+          modality:
+            championship.modality?.id || (championship as IChampionshipResponse).modalityId || '',
+          gender: (championship.gender || 'MALE').toUpperCase() as IChampionshipResponse['gender'],
           seasonType: seasonType,
           season: championship.season?.id || null,
           seasonName: '',
@@ -183,12 +186,41 @@ export class ChampionshipCreate implements OnInit {
     return 'Avulso';
   }
 
+  getValidationErrors(): string[] {
+    const errors: string[] = [];
+    if (!this.formData.name?.trim()) errors.push('Nome do Campeonato');
+    if (!this.formData.modality) errors.push('Modalidade');
+
+    if (this.formData.seasonType === 'existing' && !this.formData.season) {
+      errors.push('Seleção de Temporada');
+    }
+
+    if (this.formData.seasonType === 'new') {
+      if (!this.formData.seasonName?.trim()) errors.push('Nome da Nova Temporada');
+      if (!this.formData.seasonStart) errors.push('Data de Início da Temporada');
+      if (!this.formData.seasonEnd) errors.push('Data de Término da Temporada');
+    }
+
+    return errors;
+  }
+
   onCancel(): void {
     // Navegar de volta ou fechar
     this.router.navigate(['/admin/championships']);
   }
 
   goToSetup(): void {
+    this.showValidationErrors.set(true);
+
+    if (
+      !this.formData.name?.trim() ||
+      !this.formData.modality ||
+      this.isExistingSeasonMissing() ||
+      this.isNewSeasonMissing()
+    ) {
+      return;
+    }
+
     const basicInfo = {
       name: this.formData.name,
       gender: this.formData.gender,
@@ -201,22 +233,22 @@ export class ChampionshipCreate implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.formData.name || !this.formData.modality) {
-      this.toastService.error('Preencha nome e modalidade.');
+    this.showValidationErrors.set(true);
+
+    if (
+      !this.formData.name?.trim() ||
+      !this.formData.modality ||
+      this.isExistingSeasonMissing() ||
+      this.isNewSeasonMissing()
+    ) {
       return;
     }
 
-    if (this.isExistingSeasonMissing()) {
-      this.toastService.error('Selecione uma temporada existente.');
-      return;
+    if (this.formData.seasonType !== 'new') {
+      this.createObjectToApi();
+    } else {
+      this.createNewSeason();
     }
-
-    if (this.isNewSeasonMissing()) {
-      this.toastService.error('Preencha nome, início e fim da nova temporada.');
-      return;
-    }
-
-    this.formData.seasonType !== 'new' ? this.createObjectToApi() : this.createNewSeason();
 
     this.isSubmitting.set(true);
   }
@@ -260,9 +292,9 @@ export class ChampionshipCreate implements OnInit {
           this.createObjectToApi();
         }, 1000);
       },
-      error: (error) => {
+      error: (error: IApiError) => {
         this.isSubmitting.set(false);
-        this.toastService.error('Erro ao criar temporada.');
+        this.toastService.error(error.message);
       },
     });
   }
@@ -288,7 +320,8 @@ export class ChampionshipCreate implements OnInit {
     if (!id) return;
 
     this.championshipService.updateChampionship(id, championship).subscribe({
-      next: (response) => {
+      next: (response: IChampionshipResponse) => {
+        console.log(response);
         this.isSubmitting.set(false);
         this.saveSuccess.set(true);
         this.toastService.success('Campeonato atualizado com sucesso!');

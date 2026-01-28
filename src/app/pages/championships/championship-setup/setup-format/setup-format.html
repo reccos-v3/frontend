@@ -22,7 +22,7 @@
         {{ selectedFormat() }}
         @switch (internalStep()) {
           @case ('selection') {
-            <app-setup--knockout
+            <app-setup-knockout
               [selectedFormat]="selectedFormat()"
               [groupsCount]="groupsCount()"
               [qualifiedPerGroup]="qualifiedPerGroup()"
@@ -31,6 +31,7 @@
               (updateGroupsCount)="updateGroupsCount($event)"
               (updateQualified)="updateQualified($event)"
               (updateTotalTeams)="updateTotalTeams($event)"
+              (updateSchedulePreferences)="updateSchedulePreferences($event)"
             />
           }
           @case ('configuration') {
