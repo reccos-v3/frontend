@@ -25,6 +25,7 @@
       class="flex items-center justify-between mt-8 pt-6 border-t border-[#E5E7EB] dark:border-[#1A2C24]"
     >
       <button
+        (click)="advanced.emit('rules')"
         class="px-6 py-2.5 rounded-lg border border-[#E5E7EB] dark:border-[#1A2C24] text-[#111814] dark:text-white font-bold text-sm hover:bg-[#F6F8F7] dark:hover:bg-[#102219] transition-colors flex items-center gap-2"
       >
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>

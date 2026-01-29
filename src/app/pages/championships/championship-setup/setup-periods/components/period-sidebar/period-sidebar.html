@@ -45,7 +45,10 @@
     <div class="space-y-3">
       <p class="text-[#121714] text-[15px] dark:text-gray-200 font-normal leading-relaxed mb-6">
         As datas definidas aqui são críticas. Após o encerramento em
-        <span class="font-bold">15/06/2024</span>:
+        <span class="font-bold">{{
+          tempValues()?.registrationPeriod?.endAt | date: 'dd/MM/yyyy'
+        }}</span
+        >:
       </p>
       <ul class="space-y-2">
         <li class="flex items-start gap-2 text-sm text-[#4a5f53] dark:text-gray-400">

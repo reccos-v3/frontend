@@ -1,247 +1,304 @@
-<!-- Scrollable Content -->
-<div class="flex-1 overflow-y-auto p-6 md:p-10 pb-32">
-  <div class="max-w-5xl mx-auto flex flex-col gap-8">
-    <!-- Critical Warning Banner -->
-    <app-alert
-      class="block mb-8"
-      type="error"
-      variant="left-accent"
-      icon="gpp_maybe"
-      title="Atenção: Ponto de não retorno"
-      message="Ao ativar o campeonato, as configurações de Regras e Estrutura serão bloqueadas permanentemente para garantir a integridade da competição. Certifique-se de que todos os detalhes abaixo estão corretos."
-    />
-    <div class="flex items-center justify-between">
-      <h3 class="text-xl font-bold text-slate-900 dark:text-white">Resumo do Setup</h3>
-      <button
-        class="text-primary hover:text-primary-dark text-sm font-medium flex items-center gap-1"
-      >
-        Expandir tudo
-        <span class="material-symbols-outlined text-[18px]">unfold_more</span>
-      </button>
+<div class="max-w-[1100px] w-full mx-auto p-8 flex flex-col gap-8">
+  <!-- Page Heading -->
+  <div class="flex flex-col gap-1">
+    <h1 class="text-[#0F1F2D] dark:text-white text-4xl font-black leading-tight tracking-tight">
+      Review do Campeonato
+    </h1>
+    <p class="text-[#1F3A5F] dark:text-gray-400 text-lg font-normal">
+      Revise todas as informações configuradas antes de iniciar oficialmente a competição.
+    </p>
+  </div>
+  <!-- Review Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Basic Info Card -->
+    <div
+      class="bg-white dark:bg-background-dark border border-[#E5E7EB] dark:border-white/10 rounded-xl p-6 shadow-sm"
+    >
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-[#121714] dark:text-white text-lg font-bold mb-1">Informações Básicas</h3>
+          <p class="text-sm text-[#678375]">Detalhes principais da identidade</p>
+        </div>
+        <span
+          class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider"
+          >CONFIGURED</span
+        >
+      </div>
+      <div class="space-y-3">
+        <div class="flex justify-between border-b border-gray-100 dark:border-white/5 pb-2">
+          <span class="text-sm text-gray-500">Nome:</span>
+          <span class="text-sm font-medium">Copa Verão Reccos 2024</span>
+        </div>
+        <div class="flex justify-between border-b border-gray-100 dark:border-white/5 pb-2">
+          <span class="text-sm text-gray-500">Modalidade:</span>
+          <span class="text-sm font-medium">Futebol 7</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-500">Gênero:</span>
+          <span class="text-sm font-medium">Masculino</span>
+        </div>
+      </div>
     </div>
-    <!-- Summary Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Card 1: Regras -->
-      <div
-        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
-      >
-        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="text-slate-400 hover:text-primary p-1">
-            <span class="material-symbols-outlined">edit</span>
-          </button>
+    <!-- Periods Card -->
+    <div
+      class="bg-white dark:bg-background-dark border border-[#E5E7EB] dark:border-white/10 rounded-xl p-6 shadow-sm"
+    >
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-[#121714] dark:text-white text-lg font-bold mb-1">Períodos</h3>
+          <p class="text-sm text-[#678375]">Cronograma de datas</p>
         </div>
-        <div class="flex items-center gap-3 mb-6">
-          <div
-            class="size-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400"
-          >
-            <span class="material-symbols-outlined">sports_soccer</span>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-900 dark:text-white">Regras do Jogo</h4>
-            <p
-              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
-            >
-              Configurado
-            </p>
-          </div>
-        </div>
-        <ul class="space-y-3">
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>Formato Society 7 vs 7</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>2 tempos de 25 minutos</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>Substituições ilimitadas (Volante)</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>2 cartões amarelos = suspensão</span>
-          </li>
-        </ul>
+        <span class="material-symbols-outlined text-gray-400">calendar_month</span>
       </div>
-      <!-- Card 2: Estrutura -->
-      <div
-        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
-      >
-        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="text-slate-400 hover:text-primary p-1">
-            <span class="material-symbols-outlined">edit</span>
-          </button>
-        </div>
-        <div class="flex items-center gap-3 mb-6">
-          <div
-            class="size-10 rounded-full bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-400"
+      <div class="space-y-3">
+        <div class="flex flex-col gap-1 p-3 bg-background-light dark:bg-white/5 rounded-lg">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide"
+            >Período de Inscrição</span
           >
-            <span class="material-symbols-outlined">account_tree</span>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-900 dark:text-white">Estrutura</h4>
-            <p
-              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
-            >
-              Misto
-            </p>
-          </div>
+          <p class="text-sm font-medium">01/10/2023 até 15/10/2023</p>
         </div>
-        <ul class="space-y-3">
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>Fase de Grupos + Mata-mata</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>4 Grupos de 4 times (16 total)</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>Classificam 2 por grupo</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5"
-              >check_circle</span
-            >
-            <span>Final Única (Sem ida e volta)</span>
-          </li>
-        </ul>
+        <div class="flex flex-col gap-1 p-3 bg-background-light dark:bg-white/5 rounded-lg">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide"
+            >Jogos Previstos</span
+          >
+          <p class="text-sm font-medium">20/10/2023 até 20/12/2023</p>
+        </div>
       </div>
-      <!-- Card 3: Times -->
-      <div
-        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
-      >
-        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="text-slate-400 hover:text-primary p-1">
-            <span class="material-symbols-outlined">edit</span>
-          </button>
+    </div>
+    <!-- Rules Card -->
+    <div
+      class="bg-white dark:bg-background-dark border border-[#E5E7EB] dark:border-white/10 rounded-xl p-6 shadow-sm"
+    >
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-[#121714] dark:text-white text-lg font-bold mb-1">Regras e Pontuação</h3>
+          <p class="text-sm text-[#678375]">Configurações de editabilidade</p>
         </div>
-        <div class="flex items-center gap-3 mb-6">
-          <div
-            class="size-10 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 dark:text-orange-400"
-          >
-            <span class="material-symbols-outlined">groups</span>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-900 dark:text-white">Participantes</h4>
-            <p
-              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
-            >
-              16/16 Vagas
-            </p>
+        <span class="material-symbols-outlined text-gray-400">gavel</span>
+      </div>
+      <div class="grid grid-cols-1 gap-3">
+        <div
+          class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <div class="flex flex-col">
+            <span class="text-sm font-medium">Vitória: 3pts, Empate: 1pt</span>
+            <span class="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px]">block</span> Não editável após
+              início
+            </span>
           </div>
         </div>
-        <div class="flex flex-col gap-4">
-          <div class="flex -space-x-3 overflow-hidden py-1">
-            <img
-              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
-              data-alt="Team logo 1"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ6NRfI-ZjMTm9Axz44tYwEh3tRlilA6_NH_plPiNm1oZpp-LQMmsIKO3Hnt43vBD81T9_dLwCBlR19MQEaqjA0OI-loeST9H5-p5R2HwZCQRdsR-X8j2KEy5ur-Ow3E06BFURAKFJVSUguXjMEKdMGoY8HrCaT4rF1O9mfye6_hYgiCntYK9roOtw9ZX7jKVK_Nztb1t_JMS7gAFtdSDqbZ0hg1uU5__BZ0gFaXKAZ4BdKJmha9K4pzeRLBO-2QDON0fvpPjivCA"
-            />
-            <img
-              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
-              data-alt="Team logo 2"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAJdkAhSKKyOPv0g0QR-5bptKMzMXpxzAYAz3TnzeLMkeVAtuX-UzRiynpfDz41UcHjErU0zaqr-kc69PDfFB6P_HJh2NVwVknJLPdL8huzly_129yePExT-B_k_lkfgW_Ib8brUJg1kS691av5z29ssa1XvNrGO2RVbDJdggXjtNoVEsCZKnwVPMSqxn7pQJzoVQZCRwKpWLs3We2-2ZCklq2nCSCJptLXlnvaaFPC6Y9FWWdxsnTYTaNkA6j5HXNLavghEJdahs"
-            />
-            <img
-              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
-              data-alt="Team logo 3"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuANgK5-uPKcMHvmfYa1arkjvOCk_tO0lxB24zrBlsQZfjrPNgOuTgCxfea9vMszRSwYZdIOZwYCeG9YFEzUNhyKAPdPq3nLZSnpNswt41lQIonphb7y9rEh7OMw0ePfsnEjo7lhLixceXM8m4qoUfhs6ShNdZzEsgPqNC1t3DbrOEV2os__ayJfZ61VwO1Hj4FhN8tAhbx-tyBk1FtJQZBdUhSxK3-QDIdRvC4kdp-kZ5KMx6vj-bcj_F8wE_glFDheyqF8ACoLBD0"
-            />
-            <img
-              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025]"
-              data-alt="Team logo 4"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_Z2EL92UtDh_-lo6HHpOzhf2qn4GU9u_Syzgz_s2ZPQvEDkJklA8bPGcG1FipDX98WRkgyYniXvLCiyDKf5MRLV3F9_EeihBkqoxWXtGK1_i5fGgGmkK9DBgEUwr5HbPWXJeWh-VhXGrvQBWXz9cjPv-3Dsj_YRRmKb2SHYwXoTZ11bwpO69-K_wt4LOuSfz_oGgUcJGB_PJTBRTEvutyiLdV5BBM1b33UvOlQRLmI_owJ6ca-ZXVwLNFjaCkyC7hWkYW3w-RIH4"
-            />
-            <div
-              class="inline-block size-10 rounded-full ring-2 ring-white dark:ring-[#183025] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-400"
-            >
-              +12
-            </div>
+        <div
+          class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <div class="flex flex-col">
+            <span class="text-sm font-medium">Critério: Confronto Direto</span>
+            <span class="text-[10px] text-primary font-semibold uppercase flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px]">check_circle</span>
+              Editável a qualquer momento
+            </span>
           </div>
-          <div
-            class="bg-slate-50 dark:bg-white/5 rounded-lg p-3 text-sm text-slate-600 dark:text-slate-300 flex items-center justify-between"
-          >
-            <span>Capitães cadastrados</span>
-            <span class="font-bold text-slate-900 dark:text-white">100%</span>
+        </div>
+        <div class="flex items-center justify-between py-2">
+          <div class="flex flex-col">
+            <span class="text-sm font-medium">Saldo de Gols (2º Critério)</span>
+            <span class="text-[10px] text-primary font-semibold uppercase flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px]">check_circle</span>
+              Editável a qualquer momento
+            </span>
           </div>
         </div>
       </div>
-      <!-- Card 4: Ajustes Automáticos -->
-      <div
-        class="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-[#e7f3ed] dark:border-white/5 shadow-sm hover:shadow-md transition-shadow relative group"
-      >
-        <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="text-slate-400 hover:text-primary p-1">
-            <span class="material-symbols-outlined">settings</span>
-          </button>
+    </div>
+    <!-- Format & Structure -->
+    <div
+      class="bg-white dark:bg-background-dark border border-[#E5E7EB] dark:border-white/10 rounded-xl p-6 shadow-sm"
+    >
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-[#121714] dark:text-white text-lg font-bold mb-1">Formato e Equipes</h3>
+          <p class="text-sm text-[#678375]">Estrutura da competição</p>
         </div>
-        <div class="flex items-center gap-3 mb-6">
-          <div
-            class="size-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400"
+        <span class="material-symbols-outlined text-gray-400">account_tree</span>
+      </div>
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-500">Formato:</span>
+          <span class="bg-gray-100 dark:bg-white/10 px-3 py-1 rounded-full text-xs font-semibold"
+            >Grupos + Mata-mata</span
           >
-            <span class="material-symbols-outlined">tune</span>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-900 dark:text-white">Ajustes Automáticos</h4>
-            <p
-              class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
+        </div>
+        <div
+          class="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 rounded-lg"
+        >
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-bold text-orange-800 dark:text-orange-300"
+              >Equipes Vinculadas</span
             >
-              Sistema
-            </p>
+            <span
+              class="text-xs font-bold text-orange-700 dark:text-orange-400 bg-orange-200 dark:bg-orange-800 px-2 py-0.5 rounded"
+              >INCOMPLETO</span
+            >
+          </div>
+          <div
+            class="w-full bg-orange-200 dark:bg-orange-800 h-2 rounded-full overflow-hidden mb-1"
+          >
+            <div class="bg-orange-500 h-full w-[75%]"></div>
+          </div>
+          <div
+            class="flex justify-between text-[10px] font-bold text-orange-700 dark:text-orange-400"
+          >
+            <span>12 equipes cadastradas</span>
+            <span>Meta: 16 equipes</span>
           </div>
         </div>
-        <ul class="space-y-3">
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5">toggle_on</span>
-            <span>Sorteio de chaves automático</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5">toggle_on</span>
-            <span>Gerar tabela de jogos pós-sorteio</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-            <span class="material-symbols-outlined text-[18px] text-primary mt-0.5">toggle_on</span>
-            <span>Notificar capitães via E-mail</span>
-          </li>
-          <li class="flex items-start gap-3 text-sm text-slate-400 dark:text-slate-500">
-            <span class="material-symbols-outlined text-[18px] mt-0.5">toggle_off</span>
-            <span>Publicar página do campeonato (Manter privado)</span>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
-</div>
-<!-- Footer Action -->
-<div
-  class="sticky bottom-0 w-full bg-white dark:bg-surface-dark border-t border-[#e7f3ed] dark:border-white/10 p-4 md:px-10 md:py-6 flex items-center justify-between z-20"
->
-  <button
-    class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium px-4 py-2 transition-colors"
+  <!-- Activation Policy Card -->
+  <div
+    class="bg-white dark:bg-background-dark border-l-4 border-l-primary border border-gray-200 dark:border-white/10 rounded-xl p-8 shadow-md"
   >
-    Voltar
-  </button>
-  <div class="flex items-center gap-4">
-    <span class="text-sm text-slate-500 dark:text-slate-400 hidden sm:inline-block"
-      >Última edição: Há 5 minutos</span
+    <div class="flex flex-col gap-6">
+      <div>
+        <h2 class="text-xl font-bold text-[#121714] dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">rocket_launch</span>
+          Início do Campeonato
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+          Defina como e quando o campeonato será oficialmente aberto para partidas.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Radio Card: Manual -->
+        <button
+          type="button"
+          (click)="setActivationMode('MANUAL')"
+          class="relative flex cursor-pointer rounded-xl border-2 p-4 transition-all duration-300 text-left"
+          [class.border-primary]="activationMode() === 'MANUAL'"
+          [class.bg-primary/5]="activationMode() === 'MANUAL'"
+          [class.border-gray-200]="activationMode() !== 'MANUAL'"
+          [class.dark:border-white/10]="activationMode() !== 'MANUAL'"
+          [class.hover:bg-gray-50]="activationMode() !== 'MANUAL'"
+          [class.dark:hover:bg-white/5]="activationMode() !== 'MANUAL'"
+        >
+          <span class="flex flex-1 flex-col">
+            <span class="flex items-center justify-between">
+              <span
+                class="block text-sm font-bold uppercase tracking-wide"
+                [class.text-[#121714]]="activationMode() === 'MANUAL'"
+                [class.dark:text-white]="activationMode() === 'MANUAL'"
+                [class.text-gray-500]="activationMode() !== 'MANUAL'"
+                >Manual</span
+              >
+              @if (activationMode() === 'MANUAL') {
+                <span class="material-symbols-outlined text-primary">check_circle</span>
+              } @else {
+                <span class="material-symbols-outlined text-gray-300">circle</span>
+              }
+            </span>
+            <span
+              class="mt-1 flex items-center text-xs"
+              [class.text-gray-600]="activationMode() === 'MANUAL'"
+              [class.dark:text-gray-400]="activationMode() === 'MANUAL'"
+              [class.text-gray-500]="activationMode() !== 'MANUAL'"
+            >
+              Ativar imediatamente após clicar no botão abaixo.
+            </span>
+          </span>
+        </button>
+
+        <!-- Radio Card: Automatic -->
+        <button
+          type="button"
+          (click)="setActivationMode('AUTOMATIC')"
+          class="relative flex cursor-pointer rounded-xl border-2 p-4 transition-all duration-300 text-left"
+          [class.border-primary]="activationMode() === 'AUTOMATIC'"
+          [class.bg-primary/5]="activationMode() === 'AUTOMATIC'"
+          [class.border-gray-200]="activationMode() !== 'AUTOMATIC'"
+          [class.dark:border-white/10]="activationMode() !== 'AUTOMATIC'"
+          [class.hover:bg-gray-50]="activationMode() !== 'AUTOMATIC'"
+          [class.dark:hover:bg-white/5]="activationMode() !== 'AUTOMATIC'"
+        >
+          <span class="flex flex-1 flex-col">
+            <span class="flex items-center justify-between">
+              <span
+                class="block text-sm font-bold uppercase tracking-wide"
+                [class.text-[#121714]]="activationMode() === 'AUTOMATIC'"
+                [class.dark:text-white]="activationMode() === 'AUTOMATIC'"
+                [class.text-gray-500]="activationMode() !== 'AUTOMATIC'"
+                >Agendado</span
+              >
+              @if (activationMode() === 'AUTOMATIC') {
+                <span class="material-symbols-outlined text-primary">check_circle</span>
+              } @else {
+                <span class="material-symbols-outlined text-gray-300">circle</span>
+              }
+            </span>
+            <span
+              class="mt-1 flex items-center text-xs"
+              [class.text-gray-600]="activationMode() === 'AUTOMATIC'"
+              [class.dark:text-gray-400]="activationMode() === 'AUTOMATIC'"
+              [class.text-gray-500]="activationMode() !== 'AUTOMATIC'"
+            >
+              Programar uma data futura para ativação automática.
+            </span>
+          </span>
+        </button>
+      </div>
+
+      <!-- Date Picker -->
+      @if (activationMode() === 'AUTOMATIC') {
+        <div
+          class="border-t border-gray-100 dark:border-white/5 pt-4 animate-in slide-in-from-top-2 duration-300"
+        >
+          <label
+            for="activation-date"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >Selecione a Data e Hora de Início</label
+          >
+          <div class="relative max-w-sm">
+            <input
+              class="w-full rounded-lg border-gray-300 dark:border-white/20 dark:bg-background-dark text-sm focus:ring-primary focus:border-primary text-text-main dark:text-white"
+              type="datetime-local"
+              id="activation-date"
+              [value]="autoActivateAt()"
+              (input)="onAutoActivateChange($event)"
+            />
+          </div>
+          <p
+            class="text-[10px] text-orange-600 dark:text-orange-400 mt-2 flex items-center gap-1 font-bold uppercase tracking-wider"
+          >
+            <span class="material-symbols-outlined text-xs">warning</span>
+            O botão "Ativar agora" será desabilitado.
+          </p>
+        </div>
+      }
+      <!-- Responsibility Alert -->
+      <div
+        class="flex gap-3 bg-[#FFFBE6] dark:bg-yellow-900/20 p-4 rounded-xl border border-[#FFE58F] dark:border-yellow-800"
+      >
+        <span class="material-symbols-outlined text-[#FAAD14] shrink-0">warning</span>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm font-bold text-[#856404] dark:text-yellow-500">
+            Atenção: Ação Irreversível
+          </p>
+          <p class="text-xs text-[#856404] dark:text-yellow-600 leading-relaxed">
+            Ao ativar o campeonato, as tabelas de jogos serão geradas e as configurações estruturais
+            (formato, pontuação base) não poderão mais ser alteradas. Certifique-se de que todos os
+            dados estão corretos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer Actions -->
+  <div class="flex flex-col md:flex-row items-center justify-end gap-4 pb-4">
+    <button
+      class="w-full md:w-auto px-8 py-3 rounded-xl border border-gray-300 dark:border-white/20 text-[#121714] dark:text-white text-sm font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
     >
+      Voltar para edição
+    </button>
     <!-- Trigger for Modal -->
     <button
       (click)="openConfirmation()"

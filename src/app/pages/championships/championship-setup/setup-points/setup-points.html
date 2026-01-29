@@ -1,0 +1,71 @@
+<section
+  [formGroup]="form()"
+  [class]="
+    embedded()
+      ? 'flex flex-col gap-6'
+      : 'flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark'
+  "
+>
+  <div class="flex items-center gap-3 pb-4 border-b border-border-light dark:border-border-dark">
+    <div class="p-2 rounded-lg bg-primary/10 text-primary">
+      <span class="material-symbols-outlined">scoreboard</span>
+    </div>
+    <h3 class="text-lg font-bold text-text-main dark:text-white">Sistema de Pontuação</h3>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Victory -->
+    <div class="flex flex-col gap-2">
+      <label for="pointsWin" class="text-sm font-bold text-text-main dark:text-gray-200"
+        >Vitória</label
+      >
+      <div class="relative">
+        <input
+          class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+          type="number"
+          id="pointsWin"
+          formControlName="pointsWin"
+        />
+        <span
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
+          >pts</span
+        >
+      </div>
+    </div>
+    <!-- Draw -->
+    <div class="flex flex-col gap-2">
+      <label for="pointsDraw" class="text-sm font-bold text-text-main dark:text-gray-200"
+        >Empate</label
+      >
+      <div class="relative">
+        <input
+          class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+          type="number"
+          id="pointsDraw"
+          formControlName="pointsDraw"
+        />
+        <span
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
+          >pts</span
+        >
+      </div>
+    </div>
+    <!-- Loss -->
+    <div class="flex flex-col gap-2">
+      <label for="pointsLoss" class="text-sm font-bold text-text-main dark:text-gray-200"
+        >Derrota</label
+      >
+      <div class="relative">
+        <input
+          class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+          type="number"
+          id="pointsLoss"
+          formControlName="pointsLoss"
+        />
+        <span
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
+          >pts</span
+        >
+      </div>
+    </div>
+  </div>
+</section>

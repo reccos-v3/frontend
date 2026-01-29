@@ -36,12 +36,12 @@ export class PeriodRangeDates implements OnInit {
 
   constructor() {
     this.championshipPeriodForm = this.fb.group({
-      startDate: [this.minDate, [Validators.required]],
-      endDate: [this.minDate, [Validators.required]],
+      startDate: [null, [Validators.required]],
+      endDate: [null, [Validators.required]],
     });
     this.registrationPeriodForm = this.fb.group({
-      startAt: [this.minDate, [Validators.required]],
-      endAt: [this.minDate, [Validators.required]],
+      startAt: [null, [Validators.required]],
+      endAt: [null, [Validators.required]],
     });
   }
 

@@ -20,10 +20,23 @@ import { SeasonService } from '../../../../services/season.service';
 import { IModalityResponse } from '../../../../interfaces/modality.interface';
 import { ISeasonResponse } from '../../../../interfaces/season.interface';
 
+import { TiebreakCriteriaModalComponent } from '../../../../components/tiebreak-criteria-modal/tiebreak-criteria-modal.component';
+import { SetupAdvancedRules } from '../setup-advanced-rules/setup-advanced-rules';
+import { SetupPointsComponent } from '../setup-points/setup-points';
+import { SetupTiebreaksComponent } from '../setup-tiebreaks/setup-tiebreaks';
+import { IPostActivationRules } from '../../../../interfaces/setup-types.interface';
+
 @Component({
   selector: 'app-setup-rules',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TiebreakCriteriaModalComponent,
+    SetupAdvancedRules,
+    SetupPointsComponent,
+    SetupTiebreaksComponent,
+  ],
   templateUrl: './setup-rules.html',
   styleUrl: './setup-rules.css',
 })
@@ -56,13 +69,7 @@ export class SetupRules implements OnInit {
   tiebreaks = signal<ITiebreakResponse[]>([]);
   showModal = signal(false);
   tempSelectedIds = signal<number[]>([]);
-
-  // Activation Policy
-  activationMode = signal<'MANUAL' | 'AUTOMATIC'>('MANUAL');
-  autoActivateAt = signal<string | null>(null);
-
-  dragIndex: number | null = null;
-  dragOverIndex: number | null = null;
+  postActivationRules = signal<IPostActivationRules | null>(null);
 
   isValid = computed(() => {
     return this.rulesForm.valid && this.tiebreaks().length > 0;
@@ -79,19 +86,6 @@ export class SetupRules implements OnInit {
     // Escuta mudanças em isValid para emitir o evento
     effect(() => {
       this.valid.emit(this.isValid());
-    });
-
-    // Reactive emission of activation policy for a "fluid" experience
-    effect(() => {
-      const mode = this.activationMode();
-      const autoActivateAt = this.autoActivateAt();
-
-      this.dataUpdate.emit({
-        activationPolicy: {
-          mode,
-          autoActivateAt,
-        },
-      });
     });
 
     // Restaurar critérios de desempate quando o catálogo estiver carregado
@@ -145,11 +139,6 @@ export class SetupRules implements OnInit {
           hasHomeAway: initial.rules.hasHomeAway,
         });
       }
-
-      if (initial?.activationPolicy) {
-        this.activationMode.set(initial.activationPolicy.mode);
-        this.autoActivateAt.set(initial.activationPolicy.autoActivateAt);
-      }
     }
   }
 
@@ -188,23 +177,9 @@ export class SetupRules implements OnInit {
     this.showModal.set(false);
   }
 
-  toggleTiebreak(tiebreak: ITiebreakResponse) {
-    if (tiebreak.code === 'POINTS') return;
-    const current = this.tempSelectedIds();
-    if (current.includes(tiebreak.id)) {
-      this.tempSelectedIds.set(current.filter((id) => id !== tiebreak.id));
-    } else {
-      this.tempSelectedIds.set([...current, tiebreak.id]);
-    }
-  }
-
-  isSelected(id: number): boolean {
-    return this.tempSelectedIds().includes(id);
-  }
-
-  confirmSelection() {
+  onTiebreaksConfirmed(selectedIds: number[]) {
     const selected = this.availableTiebreaks().filter(
-      (t) => this.tempSelectedIds().includes(t.id) || t.code === 'POINTS',
+      (t) => selectedIds.includes(t.id) || t.code === 'POINTS',
     );
     const pointsIndex = selected.findIndex((t) => t.code === 'POINTS');
     if (pointsIndex > 0) {
@@ -225,32 +200,14 @@ export class SetupRules implements OnInit {
     });
   }
 
-  onDragStart(index: number) {
-    this.dragIndex = index;
-  }
-
-  onDragOver(event: DragEvent, index: number) {
-    event.preventDefault();
-    this.dragOverIndex = index;
-  }
-
-  onDragLeave() {
-    this.dragOverIndex = null;
-  }
-
-  onDrop(inputIndex: number) {
-    if (inputIndex === 0) return;
-    if (this.dragIndex !== null && this.dragIndex !== inputIndex && this.dragIndex !== 0) {
-      this.tiebreaks.update((list) => {
-        const newList = [...list];
-        const item = newList[this.dragIndex!];
-        newList.splice(this.dragIndex!, 1);
-        newList.splice(inputIndex, 0, item);
-        return newList;
-      });
-    }
-    this.dragIndex = null;
-    this.dragOverIndex = null;
+  onTiebreaksReordered(event: { from: number; to: number }) {
+    this.tiebreaks.update((list) => {
+      const newList = [...list];
+      const item = newList[event.from];
+      newList.splice(event.from, 1);
+      newList.splice(event.to, 0, item);
+      return newList;
+    });
   }
 
   saveAndContinue() {
@@ -276,24 +233,13 @@ export class SetupRules implements OnInit {
             priorityOrder: index + 1,
           })),
         },
-        activationPolicy: {
-          mode: this.activationMode(),
-          autoActivateAt: this.autoActivateAt(),
+        postActivationRules: this.postActivationRules() || {
+          allowTeamChanges: false,
+          allowScheduleChanges: false,
+          allowRuleChanges: false,
         },
       });
       this.advanced.emit('periods');
     }
-  }
-
-  setActivationMode(mode: 'MANUAL' | 'AUTOMATIC') {
-    this.activationMode.set(mode);
-    if (mode === 'MANUAL') {
-      this.autoActivateAt.set(null);
-    }
-  }
-
-  onAutoActivateChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.autoActivateAt.set(value || null);
   }
 }
