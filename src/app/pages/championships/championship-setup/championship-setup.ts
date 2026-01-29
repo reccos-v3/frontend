@@ -31,7 +31,7 @@ import { SetupPeriods } from './setup-periods/setup-periods';
 })
 export class ChampionshipSetup implements OnInit {
   private platformId = inject(PLATFORM_ID);
-  activeComponent = signal<SetupStep>('periods');
+  activeComponent = signal<SetupStep>('rules');
   sidebarPhases = signal<IPhase[]>([]);
   setupData = signal<IChampionshipSetupRequest>({
     activate: false,

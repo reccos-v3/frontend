@@ -37,11 +37,14 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Victory -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-bold text-text-main dark:text-gray-200">Vitória</label>
+        <label for="pointsWin" class="text-sm font-bold text-text-main dark:text-gray-200"
+          >Vitória</label
+        >
         <div class="relative">
           <input
             class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
             type="number"
+            id="pointsWin"
             formControlName="pointsWin"
           />
           <span
@@ -52,11 +55,14 @@
       </div>
       <!-- Draw -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-bold text-text-main dark:text-gray-200">Empate</label>
+        <label for="pointsDraw" class="text-sm font-bold text-text-main dark:text-gray-200"
+          >Empate</label
+        >
         <div class="relative">
           <input
             class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
             type="number"
+            id="pointsDraw"
             formControlName="pointsDraw"
           />
           <span
@@ -67,11 +73,14 @@
       </div>
       <!-- Loss -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-bold text-text-main dark:text-gray-200">Derrota</label>
+        <label for="pointsLoss" class="text-sm font-bold text-text-main dark:text-gray-200"
+          >Derrota</label
+        >
         <div class="relative">
           <input
             class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
             type="number"
+            id="pointsLoss"
             formControlName="pointsLoss"
           />
           <span
@@ -156,7 +165,7 @@
           }
         </div>
       } @empty {
-        <div
+        <button
           (click)="openModal()"
           class="group flex flex-col items-center justify-center gap-4 p-10 rounded-[2rem] border-2 border-dashed border-border-light dark:border-border-dark hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all duration-300"
         >
@@ -174,9 +183,135 @@
               Os pontos são obrigatórios, mas você pode adicionar outros critérios para desempate.
             </p>
           </div>
-        </div>
+        </button>
       }
     </div>
+  </section>
+
+  <!-- Form Section: Activation Policy -->
+  <section
+    class="flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark"
+  >
+    <div class="flex items-center gap-3 pb-4 border-b border-border-light dark:border-border-dark">
+      <div class="p-2 rounded-lg bg-primary/10 text-primary">
+        <span class="material-symbols-outlined">rocket_launch</span>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">
+          Início do Campeonato
+        </h3>
+        <p class="text-sm text-text-secondary dark:text-gray-400">
+          Decida como e quando o campeonato será oficialmente iniciado.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Manual Activation -->
+      <button
+        type="button"
+        (click)="setActivationMode('MANUAL')"
+        class="flex flex-col gap-4 p-6 rounded-2xl border-2 text-left transition-all duration-300"
+        [class.border-primary]="activationMode() === 'MANUAL'"
+        [class.bg-primary/5]="activationMode() === 'MANUAL'"
+        [class.border-border-light]="activationMode() !== 'MANUAL'"
+        [class.dark:border-border-dark]="activationMode() !== 'MANUAL'"
+        [class.hover:border-primary/50]="activationMode() !== 'MANUAL'"
+      >
+        <div class="flex items-center justify-between w-full">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+            [class.bg-primary]="activationMode() === 'MANUAL'"
+            [class.text-white]="activationMode() === 'MANUAL'"
+            [class.bg-gray-100]="activationMode() !== 'MANUAL'"
+            [class.dark:bg-gray-800]="activationMode() !== 'MANUAL'"
+            [class.text-gray-400]="activationMode() !== 'MANUAL'"
+          >
+            <span class="material-symbols-outlined">touch_app</span>
+          </div>
+          @if (activationMode() === 'MANUAL') {
+            <span class="text-[10px] font-bold uppercase tracking-widest text-primary"
+              >Início Manual</span
+            >
+          }
+        </div>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-bold text-text-main dark:text-white">Manual</h4>
+          <p class="text-sm text-text-secondary dark:text-gray-400">
+            O campeonato só começa quando você clicar em “Ativar” na revisão final.
+          </p>
+        </div>
+      </button>
+
+      <!-- Automatic Activation -->
+      <button
+        type="button"
+        (click)="setActivationMode('AUTOMATIC')"
+        class="flex flex-col gap-4 p-6 rounded-2xl border-2 text-left transition-all duration-300"
+        [class.border-primary]="activationMode() === 'AUTOMATIC'"
+        [class.bg-primary/5]="activationMode() === 'AUTOMATIC'"
+        [class.border-border-light]="activationMode() !== 'AUTOMATIC'"
+        [class.dark:border-border-dark]="activationMode() !== 'AUTOMATIC'"
+        [class.hover:border-primary/50]="activationMode() !== 'AUTOMATIC'"
+      >
+        <div class="flex items-center justify-between w-full">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+            [class.bg-primary]="activationMode() === 'AUTOMATIC'"
+            [class.text-white]="activationMode() === 'AUTOMATIC'"
+            [class.bg-gray-100]="activationMode() !== 'AUTOMATIC'"
+            [class.dark:bg-gray-800]="activationMode() !== 'AUTOMATIC'"
+            [class.text-gray-400]="activationMode() !== 'AUTOMATIC'"
+          >
+            <span class="material-symbols-outlined">schedule_send</span>
+          </div>
+          @if (activationMode() === 'AUTOMATIC') {
+            <span class="text-[10px] font-bold uppercase tracking-widest text-primary"
+              >Agendado</span
+            >
+          }
+        </div>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-bold text-text-main dark:text-white">Automático</h4>
+          <p class="text-sm text-text-secondary dark:text-gray-400">
+            O sistema iniciará o campeonato automaticamente na data configurada.
+          </p>
+        </div>
+      </button>
+    </div>
+
+    @if (activationMode() === 'AUTOMATIC') {
+      <div
+        class="p-6 rounded-2xl bg-gray-50 dark:bg-white/5 border border-border-light dark:border-border-dark animate-in slide-in-from-top-2 duration-300"
+      >
+        <div class="flex flex-col gap-4 max-w-sm">
+          <label
+            for="autoActivateAt"
+            class="text-xs font-bold uppercase tracking-wider text-text-secondary dark:text-gray-400"
+          >
+            Data e Hora de Ativação
+          </label>
+          <div class="relative">
+            <input
+              type="datetime-local"
+              id="autoActivateAt"
+              [value]="autoActivateAt()"
+              (input)="onAutoActivateChange($event)"
+              class="w-full h-12 px-4 rounded-xl bg-white dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+            />
+            <span
+              class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 pointer-events-none"
+            >
+              calendar_today
+            </span>
+          </div>
+          <p class="text-xs text-orange-600 dark:text-orange-400 flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">warning</span>
+            O botão "Ativar agora" será desabilitado na etapa final.
+          </p>
+        </div>
+      </div>
+    }
   </section>
 
   <!-- Selection Modal -->
@@ -209,7 +344,7 @@
         <div class="p-8 overflow-y-auto custom-scrollbar">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @for (item of availableTiebreaks(); track item.id) {
-              <div
+              <button
                 (click)="item.code !== 'POINTS' ? toggleTiebreak(item) : null"
                 class="relative group p-4 rounded-2xl border-2 transition-all cursor-pointer select-none"
                 [class.border-primary]="isSelected(item.id)"
@@ -240,7 +375,7 @@
                     {{ item.description }}
                   </p>
                 </div>
-              </div>
+              </button>
             }
           </div>
         </div>
