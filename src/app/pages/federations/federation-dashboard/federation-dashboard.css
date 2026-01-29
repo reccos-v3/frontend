@@ -9,7 +9,11 @@
 
 /* Icon filled state */
 .icon-filled {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
 }
 
 /* Dark mode support */
@@ -19,4 +23,3 @@
     border-color: var(--color-gray-700) !important;
   }
 }
-

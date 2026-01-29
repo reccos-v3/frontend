@@ -1,10 +1,97 @@
 {
+  // =========================
+  // Line endings (CRLF ❌ / LF ✅)
+  // =========================
+  "files.eol": "\n",
+
+  // =========================
+  // Formatting
+  // =========================
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.requireConfig": true,
+
+  // =========================
+  // ESLint integration
+  // =========================
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "[javascript]": {
-    "editor.formatOnSave": true
-  }
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "html", "css", "scss"],
+
+  // =========================
+  // Disable built-in formatters
+  // =========================
+  "typescript.format.enable": false,
+  "javascript.format.enable": false,
+
+  // =========================
+  // Language-specific formatters
+  // =========================
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // =========================
+  // Editor behavior
+  // =========================
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.largeFileOptimizations": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+
+  // =========================
+  // Files & associations
+  // =========================
+  "files.associations": {
+    ".env.*": "dotenv",
+    ".prettierrc": "json"
+  },
+
+  // =========================
+  // Git
+  // =========================
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+
+  // =========================
+  // Explorer UX
+  // =========================
+  "explorer.confirmDelete": false,
+  "explorer.compactFolders": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
+
+  // =========================
+  // TypeScript
+  // =========================
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // =========================
+  // Misc
+  // =========================
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+  "semgrep.useJS": false
 }
