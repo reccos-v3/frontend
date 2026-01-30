@@ -22,7 +22,70 @@ export class SetupSidebarFormat {
   totalTeams = input(16);
   groupsCount = input(4);
   qualifiedPerGroup = input(2);
+  isDoubleRound = input(true);
+  tiebreakers = input<string[]>(['Saldo de Gols']);
   phasesChange = output<IPhase[]>();
+
+  totalRounds = computed(() => {
+    const format = this.selectedFormat();
+    const teams = this.totalTeams();
+    const multiplier = this.isDoubleRound() ? 2 : 1;
+
+    if (format === 'points') {
+      return (teams - 1) * multiplier;
+    }
+
+    if (format === 'knockout') {
+      // Approximate for single elim knockout
+      return Math.ceil(Math.log2(teams)) * multiplier;
+    }
+
+    if (format === 'groups_and_knockout') {
+      const groupRounds = (Math.ceil(teams / this.groupsCount()) - 1) * 1; // Groups usually single round in this setup
+      const knockoutTeams = this.groupsCount() * this.qualifiedPerGroup();
+      const knockoutRounds = Math.ceil(Math.log2(knockoutTeams)) * multiplier;
+      return groupRounds + knockoutRounds;
+    }
+
+    return 0;
+  });
+
+  matchesPerTeam = computed(() => {
+    const format = this.selectedFormat();
+    const multiplier = this.isDoubleRound() ? 2 : 1;
+
+    if (format === 'points') {
+      return (this.totalTeams() - 1) * multiplier;
+    }
+
+    // For other formats it varies, but usually it's the same as rounds in points
+    return this.totalRounds();
+  });
+
+  totalGames = computed(() => {
+    const format = this.selectedFormat();
+    const teams = this.totalTeams();
+    const multiplier = this.isDoubleRound() ? 2 : 1;
+
+    if (format === 'points') {
+      return ((teams * (teams - 1)) / 2) * multiplier;
+    }
+
+    if (format === 'knockout') {
+      return (teams - 1) * multiplier;
+    }
+
+    if (format === 'groups_and_knockout') {
+      const teamsPerGroup = Math.ceil(teams / this.groupsCount());
+      const groupsCount = this.groupsCount();
+      const groupGames = ((teamsPerGroup * (teamsPerGroup - 1)) / 2) * groupsCount;
+      const knockoutTeams = groupsCount * this.qualifiedPerGroup();
+      const knockoutGames = (knockoutTeams - 1) * multiplier;
+      return groupGames + knockoutGames;
+    }
+
+    return 0;
+  });
 
   phases = computed(() => {
     const format = this.selectedFormat();

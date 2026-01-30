@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { SetupTeamCounter } from '../setup-team-counter/setup-team-counter';
 
 @Component({
@@ -10,9 +10,9 @@ import { SetupTeamCounter } from '../setup-team-counter/setup-team-counter';
 })
 export class SetupRoundRobin {
   totalTeams = input.required<number>();
+  isDoubleRound = input<boolean>(true);
   updateTotalTeams = output<number>();
-
-  isDoubleRound = signal<boolean>(true);
+  updateDoubleRound = output<boolean>();
 
   private multiplier = computed(() => (this.isDoubleRound() ? 2 : 1));
 
@@ -24,6 +24,6 @@ export class SetupRoundRobin {
   }
 
   toggleDoubleRound() {
-    this.isDoubleRound.update((state) => !state);
+    this.updateDoubleRound.emit(!this.isDoubleRound());
   }
 }

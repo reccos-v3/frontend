@@ -18,7 +18,6 @@ export interface ISetupRules {
 
 export interface ISetupFormat {
   formatType: string;
-  knockoutConfig?: IKnockoutConfig;
 }
 
 export interface IKnockoutConfig {
@@ -59,9 +58,7 @@ export interface ISetupTiebreaks {
   criteria: ISetupTiebreakCriteria[];
 }
 
-export interface ISetupTeams {
-  teamIds: string[];
-}
+export type ISetupTeams = string[];
 
 export interface ISetupChampionshipPeriod {
   startDate: string;
@@ -102,6 +99,7 @@ export interface IChampionshipSetupRequest {
   basics?: ISetupBasics;
   rules?: ISetupRules;
   format?: ISetupFormat;
+  knockoutConfig?: IKnockoutConfig;
   structure?: ISetupStructure;
   tiebreaks?: ISetupTiebreaks;
   teams?: ISetupTeams;

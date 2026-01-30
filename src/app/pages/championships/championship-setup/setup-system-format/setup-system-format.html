@@ -15,7 +15,9 @@
   @case ('points') {
     <app-setup-round-robin
       [totalTeams]="totalTeams()"
+      [isDoubleRound]="isDoubleRound()"
       (updateTotalTeams)="changeTotalTeams($event)"
+      (updateDoubleRound)="updateDoubleRound.emit($event)"
     />
   }
 }

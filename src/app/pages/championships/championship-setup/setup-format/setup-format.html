@@ -26,10 +26,12 @@
               [groupsCount]="groupsCount()"
               [qualifiedPerGroup]="qualifiedPerGroup()"
               [totalTeams]="totalTeams()"
+              [isDoubleRound]="isDoubleRound()"
               (updateFormat)="selectedFormat.set($event)"
               (updateGroupsCount)="updateGroupsCount($event)"
               (updateQualified)="updateQualified($event)"
               (updateTotalTeams)="updateTotalTeams($event)"
+              (updateDoubleRound)="isDoubleRound.set($event)"
             />
 
             <app-format-calendar-preferences
@@ -53,6 +55,7 @@
         [totalTeams]="debouncedTotalTeams()!"
         [groupsCount]="debouncedGroupsCount()!"
         [qualifiedPerGroup]="debouncedQualified()!"
+        [isDoubleRound]="isDoubleRound()"
         (phasesChange)="handlePhasesChange($event)"
       />
     </div>

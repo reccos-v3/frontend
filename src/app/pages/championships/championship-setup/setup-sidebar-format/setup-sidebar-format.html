@@ -85,20 +85,23 @@
       <ul class="space-y-3 text-sm">
         <li class="flex items-center gap-3 text-text-main dark:text-white">
           <span class="material-symbols-outlined text-primary text-lg">format_list_numbered</span>
-          <span class="font-semibold">Rodadas:</span> 19
+          <span class="font-semibold">Rodadas:</span> {{ totalRounds() }}
         </li>
         <li class="flex items-center gap-3 text-text-main dark:text-white">
           <span class="material-symbols-outlined text-primary text-lg">sports_soccer</span>
-          <span class="font-semibold">Partidas por Time:</span> 38
+          <span class="font-semibold">Partidas por Time:</span> {{ matchesPerTeam() }}
         </li>
         <li class="flex items-center gap-3 text-text-main dark:text-white">
           <span class="material-symbols-outlined text-primary text-lg">compare_arrows</span>
-          <span class="font-semibold">Formato:</span> Turno e Returno
+          <span class="font-semibold">Formato:</span>
+          {{ isDoubleRound() ? 'Turno e Returno' : 'Apenas Turno' }}
         </li>
         <li class="flex items-center gap-3 text-text-main dark:text-white">
           <span class="material-symbols-outlined text-primary text-lg">info</span>
           <span class="font-semibold">Critério de Desempate:</span>
-          Saldo de Gols
+          @for (criteria of tiebreakers(); track criteria; let last = $last) {
+            {{ criteria }}{{ !last ? ', ' : '' }}
+          }
         </li>
       </ul>
     </div>
@@ -108,7 +111,8 @@
     class="bg-gray-50 dark:bg-gray-800/50 p-4 border-t border-gray-100 dark:border-gray-700 text-center"
   >
     <p class="text-xs text-secondary">
-      Total de jogos estimados: <span class="font-bold text-main dark:text-white">31 jogos</span>
+      Total de jogos estimados:
+      <span class="font-bold text-main dark:text-white">{{ totalGames() }} jogos</span>
     </p>
   </div>
 </div>

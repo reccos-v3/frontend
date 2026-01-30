@@ -13,6 +13,9 @@ import {
 } from '../../../interfaces/setup-types.interface';
 import { IPhase } from './setup-sidebar-format/setup-sidebar-format';
 import { SetupPeriods } from './setup-periods/setup-periods';
+import { ChampionshipService } from '../../../services/championship.service';
+import { IChampionshipResponse } from '../../../interfaces/championship.interface';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-championship-setup',
@@ -31,8 +34,11 @@ import { SetupPeriods } from './setup-periods/setup-periods';
 })
 export class ChampionshipSetup implements OnInit {
   private platformId = inject(PLATFORM_ID);
-  activeComponent = signal<SetupStep>('rules');
+  private toastService = inject(ToastService);
+  private championshipService = inject(ChampionshipService);
+
   sidebarPhases = signal<IPhase[]>([]);
+  activeComponent = signal<SetupStep>('rules');
   setupData = signal<IChampionshipSetupRequest>({
     activate: false,
   });
@@ -121,9 +127,7 @@ export class ChampionshipSetup implements OnInit {
             ...data.tiebreaks,
           } as IChampionshipSetupRequest['tiebreaks'])
         : prev.tiebreaks,
-      teams: data.teams
-        ? ({ ...(prev.teams || {}), ...data.teams } as IChampionshipSetupRequest['teams'])
-        : prev.teams,
+      teams: data.teams !== undefined ? data.teams : prev.teams,
       activationPolicy: data.activationPolicy
         ? ({
             ...(prev.activationPolicy || {}),
@@ -146,7 +150,17 @@ export class ChampionshipSetup implements OnInit {
   }
 
   finalReview() {
-    console.log('this.setupData()', this.setupData());
+    this.championshipService.createChampionshipBySetup(this.setupData()).subscribe({
+      next: (res: IChampionshipResponse) => {
+        console.log('create CHAMPIONSHIP SETUP', res);
+        // this.toastService.success('Campeonato criado com sucesso!');
+        // this.router.navigate(['/championships']);
+      },
+      error: (err) => {
+        this.toastService.error('Erro ao criar campeonato. Verifique os dados.');
+        console.error(err);
+      },
+    });
   }
 
   handlePhases(phases: IPhase[]) {

@@ -17,10 +17,12 @@ export class SetupSystemFormat {
   groupsCount = input.required<number>();
   qualifiedPerGroup = input.required<number>();
   totalTeams = input.required<number>();
+  isDoubleRound = input<boolean>(true);
 
   updateGroupsCount = output<number>();
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
+  updateDoubleRound = output<boolean>();
 
   phaseName = computed(() => {
     const teams = this.totalTeams();
@@ -44,8 +46,8 @@ export class SetupSystemFormat {
     this.updateTotalTeams.emit(val);
   }
 
-  onTotalTeamsInput(event: any) {
-    const val = parseInt(event.target.value, 10);
+  onTotalTeamsInput(event: Event) {
+    const val = parseInt((event.target as HTMLInputElement).value, 10);
     if (!isNaN(val)) {
       this.updateTotalTeams.emit(val - this.totalTeams());
     }

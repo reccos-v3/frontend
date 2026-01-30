@@ -39,6 +39,7 @@ export class PeriodRangeDates implements OnInit {
       startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
     });
+
     this.registrationPeriodForm = this.fb.group({
       startAt: [null, [Validators.required]],
       endAt: [null, [Validators.required]],
@@ -57,14 +58,31 @@ export class PeriodRangeDates implements OnInit {
       this.registrationPeriodForm.statusChanges.pipe(startWith(this.registrationPeriodForm.status)),
     ]).subscribe(() => {
       const isValid = this.championshipPeriodForm.valid && this.registrationPeriodForm.valid;
+
       this.validForm.emit(isValid);
 
       if (isValid) {
         this.periodValues.emit({
-          championshipPeriod: this.championshipPeriodForm.value,
-          registrationPeriod: this.registrationPeriodForm.value,
+          championshipPeriod: {
+            startDate: this.toStartOfDay(this.championshipPeriodForm.value.startDate),
+            endDate: this.toEndOfDay(this.championshipPeriodForm.value.endDate),
+          },
+          registrationPeriod: {
+            startAt: this.toStartOfDay(this.registrationPeriodForm.value.startAt),
+            endAt: this.toEndOfDay(this.registrationPeriodForm.value.endAt),
+          },
         });
       }
     });
+  }
+
+  /** yyyy-MM-dd -> yyyy-MM-ddT00:00:00 */
+  private toStartOfDay(date: string): string {
+    return `${date}T00:00:00`;
+  }
+
+  /** yyyy-MM-dd -> yyyy-MM-ddT23:59:59 */
+  private toEndOfDay(date: string): string {
+    return `${date}T23:59:59`;
   }
 }

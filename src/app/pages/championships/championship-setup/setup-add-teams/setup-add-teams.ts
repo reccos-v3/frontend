@@ -16,36 +16,42 @@ export class SetupAddTeams {
 
   teams = signal([
     {
+      id: 'team-1',
       name: 'Dragões Vermelhos FC',
       added: 'Adicionado hoje',
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuCXVnsZVhXoXUDrAPKyWN40RFuin_o4cUEVz60toNcLIXoLhPeYNBM7sXjxDqHAgIEhIYJgx665ZxymgIfXzDrsQSGzMpbNZ9pe5HurOf5Pf6CkeWBI6725TeFVY9czcoTv27u5k253aF8U4oOxTOJ_vKOMYTI3zTgLCLTn98b4cmL1qToDnAiVYdbbmLT6pxrBR1sppMEFmNQwZchJZYRHfU4_C2dCKJWx9vO1Mh2NxHdgdRjg2CRt7n3qO-6JsFEcrrnlQd0asik',
     },
     {
+      id: 'team-2',
       name: 'Águias Azuis',
       added: 'Adicionado hoje',
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuB2WA6ycoX7EdAW5RCDrvNVtmmf2XpJvYzf-9vYXBSUmI2ZRJ8kDZG_PnycErzaLps9w3p1mDdi7q8_Hf_Flgk88U3Bj5fR34AUa3zEyRVxb_Rfa01oVvfzGsmB9WoFn_LTynp802xHzZ-fOxMhGH7nGN7i0wwCzTbC2NB9wzjuZt5jqpx7iKWdIvkWv4T1a6UyttFk_Pzk1Su3V_a4L6-eQrJImJLKkKY9MRyNXLiYtpNmxQpcJnrrZOKiNOLicC-wEZ3OL_DVZo0',
     },
     {
+      id: 'team-3',
       name: 'Verdão da Massa',
       added: 'Adicionado hoje',
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuAIsOWcDqCvQ2xdU9Liu2Vc6AhJqEpUTGhX265xQugsi2ANNgjmJaWzxTq-T030-9UVjq_h2iqsx30Xgj83G2VdiG_wZ-fMgf--n-4MofIh8RacfuDDSvWML5rlqlBhLiqSW6UCQzi8jCGQoKWe4tXxCCAjycdJ0RZADDzklYtpd8LMWI2PCUrd3JM6IWddy5P6NTMkjWcYTb1PSJ8AvhZxX5TGGPVC2I830na-Ag8NCDsaO3sUdqJB6Yof6wSeeB3MLz1eR9RcKYg',
     },
     {
+      id: 'team-4',
       name: 'Canarinhos',
       added: 'Adicionado ontem',
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuD7nQO8s2nJpPP7KHIiI7hSa8gKVkJZf5AYbqj2866Qj--bXyXfddFLJj4W0uSAaHL4tegLQLz2jhEMQxS4rgmS7-qnc-jDzEZrDZua0ASl3Qbtzd5x2P4sNvsaeusZEOlTFNvs7GrExzhI0h6_GthCGOgqv9B_xT1jQcCogcvQjsG4ibgyTuTiV0q9e6oMtG3I6C5Zj7qxi4kcJlICAGlkPnURbt24TwZr4YUSaYUhAGoIbyH_oyW8LfwrF_E-k-CDqqDOdGBPc8I',
     },
     {
+      id: 'team-5',
       name: 'Fúria Rubra',
       added: 'Adicionado ontem',
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuC1vws2rCc94Qpnde4l2nxjQMrTJsu7LYto56qEbvex6MzYi2qoF__ubOoGGv64ZkqgNUfDzWfx4Lsgz4-q1K_3gSq8a0Bp9VBnv3hTIU4cC74ov-QDXcBx1SLEq05sFbUTaqjhfNHdh4vvw5WSmTOoxWFusAq6KcT46rZRrsj0LhuY_c2Dqnd1UusEDkkGMT4gKLepSIe7eXSkTckayy1_spZgydbqJcmwEwOverD6ufiwgMyZGzHsrtjxNOzuOhQ45zPSKt_Ylwg',
     },
     {
+      id: 'team-6',
       name: 'Roxos FC',
       added: 'Adicionado ontem',
       image:
@@ -68,29 +74,11 @@ export class SetupAddTeams {
 
   saveAndContinue() {
     if (this.isValid()) {
-      // In a real app, these would be IDs of actual selected teams
-      const dummyIds = [
-        'uuid-time-1',
-        'uuid-time-2',
-        'uuid-time-3',
-        'uuid-time-4',
-        'uuid-time-5',
-        'uuid-time-6',
-        'uuid-time-7',
-        'uuid-time-8',
-        'uuid-time-9',
-        'uuid-time-10',
-        'uuid-time-11',
-        'uuid-time-12',
-        'uuid-time-13',
-        'uuid-time-14',
-        'uuid-time-15',
-        'uuid-time-16',
-      ];
+      // Collect all team IDs from the current teams list
+      // const teamIds: string[] = this.teams().map((team) => team.id);
+
       this.dataUpdate.emit({
-        teams: {
-          teamIds: dummyIds,
-        },
+        teams: [],
       });
       this.advanced.emit('final_review');
     }

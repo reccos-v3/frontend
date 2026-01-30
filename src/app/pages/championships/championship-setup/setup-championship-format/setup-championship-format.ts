@@ -20,11 +20,13 @@ export class SetupChampionshipFormat {
   totalTeams = input.required<number>();
   groupsCount = input.required<number>();
   qualifiedPerGroup = input.required<number>();
+  isDoubleRound = input<boolean>(true);
 
   updateFormat = output<'groups_and_knockout' | 'knockout' | 'points'>();
   updateGroupsCount = output<number>();
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
+  updateDoubleRound = output<boolean>();
 
   isExpanded = true;
 

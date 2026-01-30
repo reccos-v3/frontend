@@ -61,9 +61,11 @@
         [groupsCount]="groupsCount()"
         [qualifiedPerGroup]="qualifiedPerGroup()"
         [totalTeams]="totalTeams()"
+        [isDoubleRound]="isDoubleRound()"
         (updateGroupsCount)="changeGroupsCount($event)"
         (updateQualified)="changeQualified($event)"
         (updateTotalTeams)="changeTotalTeams($event)"
+        (updateDoubleRound)="updateDoubleRound.emit($event)"
       />
     </div>
   }

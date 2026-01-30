@@ -7,6 +7,7 @@ import { IChampionshipRequest, IChampionshipResponse } from '../interfaces/champ
 import { IPage } from '../interfaces/page.interface';
 import { TokenService } from './token.service';
 import { of } from 'rxjs';
+import { IChampionshipSetupRequest } from '../interfaces/setup-types.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,42 @@ export class ChampionshipService {
       .pipe(
         catchError((error) => {
           console.error('Erro ao criar campeonato:', error);
+          return throwError(() => error);
+        }),
+      );
+  }
+
+  createChampionshipBySetup(request: IChampionshipSetupRequest): Observable<IChampionshipResponse> {
+    const federationId = this.tokenService.getFederationId();
+    if (!federationId) {
+      return throwError(() => new Error('Federation ID not found'));
+    }
+
+    return this.http
+      .post<IChampionshipResponse>(
+        `${environment.apiUrl}/federations/${federationId}/championships/setup`,
+        request,
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao criar campeonato:', error);
+          return throwError(() => error);
+        }),
+      );
+  }
+
+  updateChampionshipWithSetup(
+    id: string,
+    championshipRequest: IChampionshipSetupRequest,
+  ): Observable<IChampionshipResponse> {
+    return this.http
+      .put<IChampionshipResponse>(
+        `${environment.apiUrl}championships/${id}/setup`,
+        championshipRequest,
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao atualizar campeonato:', error);
           return throwError(() => error);
         }),
       );

@@ -28,6 +28,11 @@
     class="flex flex-col p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark divide-y divide-border-light dark:divide-border-dark"
   >
     <app-setup-points [form]="rulesForm" [embedded]="true" />
+  </div>
+
+  <div
+    class="flex flex-col p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark divide-y divide-border-light dark:divide-border-dark"
+  >
     <app-setup-advanced-rules
       [embedded]="true"
       (advancedRulesChange)="postActivationRules.set($event)"

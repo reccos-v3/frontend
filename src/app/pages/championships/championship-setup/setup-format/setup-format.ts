@@ -51,6 +51,8 @@ export class SetupFormat implements OnInit {
     avoidHolidays: false,
   });
 
+  isDoubleRound = signal(true);
+
   // Internal state for wizard step
   internalStep = signal<'selection' | 'configuration'>('selection');
 
@@ -95,6 +97,9 @@ export class SetupFormat implements OnInit {
       this.groupsCount.set(initial.structure.groupsCount);
       this.qualifiedPerGroup.set(initial.structure.qualifiedPerGroup);
       this.firstPhaseType.set(initial.structure.firstPhaseType);
+    }
+    if (initial?.rules) {
+      this.isDoubleRound.set(initial.rules.hasHomeAway);
     }
   }
 
@@ -143,6 +148,20 @@ export class SetupFormat implements OnInit {
       if (this.internalStep() === 'selection') {
         if (currentFormat === 'points') {
           // Round robin goes directly to teams
+          // For points format, set knockoutConfig based on turno/returno
+          const legs = this.isDoubleRound() ? 2 : 1;
+          this.knockoutConfig.set({
+            defaultLegs: legs,
+            defaultAdvanceRule: 'REGULAR_OR_PENALTIES',
+            phases: [
+              {
+                phaseOrder: 1,
+                legs: legs,
+                advanceRule: 'REGULAR_OR_PENALTIES',
+              },
+            ],
+          });
+
           this.emitDataUpdate();
           this.advanced.emit('teams');
         } else {
@@ -162,8 +181,8 @@ export class SetupFormat implements OnInit {
     this.dataUpdate.emit({
       format: {
         formatType: this.selectedFormat().toUpperCase(),
-        knockoutConfig: this.knockoutConfig(),
       },
+      knockoutConfig: this.knockoutConfig(),
       structure: {
         totalTeams: this.totalTeams(),
         groupsCount: this.groupsCount(),
