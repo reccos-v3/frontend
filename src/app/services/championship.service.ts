@@ -61,7 +61,7 @@ export class ChampionshipService {
   ): Observable<IChampionshipResponse> {
     return this.http
       .put<IChampionshipResponse>(
-        `${environment.apiUrl}championships/${id}/setup`,
+        `${environment.apiUrl}/championships/${id}/setup`,
         championshipRequest,
       )
       .pipe(
@@ -72,7 +72,12 @@ export class ChampionshipService {
       );
   }
 
-  getChampionshipsByFederation(page = 0, size = 10): Observable<IPage<IChampionshipResponse>> {
+  getChampionshipsByFederation(
+    page: number,
+    size: number,
+    status: string,
+    modalityId: string,
+  ): Observable<IPage<IChampionshipResponse>> {
     const federationId = this.tokenService.getFederationId();
     if (!federationId) {
       return of({
@@ -86,7 +91,7 @@ export class ChampionshipService {
 
     return this.http
       .get<IPage<IChampionshipResponse>>(
-        `${environment.apiUrl}/federations/${federationId}/championships`,
+        `${environment.apiUrl}/federations/${federationId}/championships?status=${status}&modalityId=${modalityId}`,
         {
           params: {
             page: page.toString(),
@@ -111,6 +116,17 @@ export class ChampionshipService {
     );
   }
 
+  getAllSetupByChampionshipId(championshipId: string) {
+    return this.http
+      .get<IChampionshipResponse>(`${environment.apiUrl}/championships/${championshipId}/setup`)
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao buscar campeonato:', error);
+          return throwError(() => error);
+        }),
+      );
+  }
+
   updateChampionship(
     id: string,
     championshipRequest: IChampionshipRequest,
@@ -132,5 +148,16 @@ export class ChampionshipService {
         return throwError(() => error);
       }),
     );
+  }
+
+  updateStatus(id: string, status: string): Observable<IChampionshipResponse> {
+    return this.http
+      .patch<IChampionshipResponse>(`${environment.apiUrl}/championships/${id}/status`, { status })
+      .pipe(
+        catchError((error) => {
+          console.error('Erro ao atualizar status do campeonato:', error);
+          return throwError(() => error);
+        }),
+      );
   }
 }

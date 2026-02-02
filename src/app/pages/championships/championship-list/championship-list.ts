@@ -12,7 +12,6 @@ import {
 } from '../../../interfaces/championship.interface';
 import { IPage } from '../../../interfaces/page.interface';
 import { ToastService } from '../../../services/toast.service';
-import { ISetupBasics } from '../../../interfaces/setup-types.interface';
 export type ViewMode = 'table' | 'sequence' | 'step';
 
 @Component({
@@ -35,6 +34,11 @@ export class ChampionshipList implements OnInit {
     totalDrafts: 0,
     totalTeams: 0,
   });
+
+  filtersFlag = {
+    status: '',
+    modalityId: '',
+  };
 
   statCards = computed(() => [
     {
@@ -88,6 +92,13 @@ export class ChampionshipList implements OnInit {
       render: (row) => this.renderFormat(row),
     },
     {
+      key: 'isActive',
+      label: 'Ativação',
+      type: 'toggle',
+      align: 'center',
+      render: (row) => row.status === 'ACTIVE',
+    },
+    {
       key: 'status',
       label: 'Status',
       render: (row) => this.renderStatus(row),
@@ -96,6 +107,23 @@ export class ChampionshipList implements OnInit {
 
   // Paginação
   pagination = signal<ITablePagination | undefined>(undefined);
+
+  // Modal de Confirmação
+  confirmationModal = signal({
+    isOpen: false,
+    title: '',
+    message: '',
+    row: null as IChampionshipResponse | null,
+    targetStatus: false,
+  });
+
+  page: {
+    page: number;
+    size: number;
+  } = {
+    page: 0,
+    size: 0,
+  };
 
   // Configuração das ações
   actions = signal<ITableAction<IChampionshipResponse>[]>([
@@ -167,10 +195,39 @@ export class ChampionshipList implements OnInit {
     `;
   }
 
+  getFormatName(formatType: string): string {
+    switch (formatType) {
+      case 'KNOCKOUT':
+        return 'Mata-Mata';
+      case 'GROUPS_AND_KNOCKOUT':
+        return 'Grupos + Mata-Mata';
+      case 'POINTS':
+        return 'Pontos corridos';
+      default:
+        return 'Não definido';
+    }
+  }
+
   renderFormat(row: IChampionshipResponse): string {
-    const formatName = row.format?.formatType || 'Não definido';
+    const formatType = row.format?.formatType;
+    const formatName = this.getFormatName(formatType || 'Não definido');
+
+    const colors: Record<string, string> = {
+      KNOCKOUT:
+        'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800',
+      GROUPS_AND_KNOCKOUT:
+        'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800',
+      POINTS:
+        'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
+    };
+
+    const colorClass =
+      formatType && colors[formatType]
+        ? colors[formatType]
+        : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
+
     return `
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${colorClass}">
         ${formatName}
       </span>
     `;
@@ -232,23 +289,30 @@ export class ChampionshipList implements OnInit {
     `;
   }
 
-  getChampionships(page = 0) {
-    this.championshipService.getChampionshipsByFederation(page).subscribe({
-      next: (response) => {
-        this.data.set(response.content);
-        this.pagination.set({
-          currentPage: response.number,
-          pageSize: response.size,
-          totalElements: response.totalElements,
-          totalPages: response.totalPages,
-          onPageChange: (newPage) => this.getChampionships(newPage),
-        });
-        this.calculateStatistics(response);
-      },
-      error: (error) => {
-        console.error('Erro ao buscar campeonatos:', error);
-      },
-    });
+  getChampionships() {
+    this.championshipService
+      .getChampionshipsByFederation(
+        this.page.page,
+        this.page.size,
+        this.filtersFlag.status,
+        this.filtersFlag.modalityId,
+      )
+      .subscribe({
+        next: (response) => {
+          this.data.set(response.content);
+          this.pagination.set({
+            currentPage: response.number,
+            pageSize: response.size,
+            totalElements: response.totalElements,
+            totalPages: response.totalPages,
+            onPageChange: () => this.getChampionships(),
+          });
+          this.calculateStatistics(response);
+        },
+        error: (error) => {
+          console.error('Erro ao buscar campeonatos:', error);
+        },
+      });
   }
 
   calculateStatistics(response: IPage<IChampionshipResponse>) {
@@ -293,7 +357,8 @@ export class ChampionshipList implements OnInit {
       this.championshipService.deleteChampionship(row.id).subscribe({
         next: () => {
           this.toastService.success('Campeonato excluído com sucesso!');
-          this.getChampionships(this.pagination()?.currentPage || 0);
+          this.page.page = this.pagination()?.currentPage || 0;
+          this.getChampionships();
         },
         error: (error) => {
           this.toastService.error('Erro ao excluir campeonato.');
@@ -301,6 +366,52 @@ export class ChampionshipList implements OnInit {
         },
       });
     }
+  }
+
+  handleToggle(event: {
+    row: IChampionshipResponse;
+    column: ITableColumn<IChampionshipResponse>;
+    checked: boolean;
+  }) {
+    // Prevent immediate change visual effect if possible, or just open modal
+    const { row, checked } = event;
+    // User disse: ACTIVE = true, outros = false.
+    // Vamos assumir que desativar vai para INACTIVE.
+
+    this.confirmationModal.set({
+      isOpen: true,
+      title: checked ? 'Ativar Campeonato' : 'Desativar Campeonato',
+      message: `Tem certeza que deseja ${checked ? 'ativar' : 'desativar'} o campeonato "${row.name}"?`,
+      row: row,
+      targetStatus: checked,
+    });
+  }
+
+  confirmStatusChange() {
+    const { row, targetStatus } = this.confirmationModal();
+    if (!row) return;
+
+    const newStatus = targetStatus ? 'ACTIVE' : 'INACTIVE';
+
+    this.championshipService.updateStatus(row.id, newStatus).subscribe({
+      next: () => {
+        this.toastService.success(
+          `Campeonato ${targetStatus ? 'ativado' : 'desativado'} com sucesso!`,
+        );
+        this.page.page = this.pagination()?.currentPage || 0;
+        this.getChampionships();
+        this.closeModal();
+      },
+      error: (error) => {
+        this.toastService.error('Erro ao atualizar status do campeonato.');
+        console.error(error);
+        this.closeModal();
+      },
+    });
+  }
+
+  closeModal() {
+    this.confirmationModal.update((curr) => ({ ...curr, isOpen: false }));
   }
 
   // Métodos para trocar visualização

@@ -1,18 +1,19 @@
 /**
  * Interface para definir uma coluna da tabela
  */
-export interface ITableColumn<T = any> {
+export interface ITableColumn<T> {
   key: string;
   label: string;
   width?: string;
   align?: 'left' | 'right' | 'center';
-  render?: (row: T) => string | any; // Função para renderizar conteúdo customizado
+  render?: (row: T) => string | unknown; // Função para renderizar conteúdo customizado
+  type?: 'default' | 'toggle';
 }
 
 /**
  * Interface para definir uma ação da tabela
  */
-export interface ITableAction<T = any> {
+export interface ITableAction<T> {
   icon: string;
   label: string;
   action: (row: T) => void;
@@ -35,7 +36,7 @@ export interface ITablePagination {
 /**
  * Interface para configuração completa da tabela
  */
-export interface ITableConfig<T = any> {
+export interface ITableConfig<T> {
   columns: ITableColumn<T>[];
   actions?: ITableAction<T>[];
   pagination?: ITablePagination;

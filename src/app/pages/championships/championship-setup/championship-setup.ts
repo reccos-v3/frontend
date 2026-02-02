@@ -16,6 +16,7 @@ import { SetupPeriods } from './setup-periods/setup-periods';
 import { ChampionshipService } from '../../../services/championship.service';
 import { IChampionshipResponse } from '../../../interfaces/championship.interface';
 import { ToastService } from '../../../services/toast.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-championship-setup',
@@ -34,7 +35,9 @@ import { ToastService } from '../../../services/toast.service';
 })
 export class ChampionshipSetup implements OnInit {
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
   private toastService = inject(ToastService);
+  private activateRouter = inject(ActivatedRoute);
   private championshipService = inject(ChampionshipService);
 
   sidebarPhases = signal<IPhase[]>([]);
@@ -59,6 +62,7 @@ export class ChampionshipSetup implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+      this.getSetupChampionship();
       const storedBasics = localStorage.getItem('championshipSetupBasics');
       if (storedBasics) {
         try {
@@ -71,6 +75,50 @@ export class ChampionshipSetup implements OnInit {
         }
       }
     }
+  }
+
+  getSetupChampionship() {
+    const championshipId = this.activateRouter.snapshot.params['id'];
+    this.championshipService.getAllSetupByChampionshipId(championshipId).subscribe({
+      next: (response: IChampionshipResponse) => {
+        this.setupData.set({
+          basics: {
+            name: response.name,
+            modalityId: response.modalityId,
+            gender: response.gender,
+            type: response.type,
+            seasonId: response.season?.id || '',
+          },
+          rules: response.rules
+            ? {
+                pointsWin: response.rules.pointsWin,
+                pointsDraw: response.rules.pointsDraw,
+                pointsLoss: response.rules.pointsLoss,
+                hasHomeAway: response.rules.hasHomeAway,
+              }
+            : undefined,
+          format: response.format
+            ? {
+                formatType: response.format.formatType,
+              }
+            : undefined,
+          structure: response.structure || undefined,
+          tiebreaks: response.tiebreaks || undefined,
+          championshipPeriod: response.championshipPeriod || undefined,
+          registrationPeriod: response.registrationPeriod || undefined,
+          activationPolicy: response.activationPolicy || undefined,
+          postActivationRules: response.postActivationRules || undefined,
+          schedulePreferences: response.schedulePreferences || undefined,
+          activate: response.canActivate,
+        });
+
+        console.log('setupData initialized:', this.setupData());
+      },
+      error: (error) => {
+        console.error('Erro ao buscar campeonato:', error);
+        // this.toastService.showError('Erro ao buscar campeonato');
+      },
+    });
   }
 
   advanced(component: SetupStep) {
@@ -150,17 +198,19 @@ export class ChampionshipSetup implements OnInit {
   }
 
   finalReview() {
-    this.championshipService.createChampionshipBySetup(this.setupData()).subscribe({
-      next: (res: IChampionshipResponse) => {
-        console.log('create CHAMPIONSHIP SETUP', res);
-        // this.toastService.success('Campeonato criado com sucesso!');
-        // this.router.navigate(['/championships']);
-      },
-      error: (err) => {
-        this.toastService.error('Erro ao criar campeonato. Verifique os dados.');
-        console.error(err);
-      },
-    });
+    const championshipId = this.activateRouter.snapshot.params['id'];
+    this.championshipService
+      .updateChampionshipWithSetup(championshipId, this.setupData())
+      .subscribe({
+        next: (res: IChampionshipResponse) => {
+          this.toastService.success('Campeonato atualizado com sucesso!');
+          this.router.navigate(['/admin/championships']);
+        },
+        error: (err) => {
+          this.toastService.error('Erro ao atualizar campeonato. Verifique os dados.');
+          console.error(err);
+        },
+      });
   }
 
   handlePhases(phases: IPhase[]) {

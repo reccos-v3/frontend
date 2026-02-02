@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, output } from '@angular/core';
+import { Component, computed, inject, OnInit, output, input } from '@angular/core';
 import { AppAlert } from '../../../../../../components/alert/alert';
 import {
   FormBuilder,
@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-period-range-dates',
+  standalone: true,
   imports: [AppAlert, FormsModule, ReactiveFormsModule, DatePipe],
   templateUrl: './period-range-dates.html',
   styleUrl: './period-range-dates.css',
@@ -24,6 +25,11 @@ export class PeriodRangeDates implements OnInit {
     championshipPeriod: { startDate: string; endDate: string };
     registrationPeriod: { startAt: string; endAt: string };
   }>();
+
+  initialValues = input<{
+    championshipPeriod: { startDate: string; endDate: string };
+    registrationPeriod: { startAt: string; endAt: string };
+  } | null>(null);
 
   championshipPeriodForm!: FormGroup;
   registrationPeriodForm!: FormGroup;
@@ -47,6 +53,21 @@ export class PeriodRangeDates implements OnInit {
   }
 
   ngOnInit(): void {
+    const initial = this.initialValues();
+    if (initial) {
+      if (initial.championshipPeriod) {
+        this.championshipPeriodForm.patchValue({
+          startDate: initial.championshipPeriod.startDate.split('T')[0],
+          endDate: initial.championshipPeriod.endDate.split('T')[0],
+        });
+      }
+      if (initial.registrationPeriod) {
+        this.registrationPeriodForm.patchValue({
+          startAt: initial.registrationPeriod.startAt.split('T')[0],
+          endAt: initial.registrationPeriod.endAt.split('T')[0],
+        });
+      }
+    }
     this.monitorForms();
   }
 

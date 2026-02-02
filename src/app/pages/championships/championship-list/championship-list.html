@@ -156,8 +156,9 @@
       [data]="data()"
       [actions]="actions()"
       [pagination]="pagination()"
-      emptyMessage="Nenhum campeonato encontrado."
-    />
+      [emptyMessage]="'Nenhum campeonato encontrado.'"
+      (onToggle)="handleToggle($event)"
+    ></app-table-list>
   } @else if (currentView() === 'sequence') {
     <app-sequence-list
       [data]="data()"

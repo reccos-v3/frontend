@@ -1,3 +1,13 @@
+import {
+  IActivationPolicy,
+  IPostActivationRules,
+  ISchedulePreferences,
+  ISetupChampionshipPeriod,
+  ISetupRegistrationPeriod,
+  ISetupStructure,
+  ISetupTiebreaks,
+} from './setup-types.interface';
+
 export interface IChampionshipRequest {
   name: string;
   modalityId: string;
@@ -53,6 +63,15 @@ export interface IChampionshipResponse {
     reviewDone: boolean;
   };
   teamsCount: number;
+  canActivate: boolean;
+  structure: ISetupStructure | null;
+  tiebreaks: ISetupTiebreaks | null;
+  activationPolicy: IActivationPolicy | null;
+  postActivationRules: IPostActivationRules | null;
+  schedulePreferences: ISchedulePreferences | null;
+  championshipPeriod: ISetupChampionshipPeriod | null;
+  registrationPeriod: ISetupRegistrationPeriod | null;
+  pendingSteps: IChampionshipPendingStep[];
 }
 
 export interface IChampionshipStatisticsCard {
@@ -61,3 +80,5 @@ export interface IChampionshipStatisticsCard {
   totalDrafts: number;
   totalTeams: number;
 }
+
+export type IChampionshipPendingStep = 'RULES' | 'FORMAT' | 'STRUCTURE' | 'PERIOD' | 'TEAMS';

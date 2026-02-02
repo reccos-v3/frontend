@@ -1,15 +1,16 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output, signal, OnInit } from '@angular/core';
 import { PeriodSidebar } from './components/period-sidebar/period-sidebar';
 import { PeriodRangeDates } from './components/period-range-dates/period-range-dates';
 import { IChampionshipSetupRequest, SetupStep } from '../../../../interfaces/setup-types.interface';
 
 @Component({
   selector: 'app-setup-periods',
+  standalone: true,
   imports: [PeriodSidebar, PeriodRangeDates],
   templateUrl: './setup-periods.html',
   styleUrl: './setup-periods.css',
 })
-export class SetupPeriods {
+export class SetupPeriods implements OnInit {
   data = input<IChampionshipSetupRequest>();
 
   valid = output<boolean>();
@@ -21,6 +22,22 @@ export class SetupPeriods {
     championshipPeriod: { startDate: string; endDate: string };
     registrationPeriod: { startAt: string; endAt: string };
   } | null>(null);
+
+  ngOnInit() {
+    const data = this.data();
+    if (data?.championshipPeriod && data?.registrationPeriod) {
+      this.tempValues.set({
+        championshipPeriod: {
+          startDate: data.championshipPeriod.startDate,
+          endDate: data.championshipPeriod.endDate,
+        },
+        registrationPeriod: {
+          startAt: data.registrationPeriod.startAt,
+          endAt: data.registrationPeriod.endAt,
+        },
+      });
+    }
+  }
 
   handlePeriodValues(values: {
     championshipPeriod: { startDate: string; endDate: string };

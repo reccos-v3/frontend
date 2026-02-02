@@ -230,6 +230,7 @@ export class ChampionshipCreate implements OnInit {
     };
     localStorage.setItem('championshipSetupBasics', JSON.stringify(basicInfo));
     this.router.navigate(['/admin/championships/setup', this.championshipId()]);
+    console.log('basicInfo', basicInfo);
   }
 
   onSubmit(): void {

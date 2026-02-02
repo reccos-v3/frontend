@@ -24,6 +24,7 @@ export class TableList<T = any> {
 
   // Outputs
   onActionClick = output<{ action: ITableAction<T>; row: T }>();
+  onToggle = output<{ row: T; column: ITableColumn<T>; checked: boolean }>();
 
   /**
    * Verifica se deve exibir a coluna de ações
@@ -183,5 +184,21 @@ export class TableList<T = any> {
    */
   isHtmlContent(column: ITableColumn<T>): boolean {
     return !!column.render;
+  }
+
+  /**
+   * Manipula a mudança do toggle
+   */
+  handleToggleChange(row: T, column: ITableColumn<T>, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.onToggle.emit({ row, column, checked });
+    // Reverte visualmente até confirmação (opcional, dependendo da UX desejada)
+    // Para UX otimista não reverteriamos, mas como tem modal, é melhor deixar o estado 'controlado' ou reverter se o usuário cancelar
+    // Por enquanto, emitimos o evento e deixamos o pai decidir.
+    // Se o pai não atualizar o dado, o checkbox pode ficar desincronizado se não for fully controlled.
+    // Como estamos usando renderCell que lê do row, se o row não mudar, o angular change detection deve redesenhar...
+    // Mas inputs checkbox 'checked' attribute vs property são tricky.
+    // Melhor abordagem: preventDefault no click e emitir evento?
+    // Ou deixar mudar e reverter se cancelado? Vamos deixar mudar e o pai lida.
   }
 }
