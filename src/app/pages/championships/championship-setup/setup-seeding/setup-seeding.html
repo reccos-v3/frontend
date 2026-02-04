@@ -1,0 +1,353 @@
+<div class="flex flex-col gap-8 max-w-[1000px] mx-auto p-4 lg:p-0">
+  <!-- Title Section -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">
+      Ordenação & Seed
+    </h2>
+    <p class="text-text-secondary dark:text-gray-400">
+      Defina como os times serão posicionados na fase inicial do campeonato.
+    </p>
+  </div>
+
+  @if (isReadOnly()) {
+    <app-alert
+      class="block mb-4"
+      type="info"
+      variant="left-accent"
+      title="Estado Congelado"
+      icon="lock"
+      message="Este sorteio/ordenação está congelado desde a ativação do campeonato."
+    />
+  }
+
+  <!-- Show different content based on format type -->
+  @if (!hasSeedPolicy()) {
+    <!-- POINTS format: no seed policy needed -->
+    <section
+      class="bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <div class="flex flex-col items-center justify-center py-12 text-center">
+        <div
+          class="size-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4"
+        >
+          <span class="material-symbols-outlined text-gray-400 text-3xl">sports_score</span>
+        </div>
+        <h3 class="text-lg font-bold text-text-main dark:text-white mb-2">
+          Política de Seed não se aplica
+        </h3>
+        <p class="text-sm text-text-secondary dark:text-gray-400 max-w-md">
+          O formato <span class="font-bold">Pontos Corridos</span> não possui fase eliminatória,
+          portanto não há necessidade de definir política de chaveamento ou ordenação de seed.
+        </p>
+      </div>
+    </section>
+  } @else {
+    <!-- KNOCKOUT / GROUPS_AND_KNOCKOUT: show seed policy configuration -->
+    <section
+      class="bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <h2 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">sort</span>
+        Política de Definição de Chaveamento (Seed / Classificação)
+      </h2>
+
+      <!-- Aviso de congelamento -->
+      <app-alert
+        class="block mb-8"
+        type="warning"
+        variant="left-accent"
+        title="IMPORTANTE"
+        icon="lock"
+        message="<p class='text-xs text-text-main dark:text-gray-300 leading-relaxed'>
+          Esta política define
+          <span class='font-bold'>como o sistema irá decidir a ordem e o chaveamento</span> nas
+          fases eliminatórias.
+          <br />
+          Ao ativar o campeonato (<span class='font-bold'>ACTIVE</span>), esta configuração será
+          <span class='font-bold'>congelada</span> e não poderá ser alterada.
+        </p>"
+      />
+
+      <div class="space-y-6">
+        <!-- Tipo de Política -->
+        <div>
+          <label
+            for="policyType"
+            class="block text-xs font-bold uppercase tracking-wide text-text-secondary dark:text-gray-400 mb-3"
+          >
+            Tipo de Política
+          </label>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <label class="relative cursor-pointer group" [class.pointer-events-none]="isReadOnly()">
+              <input
+                type="radio"
+                name="policy_type"
+                value="RANKING"
+                [(ngModel)]="policyType"
+                [disabled]="isReadOnly()"
+                class="peer sr-only"
+              />
+              <div
+                class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-lg">leaderboard</span>
+                  </div>
+                  <span class="text-sm font-bold text-text-main dark:text-white"
+                    >Técnica (Ranking)</span
+                  >
+                </div>
+                <p class="text-xs text-text-secondary dark:text-gray-400">
+                  A ordem será definida por um critério técnico (ex: classificação, histórico,
+                  ranking externo).
+                </p>
+              </div>
+              <div
+                class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+              >
+                <span class="material-symbols-outlined text-base">check_circle</span>
+              </div>
+            </label>
+
+            <label class="relative cursor-pointer group" [class.pointer-events-none]="isReadOnly()">
+              <input
+                type="radio"
+                name="policy_type"
+                value="DRAW"
+                [(ngModel)]="policyType"
+                [disabled]="isReadOnly()"
+                class="peer sr-only"
+              />
+              <div
+                class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-lg">shuffle</span>
+                  </div>
+                  <span class="text-sm font-bold text-text-main dark:text-white">Sorteio</span>
+                </div>
+                <p class="text-xs text-text-secondary dark:text-gray-400">
+                  A ordem será definida por sorteio, usando seed global do campeonato para
+                  auditoria.
+                </p>
+              </div>
+              <div
+                class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+              >
+                <span class="material-symbols-outlined text-base">check_circle</span>
+              </div>
+            </label>
+
+            <label class="relative cursor-pointer group" [class.pointer-events-none]="isReadOnly()">
+              <input
+                type="radio"
+                name="policy_type"
+                value="HYBRID"
+                [(ngModel)]="policyType"
+                [disabled]="isReadOnly()"
+                class="peer sr-only"
+              />
+              <div
+                class="p-4 rounded-xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-lg">join_inner</span>
+                  </div>
+                  <span class="text-sm font-bold text-text-main dark:text-white">Híbrido</span>
+                </div>
+                <p class="text-xs text-text-secondary dark:text-gray-400">
+                  Combina critério técnico para agrupamento e sorteio dentro dos grupos definidos.
+                </p>
+              </div>
+              <div
+                class="absolute top-3 right-3 opacity-0 peer-checked:opacity-100 text-primary transition-opacity"
+              >
+                <span class="material-symbols-outlined text-base">check_circle</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Modo de Decisão e Fonte Técnica -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label
+              for="decisionMode"
+              class="block text-xs font-bold uppercase tracking-wide text-text-secondary dark:text-gray-400 mb-2"
+            >
+              Modo de Decisão
+            </label>
+            <div class="relative">
+              <select
+                [(ngModel)]="decisionMode"
+                [disabled]="isReadOnly()"
+                class="w-full appearance-none bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-text-main dark:text-white py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                @for (opt of decisionModeOptions; track opt.value) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                }
+              </select>
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text-secondary dark:text-gray-400"
+              >
+                <span class="material-symbols-outlined">expand_more</span>
+              </div>
+            </div>
+            <p class="text-xs text-text-secondary dark:text-gray-400 mt-2">
+              @if (decisionMode() === 'AUTOMATIC') {
+                <span class="font-bold">Automático:</span> O sistema aplica a política definida.<br />
+              } @else {
+                <span class="font-bold">Manual:</span> Um administrador informa a ordem, que fica
+                registrada para auditoria.
+              }
+            </p>
+          </div>
+
+          @if (shouldShowTechnicalSourceField()) {
+            <div>
+              <label
+                for="technicalSource"
+                class="block text-xs font-bold uppercase tracking-wide text-text-secondary dark:text-gray-400 mb-2"
+              >
+                Fonte do Critério Técnico
+              </label>
+              <div class="relative">
+                <select
+                  [(ngModel)]="technicalSource"
+                  [disabled]="isReadOnly()"
+                  class="w-full appearance-none bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-text-main dark:text-white py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  @for (opt of technicalSourceOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                  }
+                </select>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text-secondary dark:text-gray-400"
+                >
+                  <span class="material-symbols-outlined">expand_more</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Onde a política se aplica -->
+        <div>
+          <span
+            class="block text-xs font-bold uppercase tracking-wide text-text-secondary dark:text-gray-400 mb-3"
+          >
+            Onde esta política será aplicada
+          </span>
+          <div class="space-y-3">
+            @for (ctx of filteredContextOptions(); track ctx.key) {
+              <label
+                class="flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all group"
+                [class.border-primary]="getContextValue(ctx.key)"
+                [class.bg-primary/5]="getContextValue(ctx.key)"
+                [class.border-gray-200]="!getContextValue(ctx.key)"
+                [class.dark:border-gray-700]="!getContextValue(ctx.key)"
+                [class.hover:border-primary]="!isReadOnly()"
+                [class.pointer-events-none]="isReadOnly()"
+                [class.opacity-60]="isReadOnly()"
+              >
+                <input
+                  type="checkbox"
+                  class="sr-only"
+                  [checked]="getContextValue(ctx.key)"
+                  [disabled]="isReadOnly()"
+                  (change)="toggleContext(ctx.key)"
+                />
+                <div
+                  class="size-6 rounded-full border-2 flex items-center justify-center transition-all shrink-0"
+                  [class.border-primary]="getContextValue(ctx.key)"
+                  [class.bg-primary]="getContextValue(ctx.key)"
+                  [class.border-gray-300]="!getContextValue(ctx.key)"
+                  [class.dark:border-gray-500]="!getContextValue(ctx.key)"
+                >
+                  @if (getContextValue(ctx.key)) {
+                    <span class="material-symbols-outlined text-white text-sm !text-[14px]"
+                      >check</span
+                    >
+                  }
+                </div>
+                <div class="flex-1">
+                  <span
+                    class="text-sm font-bold block transition-colors"
+                    [class.text-primary]="getContextValue(ctx.key)"
+                    [class.text-text-main]="!getContextValue(ctx.key)"
+                    [class.dark:text-white]="!getContextValue(ctx.key)"
+                    >{{ ctx.label }}</span
+                  >
+                  <span class="text-xs text-text-secondary dark:text-gray-400">
+                    {{ ctx.description }}
+                  </span>
+                </div>
+              </label>
+            }
+          </div>
+        </div>
+
+        <!-- Bloco de Auditoria -->
+        <div class="bg-primary/5 dark:bg-primary/10 border border-primary/30 rounded-lg p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-primary text-xl mt-0.5">verified</span>
+            <div class="flex-1">
+              <p class="text-sm font-bold text-text-main dark:text-white mb-3">
+                Registro de Auditoria
+              </p>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-text-secondary dark:text-gray-400"
+              >
+                <div class="flex justify-between">
+                  <span>Definido por:</span>
+                  <span class="font-medium text-text-main dark:text-white">{{
+                    audit().definedBy || '—'
+                  }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Data de criação:</span>
+                  <span class="font-medium text-text-main dark:text-white">{{
+                    audit().createdAt || '—'
+                  }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Status:</span>
+                  @if (audit().status === 'FROZEN') {
+                    <span
+                      class="inline-flex items-center rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary"
+                    >
+                      Congelado
+                    </span>
+                  } @else {
+                    <span
+                      class="inline-flex items-center rounded-full bg-yellow-500/20 px-2 py-0.5 text-xs font-bold text-yellow-600 dark:text-yellow-400"
+                    >
+                      Rascunho (Editável)
+                    </span>
+                  }
+                </div>
+                <div class="flex justify-between">
+                  <span>Congela em:</span>
+                  <span class="font-medium text-text-main dark:text-white">ACTIVE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+  <!-- Actions -->
+  <div class="flex justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
+    <button
+      (click)="saveAndContinue()"
+      class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-primary/20"
+    >
+      <span>Salvar e Continuar</span>
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </div>
+</div>

@@ -44,7 +44,7 @@ export class SetupFinalReview implements OnInit {
   formatLabel = computed(() => {
     const type = this.data()?.format?.formatType;
     const map: Record<string, string> = {
-      LEAGUE: 'Pontos Corridos',
+      POINTS: 'Pontos Corridos',
       KNOCKOUT: 'Mata-mata',
       GROUPS_AND_KNOCKOUT: 'Grupos + Mata-mata',
     };

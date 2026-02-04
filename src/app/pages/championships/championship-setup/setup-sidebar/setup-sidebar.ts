@@ -25,6 +25,7 @@ export class SetupSidebar {
     { id: 'periods', label: 'Períodos', description: 'Defina os períodos' },
     { id: 'format', label: 'Formato', description: 'Escolha o sistema de disputa' },
     { id: 'teams', label: 'Equipes', description: 'Adicione os participantes' },
+    { id: 'seeding', label: 'Sorteio', description: 'Defina o sorteio' },
     { id: 'final_review', label: 'Revisão', description: 'Confirme todas as configurações' },
   ];
 }

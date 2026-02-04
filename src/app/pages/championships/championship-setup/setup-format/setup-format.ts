@@ -163,7 +163,7 @@ export class SetupFormat implements OnInit {
           });
 
           this.emitDataUpdate();
-          this.advanced.emit('teams');
+          this.advanced.emit('teams'); // Skip seeding for points
         } else {
           // Others go to configuration
           this.internalStep.set('configuration');

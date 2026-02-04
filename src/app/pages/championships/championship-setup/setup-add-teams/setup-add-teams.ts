@@ -80,7 +80,7 @@ export class SetupAddTeams {
       this.dataUpdate.emit({
         teams: [],
       });
-      this.advanced.emit('final_review');
+      this.advanced.emit('seeding');
     }
   }
 

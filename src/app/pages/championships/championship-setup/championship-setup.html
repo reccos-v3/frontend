@@ -39,6 +39,16 @@
             (dataUpdate)="updateData($event)"
           />
         }
+
+        @case ('seeding') {
+          <app-setup-seeding
+            [setupData]="setupData()"
+            [status]="'CONFIGURING'"
+            (seedingChange)="handleSeedingChange($event)"
+            (updateData)="updateData($event)"
+            (advanced)="advanced($event)"
+          />
+        }
         @case ('final_review') {
           <app-setup-final-review
             [data]="setupData()"
