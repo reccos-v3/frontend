@@ -190,13 +190,19 @@ export class SetupSeeding {
 
   saveAndContinue() {
     const policy: ISeedPolicy = {
-      policyType: this.policyType(),
-      decisionMode: this.decisionMode(),
+      type: this.policyType(),
+      mode: this.decisionMode(),
       technicalSource: this.technicalSource() ?? null,
-      knockoutEntry: this.knockoutEntry(),
-      groupDistribution: this.groupDistribution(),
-      preliminaryRounds: this.preliminaryRounds(),
-      definedBy: this.audit().definedBy || 'Administrador',
+      applicationContext: {
+        knockoutEntry: this.knockoutEntry(),
+        groupDistribution: this.groupDistribution(),
+        preliminaryRounds: this.preliminaryRounds(),
+      },
+      audit: {
+        ...this.audit(),
+        definedBy: 'ADMINISTRADOR',
+        createdAt: new Date().toISOString(),
+      },
     };
 
     this.updateData.emit({

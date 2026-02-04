@@ -40,13 +40,6 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'admin/championships/setup/:id',
-    loadComponent: () =>
-      import('./pages/championships/championship-setup/championship-setup').then(
-        (m) => m.ChampionshipSetup,
-      ),
-  },
 
   // Redirecionamento padrão
   {

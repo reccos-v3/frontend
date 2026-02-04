@@ -1,0 +1,42 @@
+<div
+  class="bg-white dark:bg-slate-900 p-5 rounded-xl border flex flex-col gap-4 shadow-sm hover:shadow-md transition-all h-full"
+  [ngClass]="borderClasses()"
+>
+  <div class="flex justify-between items-start">
+    <div class="flex gap-2">
+      <div class="p-2 rounded-lg" [ngClass]="statusClasses()">
+        <span class="material-symbols-outlined">{{ module().icon }}</span>
+      </div>
+      @if (module().isLocked) {
+        <div class="flex items-center text-slate-400">
+          <span
+            class="material-symbols-outlined text-sm"
+            [title]="module().lockMessage || 'Congela ao ativar'"
+          >
+            lock
+          </span>
+        </div>
+      }
+    </div>
+    <span
+      class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter"
+      [ngClass]="statusClasses()"
+    >
+      {{ module().statusLabel }}
+    </span>
+  </div>
+
+  <div class="flex-1">
+    <h4 class="font-bold text-slate-800 dark:text-white">{{ module().title }}</h4>
+    <p class="text-xs text-slate-500 mt-1 leading-relaxed">{{ module().description }}</p>
+  </div>
+
+  <button
+    class="w-full mt-2 py-2 text-xs font-bold rounded-lg transition-colors"
+    [ngClass]="buttonClasses()"
+    [disabled]="module().isLocked"
+    (click)="onAction()"
+  >
+    {{ module().actionLabel || (module().status === 'COMPLETED' ? 'Editar' : 'Configurar') }}
+  </button>
+</div>

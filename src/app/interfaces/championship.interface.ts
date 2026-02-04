@@ -57,8 +57,11 @@ export interface IChampionshipResponse {
   } | null;
   progress: {
     id: string;
+    basicsDone: boolean;
+    periodDone: boolean;
     rulesDone: boolean;
     structureDone: boolean;
+    seedingDone: boolean;
     teamsDone: boolean;
     reviewDone: boolean;
   };

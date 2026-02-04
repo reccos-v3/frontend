@@ -340,16 +340,16 @@ export class ChampionshipList implements OnInit {
   viewChampionship(row: IChampionshipResponse): void {
     console.log('Ver campeonato:', row);
     // Para campeonatos ativos, poderíamos navegar para um dashboard de gerenciamento
-    // Para rascunhos, talvez para o wizard de configuração
+    // Para rascunhos, navegamos para o hub de setup
     if (row.status === 'ACTIVE') {
       // this.router.navigate(['/championships/manage', row.id]);
     } else {
-      this.router.navigate(['/admin/championships/edit', row.id]);
+      this.router.navigate(['/admin/championships/setup', row.id]);
     }
   }
 
   editChampionship(row: IChampionshipResponse): void {
-    this.router.navigate(['/admin/championships/edit', row.id]);
+    this.router.navigate(['/admin/championships/setup', row.id]);
   }
 
   deleteChampionship(row: IChampionshipResponse): void {

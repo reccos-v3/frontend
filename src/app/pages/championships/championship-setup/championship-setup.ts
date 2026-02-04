@@ -1,259 +1,224 @@
-import { Component, computed, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { SetupHeader } from './setup-header/setup-header';
-import { SetupSidebar } from './setup-sidebar/setup-sidebar';
-import { SetupRules } from './setup-rules/setup-rules';
-import { SetupFormat } from './setup-format/setup-format';
-import { SetupAddTeams } from './setup-add-teams/setup-add-teams';
-
-import { SetupFinalReview } from './setup-final-review/setup-final-review';
-import {
-  SetupStep,
-  StepStatus,
-  IChampionshipSetupRequest,
-  ISeedingConfig,
-} from '../../../interfaces/setup-types.interface';
-import { SetupSeeding } from './setup-seeding/setup-seeding';
-import { IPhase } from './setup-sidebar-format/setup-sidebar-format';
-import { SetupPeriods } from './setup-periods/setup-periods';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ChampionshipService } from '../../../services/championship.service';
 import { IChampionshipResponse } from '../../../interfaces/championship.interface';
-import { ToastService } from '../../../services/toast.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { SetupModuleCard, ISetupModule } from './components/setup-module-card/setup-module-card';
+import { SetupSidebar } from './setup-sidebar/setup-sidebar';
+import { SetupProgress } from './setup-progress/setup-progress';
 
 @Component({
   selector: 'app-championship-setup',
   standalone: true,
-  imports: [
-    SetupHeader,
-    SetupSidebar,
-    SetupRules,
-    SetupFormat,
-    SetupAddTeams,
-
-    SetupFinalReview,
-    SetupPeriods,
-    SetupSeeding,
-  ],
+  imports: [CommonModule, SetupModuleCard, SetupSidebar, SetupProgress],
   templateUrl: './championship-setup.html',
   styleUrl: './championship-setup.css',
 })
 export class ChampionshipSetup implements OnInit {
-  private platformId = inject(PLATFORM_ID);
-  private router = inject(Router);
-  private toastService = inject(ToastService);
-  private activateRouter = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   private championshipService = inject(ChampionshipService);
 
-  sidebarPhases = signal<IPhase[]>([]);
-  activeComponent = signal<SetupStep>('rules');
-  setupData = signal<IChampionshipSetupRequest>({
-    activate: false,
+  championshipId = signal<string | null>(null);
+  championship = signal<IChampionshipResponse | null>(null);
+  isLoading = signal(true);
+
+  canEdit = computed(() => {
+    const data = this.championship();
+    return data ? data.status !== 'ACTIVE' : false;
   });
 
-  stepStatuses = signal<Record<SetupStep, StepStatus>>({
-    rules: 'in-progress',
-    periods: 'pending',
-    format: 'pending',
-    teams: 'pending',
-    seeding: 'pending',
-    final_review: 'pending',
+  statusLabel = computed(() => {
+    const data = this.championship();
+    if (!data) return '';
+    const labels: Record<string, string> = {
+      DRAFT: 'Rascunho',
+      ACTIVE: 'Ativo',
+      FINISHED: 'Finalizado',
+    };
+    return labels[data.status] || data.status;
   });
 
-  progress = computed(() => {
-    const statuses = Object.values(this.stepStatuses());
-    const completedCount = statuses.filter((s) => s === 'completed').length;
-    return Math.round((completedCount / statuses.length) * 100);
+  genderLabel = computed(() => {
+    const data = this.championship();
+    if (!data) return '';
+    const labels: Record<string, string> = {
+      MALE: 'Masculino',
+      FEMALE: 'Feminino',
+      MIXED: 'Misto',
+    };
+    return labels[data.gender] || data.gender;
   });
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.getSetupChampionship();
-      const storedBasics = localStorage.getItem('championshipSetupBasics');
-      if (storedBasics) {
-        try {
-          const basics = JSON.parse(storedBasics);
-          this.updateData({ basics });
-          // Limpar após o uso para evitar dados persistentes indesejados
-          sessionStorage.removeItem('championshipSetupBasics');
-        } catch (e) {
-          console.error('Erro ao processar dados do sessionStorage:', e);
-        }
-      }
-    }
+  seasonName = computed(() => {
+    const data = this.championship();
+    return data?.season?.name || 'Temporada Avulsa';
+  });
+
+  metadataCards = computed(() => {
+    const data = this.championship();
+    if (!data) return [];
+
+    return [
+      {
+        id: 'MOD-01',
+        label: 'Modalidade',
+        value: data.modality.name,
+        icon: 'sports_soccer',
+        technicalId: 'MOD-01',
+        theme: {
+          bg: 'bg-indigo-50/30',
+          darkBg: 'dark:bg-indigo-900/10',
+          border: 'border-indigo-100',
+          darkBorder: 'dark:border-indigo-900/30',
+          hoverBorder: 'hover:border-indigo-300',
+          iconBg: 'bg-indigo-600',
+          iconShadow: 'shadow-indigo-100',
+          labelColor: 'text-indigo-900',
+          darkLabelColor: 'dark:text-indigo-400',
+          technicalColor: 'text-indigo-300',
+          darkTechnicalColor: 'dark:text-indigo-800',
+        },
+      },
+      {
+        id: 'CAT-V1',
+        label: 'Categoria',
+        value: this.genderLabel(),
+        icon: data.gender === 'MALE' ? 'male' : data.gender === 'FEMALE' ? 'female' : 'wc',
+        technicalId: 'CAT-V1',
+        theme: {
+          bg: 'bg-rose-50/30',
+          darkBg: 'dark:bg-rose-900/10',
+          border: 'border-rose-100',
+          darkBorder: 'dark:border-rose-900/30',
+          hoverBorder: 'hover:border-rose-300',
+          iconBg: 'bg-rose-600',
+          iconShadow: 'shadow-rose-100',
+          labelColor: 'text-rose-900',
+          darkLabelColor: 'dark:text-rose-400',
+          technicalColor: 'text-rose-300',
+          darkTechnicalColor: 'dark:text-rose-800',
+        },
+      },
+      {
+        id: 'SEA-24',
+        label: 'Temporada',
+        value: this.seasonName(),
+        icon: 'calendar_today',
+        technicalId: 'SEA-24',
+        theme: {
+          bg: 'bg-amber-50/30',
+          darkBg: 'dark:bg-amber-900/10',
+          border: 'border-amber-100',
+          darkBorder: 'dark:border-amber-900/30',
+          hoverBorder: 'hover:border-amber-300',
+          iconBg: 'bg-amber-500',
+          iconShadow: 'shadow-amber-100',
+          labelColor: 'text-amber-900',
+          darkLabelColor: 'dark:text-amber-400',
+          technicalColor: 'text-amber-300',
+          darkTechnicalColor: 'dark:text-amber-800',
+        },
+      },
+    ];
+  });
+
+  setupModules = computed<ISetupModule[]>(() => {
+    const data = this.championship();
+    if (!data || !data.progress) return [];
+
+    const p = data.progress;
+    const editable = this.canEdit();
+
+    return [
+      {
+        id: 'info',
+        title: 'Informações Básicas',
+        description: 'Nome, logo e descrição do campeonato.',
+        icon: 'info',
+        status: p.basicsDone ? 'COMPLETED' : 'PENDING',
+        statusLabel: p.basicsDone ? 'Concluído' : 'Incompleto',
+        isLocked: !editable,
+      },
+      {
+        id: 'periods',
+        title: 'Períodos',
+        description: 'Inscrições e duração do campeonato.',
+        icon: 'calendar_month',
+        status: p.periodDone ? 'COMPLETED' : 'PENDING',
+        statusLabel: p.periodDone ? 'Concluído' : 'Incompleto',
+        isLocked: !editable,
+      },
+      {
+        id: 'rules',
+        title: 'Regras Gerais',
+        description: 'Pontuação e critérios de desempate.',
+        icon: 'gavel',
+        status: p.rulesDone ? 'COMPLETED' : 'WARNING',
+        statusLabel: p.rulesDone ? 'Concluído' : 'Atenção',
+        isLocked: !editable,
+      },
+      {
+        id: 'format',
+        title: 'Formato e Estrutura',
+        description: 'Grupos, eliminatórias e total de times.',
+        icon: 'account_tree',
+        status: p.structureDone ? 'COMPLETED' : 'PENDING',
+        statusLabel: p.structureDone ? 'Concluído' : 'Incompleto',
+        isLocked: !editable,
+      },
+      {
+        id: 'seeding',
+        title: 'Política de Seed',
+        description: 'Critérios para definição de cabeças de chave.',
+        icon: 'psychology',
+        status: p.seedingDone ? 'COMPLETED' : 'PENDING',
+        statusLabel: p.seedingDone ? 'Concluído' : 'Incompleto',
+        isLocked: !editable,
+      },
+      {
+        id: 'teams',
+        title: 'Times',
+        description: 'Gerenciar inscrições e times participantes.',
+        icon: 'groups_2',
+        status: p.teamsDone ? 'COMPLETED' : 'PENDING',
+        statusLabel: p.teamsDone ? 'Concluído' : 'Pendente',
+        isLocked: !editable,
+      },
+      {
+        id: 'review',
+        title: 'Revisão Final',
+        description: 'Validação completa para ativação.',
+        icon: 'verified',
+        // O review tem uma lógica extra: precisa estar editável E apto para ativar
+        status: data.canActivate ? 'COMPLETED' : 'LOCKED',
+        statusLabel: data.canActivate ? 'Pronto' : 'Bloqueado',
+        isLocked: !editable || !data.canActivate,
+        actionLabel: data.canActivate ? 'Revisar' : 'Aguardando etapas',
+      },
+    ];
+  });
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.championshipId.set(id);
+    if (id) this.loadChampionship(id);
   }
 
-  getSetupChampionship() {
-    const championshipId = this.activateRouter.snapshot.params['id'];
-    this.championshipService.getAllSetupByChampionshipId(championshipId).subscribe({
-      next: (response: IChampionshipResponse) => {
-        this.setupData.set({
-          basics: {
-            name: response.name,
-            modalityId: response.modalityId,
-            gender: response.gender,
-            type: response.type,
-            seasonId: response.season?.id || '',
-          },
-          rules: response.rules
-            ? {
-                pointsWin: response.rules.pointsWin,
-                pointsDraw: response.rules.pointsDraw,
-                pointsLoss: response.rules.pointsLoss,
-                hasHomeAway: response.rules.hasHomeAway,
-              }
-            : undefined,
-          format: response.format
-            ? {
-                formatType: response.format.formatType,
-              }
-            : undefined,
-          structure: response.structure || undefined,
-          tiebreaks: response.tiebreaks || undefined,
-          championshipPeriod: response.championshipPeriod || undefined,
-          registrationPeriod: response.registrationPeriod || undefined,
-          activationPolicy: response.activationPolicy || undefined,
-          postActivationRules: response.postActivationRules || undefined,
-          schedulePreferences: response.schedulePreferences || undefined,
-          activate: response.canActivate,
-        });
-
-        console.log('setupData initialized:', this.setupData());
+  loadChampionship(id: string): void {
+    this.isLoading.set(true);
+    this.championshipService.getChampionshipById(id).subscribe({
+      next: (data) => {
+        this.championship.set(data);
+        this.isLoading.set(false);
       },
       error: (error) => {
-        console.error('Erro ao buscar campeonato:', error);
-        // this.toastService.showError('Erro ao buscar campeonato');
+        console.error('Error loading championship:', error);
+        this.isLoading.set(false);
       },
     });
   }
 
-  advanced(component: SetupStep) {
-    // Update previous step to completed if moving forward
-    const steps: SetupStep[] = ['rules', 'periods', 'format', 'teams', 'seeding', 'final_review'];
-    const currentIndex = steps.indexOf(this.activeComponent());
-    const nextIndex = steps.indexOf(component);
-
-    // Skip logic for seeding if format is POINTS
-    if (component === 'seeding') {
-      const format = this.setupData().format?.formatType;
-      // If format is POINTS (Pontos Corridos) or undefined, skip seeding
-      if (!format || format === 'POINTS') {
-        // If we are moving forward to seeding, skip to final_review
-        if (nextIndex > currentIndex) {
-          this.advanced('final_review');
-          return;
-        }
-        // If we assumed backward movement to seeding... well, usually we go back to teams.
-        // But let's handle the forward case mainly.
-      }
-    }
-
-    if (nextIndex > currentIndex) {
-      this.stepStatuses.update((prev) => ({
-        ...prev,
-        [this.activeComponent()]: 'completed',
-        [component]: prev[component] === 'completed' ? 'completed' : 'in-progress',
-      }));
-    }
-
-    this.activeComponent.set(component);
-  }
-
-  updateData(data: Partial<IChampionshipSetupRequest>) {
-    this.setupData.update((prev) => ({
-      ...prev,
-      ...data,
-      basics: data.basics
-        ? ({ ...(prev.basics || {}), ...data.basics } as IChampionshipSetupRequest['basics'])
-        : prev.basics,
-      rules: data.rules
-        ? ({ ...(prev.rules || {}), ...data.rules } as IChampionshipSetupRequest['rules'])
-        : prev.rules,
-      format: data.format
-        ? ({ ...(prev.format || {}), ...data.format } as IChampionshipSetupRequest['format'])
-        : prev.format,
-      structure: data.structure
-        ? ({
-            ...(prev.structure || {}),
-            ...data.structure,
-          } as IChampionshipSetupRequest['structure'])
-        : prev.structure,
-      championshipPeriod: data.championshipPeriod
-        ? ({
-            ...(prev.championshipPeriod || {}),
-            ...data.championshipPeriod,
-          } as IChampionshipSetupRequest['championshipPeriod'])
-        : prev.championshipPeriod,
-      registrationPeriod: data.registrationPeriod
-        ? ({
-            ...(prev.registrationPeriod || {}),
-            ...data.registrationPeriod,
-          } as IChampionshipSetupRequest['registrationPeriod'])
-        : prev.registrationPeriod,
-      tiebreaks: data.tiebreaks
-        ? ({
-            ...(prev.tiebreaks || {}),
-            ...data.tiebreaks,
-          } as IChampionshipSetupRequest['tiebreaks'])
-        : prev.tiebreaks,
-      teams: data.teams !== undefined ? data.teams : prev.teams,
-      activationPolicy: data.activationPolicy
-        ? ({
-            ...(prev.activationPolicy || {}),
-            ...data.activationPolicy,
-          } as IChampionshipSetupRequest['activationPolicy'])
-        : prev.activationPolicy,
-      postActivationRules: data.postActivationRules
-        ? ({
-            ...(prev.postActivationRules || {}),
-            ...data.postActivationRules,
-          } as IChampionshipSetupRequest['postActivationRules'])
-        : prev.postActivationRules,
-      schedulePreferences: data.schedulePreferences
-        ? ({
-            ...(prev.schedulePreferences || {}),
-            ...data.schedulePreferences,
-          } as IChampionshipSetupRequest['schedulePreferences'])
-        : prev.schedulePreferences,
-      seeding: data.seeding
-        ? ({
-            ...(prev.seeding || {}),
-            ...data.seeding,
-          } as IChampionshipSetupRequest['seeding'])
-        : prev.seeding,
-      seedPolicy: data.seedPolicy
-        ? ({
-            ...(prev.seedPolicy || {}),
-            ...data.seedPolicy,
-          } as IChampionshipSetupRequest['seedPolicy'])
-        : prev.seedPolicy,
-    }));
-  }
-
-  handleSeedingChange(config: ISeedingConfig) {
-    this.updateData({ seeding: config });
-  }
-
-  finalReview() {
-    console.log(this.setupData());
-    return;
-    const championshipId = this.activateRouter.snapshot.params['id'];
-    this.championshipService
-      .updateChampionshipWithSetup(championshipId, this.setupData())
-      .subscribe({
-        next: () => {
-          this.toastService.success('Campeonato atualizado com sucesso!');
-          this.router.navigate(['/admin/championships']);
-        },
-        error: (err) => {
-          this.toastService.error('Erro ao atualizar campeonato. Verifique os dados.');
-          console.error(err);
-        },
-      });
-  }
-
-  handlePhases(phases: IPhase[]) {
-    this.sidebarPhases.set(phases);
-    console.log('Phases received in ChampionshipSetup:', phases);
+  onModuleAction(moduleId: string): void {
+    console.log(`Navegando para o módulo: ${moduleId}`);
   }
 }

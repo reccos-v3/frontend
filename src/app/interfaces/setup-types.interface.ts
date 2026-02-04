@@ -142,13 +142,11 @@ export interface ISeedingAudit {
 }
 
 export interface ISeedPolicy {
-  policyType: SeedingPolicyType;
-  decisionMode: SeedingDecisionMode;
+  type: SeedingPolicyType;
+  mode: SeedingDecisionMode;
   technicalSource: SeedingTechnicalSource | null;
-  knockoutEntry: boolean;
-  groupDistribution: boolean;
-  preliminaryRounds: boolean;
-  definedBy: string;
+  applicationContext: ISeedingApplicationContext;
+  audit: ISeedingAudit;
 }
 
 export interface ISeedingConfig {
