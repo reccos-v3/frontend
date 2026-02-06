@@ -1,0 +1,17 @@
+@switch (activeComponent()) {
+  @case ('info') {
+    <app-championship-create [initialData]="data()" />
+  }
+  @case ('rules') {
+    <app-setup-rules [data]="data()" />
+  }
+  @case ('periods') {
+    <app-setup-periods [data]="data()" />
+  }
+  @case ('format') {
+    <app-setup-format [data]="data()" />
+  }
+  @case ('teams') {
+    <app-setup-add-teams [data]="data()" />
+  }
+}

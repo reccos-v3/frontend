@@ -1,5 +1,6 @@
 import { Component, effect, input, output, signal } from '@angular/core';
 import { SetupStep, IChampionshipSetupRequest } from '../../../../interfaces/setup-types.interface';
+import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
 
 @Component({
   selector: 'app-setup-add-teams',
@@ -12,7 +13,7 @@ export class SetupAddTeams {
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
-  data = input<IChampionshipSetupRequest>();
+  data = input<IChampionshipResponse>();
 
   teams = signal([
     {

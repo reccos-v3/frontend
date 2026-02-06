@@ -1,7 +1,8 @@
 import { Component, input, output, signal, OnInit } from '@angular/core';
 import { PeriodSidebar } from './components/period-sidebar/period-sidebar';
 import { PeriodRangeDates } from './components/period-range-dates/period-range-dates';
-import { IChampionshipSetupRequest, SetupStep } from '../../../../interfaces/setup-types.interface';
+import { SetupStep } from '../../../../interfaces/setup-types.interface';
+import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
 
 @Component({
   selector: 'app-setup-periods',
@@ -11,11 +12,11 @@ import { IChampionshipSetupRequest, SetupStep } from '../../../../interfaces/set
   styleUrl: './setup-periods.css',
 })
 export class SetupPeriods implements OnInit {
-  data = input<IChampionshipSetupRequest>();
+  data = input<IChampionshipResponse>();
 
   valid = output<boolean>();
   advanced = output<SetupStep>();
-  dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  dataUpdate = output<Partial<IChampionshipResponse>>();
 
   isValid = signal(false);
   tempValues = signal<{

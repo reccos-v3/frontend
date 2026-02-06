@@ -1,5 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IChampionshipResponse } from '../../../../../interfaces/championship.interface';
 
 export type SetupModuleStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'LOCKED' | 'WARNING';
 
@@ -13,6 +14,7 @@ export interface ISetupModule {
   isLocked?: boolean;
   lockMessage?: string;
   actionLabel?: string;
+  payload?: IChampionshipResponse;
 }
 
 @Component({

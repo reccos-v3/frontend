@@ -3,15 +3,16 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import {
   SetupStep,
-  IChampionshipSetupRequest,
   ISchedulePreferences,
   IKnockoutConfig,
+  IChampionshipSetupRequest,
 } from '../../../../interfaces/setup-types.interface';
 import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 import { SetupChampionshipFormat } from '../setup-championship-format/setup-championship-format';
 import { AppAlert } from '../../../../components/alert/alert';
 import { SetupFormatKnockout } from '../setup-format-knockout/setup-format-knockout';
 import { FormatCalendarPreferences } from '../format-calendar-preferences/format-calendar-preferences';
+import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
 
 interface IFormat {
   id: 'groups_and_knockout' | 'knockout' | 'points';
@@ -38,7 +39,7 @@ export class SetupFormat implements OnInit {
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
   phasesChange = output<IPhase[]>();
-  data = input<IChampionshipSetupRequest>();
+  data = input<IChampionshipResponse>();
 
   selectedFormat = signal<IFormat['id']>('groups_and_knockout');
   totalTeams = signal(16);

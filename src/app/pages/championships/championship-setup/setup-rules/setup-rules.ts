@@ -25,6 +25,7 @@ import { SetupAdvancedRules } from '../setup-advanced-rules/setup-advanced-rules
 import { SetupPointsComponent } from '../setup-points/setup-points';
 import { SetupTiebreaksComponent } from '../setup-tiebreaks/setup-tiebreaks';
 import { IPostActivationRules } from '../../../../interfaces/setup-types.interface';
+import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
 
 @Component({
   selector: 'app-setup-rules',
@@ -50,7 +51,7 @@ export class SetupRules implements OnInit {
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
-  data = input<IChampionshipSetupRequest>();
+  data = input<IChampionshipResponse>();
 
   // Basics
   name = signal('');
@@ -123,12 +124,12 @@ export class SetupRules implements OnInit {
 
       // Restaurar dados básicos e regras
       const initial = this.data();
-      if (initial?.basics) {
-        this.name.set(initial.basics.name || '');
-        this.modalityId.set(initial.basics.modalityId || '');
-        this.gender.set(initial.basics.gender || 'MALE');
-        this.type.set(initial.basics.type || 'SEASONAL');
-        this.seasonId.set(initial.basics.seasonId || '');
+      if (initial) {
+        this.name.set(initial.name || '');
+        this.modalityId.set(initial.modality.id || '');
+        this.gender.set(initial.gender || 'MALE');
+        this.type.set(initial.type || 'SEASONAL');
+        this.seasonId.set(initial?.season?.id || '');
       }
 
       if (initial?.rules) {

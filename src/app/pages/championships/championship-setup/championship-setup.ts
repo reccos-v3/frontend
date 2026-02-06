@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChampionshipService } from '../../../services/championship.service';
 import { IChampionshipResponse } from '../../../interfaces/championship.interface';
 import { CommonModule } from '@angular/common';
@@ -15,7 +15,8 @@ import { SetupProgress } from './setup-progress/setup-progress';
   styleUrl: './championship-setup.css',
 })
 export class ChampionshipSetup implements OnInit {
-  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   private championshipService = inject(ChampionshipService);
 
   championshipId = signal<string | null>(null);
@@ -138,6 +139,17 @@ export class ChampionshipSetup implements OnInit {
         status: p.basicsDone ? 'COMPLETED' : 'PENDING',
         statusLabel: p.basicsDone ? 'Concluído' : 'Incompleto',
         isLocked: !editable,
+        payload: data,
+      },
+      {
+        id: 'rules',
+        title: 'Regras e Pontuação',
+        description: 'Pontuação e critérios de desempate.',
+        icon: 'gavel',
+        status: p.rulesDone ? 'COMPLETED' : 'WARNING',
+        statusLabel: p.rulesDone ? 'Concluído' : 'Atenção',
+        isLocked: !editable,
+        payload: data,
       },
       {
         id: 'periods',
@@ -147,15 +159,7 @@ export class ChampionshipSetup implements OnInit {
         status: p.periodDone ? 'COMPLETED' : 'PENDING',
         statusLabel: p.periodDone ? 'Concluído' : 'Incompleto',
         isLocked: !editable,
-      },
-      {
-        id: 'rules',
-        title: 'Regras Gerais',
-        description: 'Pontuação e critérios de desempate.',
-        icon: 'gavel',
-        status: p.rulesDone ? 'COMPLETED' : 'WARNING',
-        statusLabel: p.rulesDone ? 'Concluído' : 'Atenção',
-        isLocked: !editable,
+        payload: data,
       },
       {
         id: 'format',
@@ -165,6 +169,7 @@ export class ChampionshipSetup implements OnInit {
         status: p.structureDone ? 'COMPLETED' : 'PENDING',
         statusLabel: p.structureDone ? 'Concluído' : 'Incompleto',
         isLocked: !editable,
+        payload: data,
       },
       {
         id: 'seeding',
@@ -174,6 +179,7 @@ export class ChampionshipSetup implements OnInit {
         status: p.seedingDone ? 'COMPLETED' : 'PENDING',
         statusLabel: p.seedingDone ? 'Concluído' : 'Incompleto',
         isLocked: !editable,
+        payload: data,
       },
       {
         id: 'teams',
@@ -183,6 +189,7 @@ export class ChampionshipSetup implements OnInit {
         status: p.teamsDone ? 'COMPLETED' : 'PENDING',
         statusLabel: p.teamsDone ? 'Concluído' : 'Pendente',
         isLocked: !editable,
+        payload: data,
       },
       {
         id: 'review',
@@ -194,12 +201,13 @@ export class ChampionshipSetup implements OnInit {
         statusLabel: data.canActivate ? 'Pronto' : 'Bloqueado',
         isLocked: !editable || !data.canActivate,
         actionLabel: data.canActivate ? 'Revisar' : 'Aguardando etapas',
+        payload: data,
       },
     ];
   });
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.championshipId.set(id);
     if (id) this.loadChampionship(id);
   }
@@ -219,6 +227,10 @@ export class ChampionshipSetup implements OnInit {
   }
 
   onModuleAction(moduleId: string): void {
-    console.log(`Navegando para o módulo: ${moduleId}`);
+    const module = this.setupModules().find((m) => m.id === moduleId);
+
+    this.router.navigate(['/admin/championships/setup', this.championshipId(), 'settings'], {
+      state: { id: moduleId, isEdit: true, component: 'rules', payload: module?.payload },
+    });
   }
 }

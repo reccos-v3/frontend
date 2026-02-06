@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, signal, inject, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -46,6 +46,8 @@ export class ChampionshipCreate implements OnInit {
   private toastService = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
 
+  @Input() initialData: Partial<IChampionshipResponse> | null = null;
+
   formData: ChampionshipFormData = {
     name: '',
     modality: '',
@@ -62,6 +64,9 @@ export class ChampionshipCreate implements OnInit {
   isEditMode = signal(false);
   championshipId = signal<string | null>(null);
   showValidationErrors = signal(false);
+
+  private isModalitiesLoading = false;
+  private isSeasonsLoading = false;
 
   modalities = signal<IModalityResponse[]>([]);
   seasons = signal<ISeasonResponse[]>([]);
@@ -98,7 +103,13 @@ export class ChampionshipCreate implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.checkEditMode();
+    if (this.initialData) {
+      this.isEditMode.set(true);
+      this.championshipId.set(this.initialData.id || null);
+      this.mapDataToForm(this.initialData);
+    } else {
+      this.checkEditMode();
+    }
     this.getSeasonsByFederationId();
     this.getModalities();
   }
@@ -115,25 +126,29 @@ export class ChampionshipCreate implements OnInit {
   loadChampionshipData(id: string): void {
     this.championshipService.getChampionshipById(id).subscribe({
       next: (championship) => {
-        const seasonType: SeasonType = championship.season ? 'existing' : 'standalone';
-        this.formData = {
-          name: championship.name,
-          modality:
-            championship.modality?.id || (championship as IChampionshipResponse).modalityId || '',
-          gender: (championship.gender || 'MALE').toUpperCase() as IChampionshipResponse['gender'],
-          seasonType: seasonType,
-          season: championship.season?.id || null,
-          seasonName: '',
-          seasonStart: '',
-          seasonEnd: '',
-        };
-        setTimeout(() => this.cdr.detectChanges(), 0);
+        this.mapDataToForm(championship);
       },
       error: (error) => {
         this.toastService.error('Erro ao carregar dados do campeonato.');
         console.error(error);
       },
     });
+  }
+
+  mapDataToForm(championship: Partial<IChampionshipResponse>): void {
+    const seasonType: SeasonType = championship.season ? 'existing' : 'standalone';
+    this.formData = {
+      name: championship.name || '',
+      modality:
+        championship.modality?.id || (championship as IChampionshipResponse).modalityId || '',
+      gender: (championship.gender || 'MALE').toUpperCase() as IChampionshipResponse['gender'],
+      seasonType: seasonType,
+      season: championship.season?.id || null,
+      seasonName: '',
+      seasonStart: '',
+      seasonEnd: '',
+    };
+    setTimeout(() => this.cdr.detectChanges(), 0);
   }
 
   onSeasonTypeSelect(type: SeasonType): void {
@@ -255,17 +270,25 @@ export class ChampionshipCreate implements OnInit {
   }
 
   getModalities() {
+    if (this.isModalitiesLoading || this.modalities().length > 0) return;
+
+    this.isModalitiesLoading = true;
     this.modalityService.getAllModalities().subscribe({
       next: (response: IModalityResponse[]) => {
         this.modalities.set(response);
+        this.isModalitiesLoading = false;
       },
       error: (error) => {
         console.error('Erro ao buscar modalidades:', error);
+        this.isModalitiesLoading = false;
       },
     });
   }
 
   getSeasonsByFederationId() {
+    if (this.isSeasonsLoading || this.seasons().length > 0) return;
+
+    this.isSeasonsLoading = true;
     this.seasonService.getSeasonsByFederationId().subscribe({
       next: (response) => {
         this.seasons.set(response);
@@ -273,9 +296,11 @@ export class ChampionshipCreate implements OnInit {
         if (response.length === 0 && this.formData.seasonType === 'existing') {
           this.formData.seasonType = 'new';
         }
+        this.isSeasonsLoading = false;
       },
       error: (error) => {
         console.error('Erro ao buscar temporadas:', error);
+        this.isSeasonsLoading = false;
       },
     });
   }
