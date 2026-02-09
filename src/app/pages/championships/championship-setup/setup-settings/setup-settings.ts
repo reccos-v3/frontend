@@ -5,9 +5,10 @@ import { SetupPeriods } from '../setup-periods/setup-periods';
 import { SetupFormat } from '../setup-format/setup-format';
 import { SetupRules } from '../setup-rules/setup-rules';
 import { SetupAddTeams } from '../setup-add-teams/setup-add-teams';
+import { SetupSeeding } from '../setup-seeding/setup-seeding';
 @Component({
   selector: 'app-setup-settings',
-  imports: [ChampionshipCreate, SetupPeriods, SetupFormat, SetupRules, SetupAddTeams],
+  imports: [ChampionshipCreate, SetupPeriods, SetupFormat, SetupRules, SetupAddTeams, SetupSeeding],
   templateUrl: './setup-settings.html',
   styleUrl: './setup-settings.css',
 })
@@ -16,7 +17,6 @@ export class SetupSettings {
   data = signal<IChampionshipResponse>({} as IChampionshipResponse);
   constructor() {
     const navigation = window.history.state;
-    console.log('navigation', navigation);
     this.data.set(navigation.payload);
     this.activeComponent.set(navigation.id);
   }

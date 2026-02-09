@@ -5,7 +5,6 @@ import {
   ISetupChampionshipPeriod,
   ISetupRegistrationPeriod,
   ISetupStructure,
-  ISetupTiebreaks,
 } from './setup-types.interface';
 
 export interface IChampionshipRequest {
@@ -16,66 +15,102 @@ export interface IChampionshipRequest {
   seasonId: string | null;
 }
 
+export interface IChampionshipModality {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  active: boolean;
+}
+
+export interface IChampionshipSeason {
+  id: string;
+  federationId: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IChampionshipRules {
+  id: string;
+  pointsWin: number;
+  pointsDraw: number;
+  pointsLoss: number;
+  hasHomeAway: boolean;
+  tieBreakerOrder: string[];
+}
+
+export interface IChampionshipTiebreaks {
+  criteria: {
+    criteriaId: string;
+    priorityOrder: number;
+  }[];
+}
+
 export interface IChampionshipResponse {
   id: string;
   federationId: string;
   name: string;
-  modalityId: string;
-  modality: {
-    id: string;
-    code: string;
-    name: string;
-    description: string;
-    active: boolean;
-  };
+  modality: IChampionshipModality;
   gender: 'MALE' | 'FEMALE' | 'MIXED';
-  type: string;
-  season: {
-    id: string;
-    federationId: string;
-    name: string;
-    startDate: string;
-    endDate: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-  } | null;
+  type: 'SEASONAL' | string;
+  season: IChampionshipSeason | null;
+  championshipPeriod: ISetupChampionshipPeriod | null;
+  registrationPeriod: ISetupRegistrationPeriod | null;
   status: string;
   createdAt: string;
   updatedAt: string;
   activatedAt: string | null;
   format: {
     id: string;
-    formatType: string;
+    formatType: 'KNOCKOUT' | 'GROUPS_AND_KNOCKOUT' | 'POINTS';
   } | null;
-  rules: {
-    id: string;
-    pointsWin: number;
-    pointsDraw: number;
-    pointsLoss: number;
-    hasHomeAway: boolean;
-  } | null;
-  progress: {
-    id: string;
-    basicsDone: boolean;
-    periodDone: boolean;
-    rulesDone: boolean;
-    structureDone: boolean;
-    seedingDone: boolean;
-    teamsDone: boolean;
-    reviewDone: boolean;
-  };
-  teamsCount: number;
-  canActivate: boolean;
   structure: ISetupStructure | null;
-  tiebreaks: ISetupTiebreaks | null;
+  rules: IChampionshipRules | null;
+  tiebreaks: IChampionshipTiebreaks | null;
   activationPolicy: IActivationPolicy | null;
   postActivationRules: IPostActivationRules | null;
   schedulePreferences: ISchedulePreferences | null;
-  championshipPeriod: ISetupChampionshipPeriod | null;
-  registrationPeriod: ISetupRegistrationPeriod | null;
+  seedingPolicy: ISeedingPolicyResponse | null;
+  progress: IChampionshipProgress;
+  teamsCount: number;
   pendingSteps: IChampionshipPendingStep[];
+  canActivate: boolean;
 }
+
+export interface IChampionshipProgress {
+  id: string;
+  basicsDone: boolean;
+  periodDone: boolean;
+  rulesDone: boolean;
+  formatDone: boolean;
+  structureDone: boolean;
+  teamsDone: boolean;
+  tiebreaksDone: boolean;
+  registrationDone: boolean;
+  scheduleDone: boolean;
+  activationDone: boolean;
+  postActivationDone: boolean;
+  seedingDone: boolean;
+  reviewDone: boolean;
+}
+
+export type IChampionshipPendingStep =
+  | 'RULES'
+  | 'FORMAT'
+  | 'STRUCTURE'
+  | 'PERIOD'
+  | 'TEAMS'
+  | 'SEEDING'
+  | 'TIEBREAKS'
+  | 'REGISTRATION'
+  | 'SCHEDULE'
+  | 'ACTIVATION'
+  | 'POST_ACTIVATION'
+  | 'REVIEW';
 
 export interface IChampionshipStatisticsCard {
   totalChampionships: number;
@@ -84,4 +119,33 @@ export interface IChampionshipStatisticsCard {
   totalTeams: number;
 }
 
-export type IChampionshipPendingStep = 'RULES' | 'FORMAT' | 'STRUCTURE' | 'PERIOD' | 'TEAMS';
+export type SeedingTechnicalSource =
+  | 'GROUP_STAGE_RESULT'
+  | 'EXTERNAL_RANKING'
+  | 'HISTORICAL_PERFORMANCE'
+  | 'PURE_RANDOM';
+
+export interface ISeedingPolicyResponse {
+  id: string;
+  championshipId: string;
+  type: 'RANKING' | 'DRAW' | 'HYBRID';
+  mode: 'AUTOMATIC' | 'MANUAL';
+  technicalSource: SeedingTechnicalSource;
+  applicationContext: IApplicationContext;
+  audit: ISeedingAudit;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IApplicationContext {
+  knockoutEntry: boolean;
+  groupDistribution: boolean;
+  preliminaryRounds: boolean;
+}
+
+export interface ISeedingAudit {
+  definedBy: string | null;
+  createdAt: string | null;
+  status: 'DRAFT' | 'FROZEN';
+  freezesTrigger: 'ACTIVE';
+}

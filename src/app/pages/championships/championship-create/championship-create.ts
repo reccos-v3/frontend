@@ -139,8 +139,7 @@ export class ChampionshipCreate implements OnInit {
     const seasonType: SeasonType = championship.season ? 'existing' : 'standalone';
     this.formData = {
       name: championship.name || '',
-      modality:
-        championship.modality?.id || (championship as IChampionshipResponse).modalityId || '',
+      modality: championship.modality?.id || '',
       gender: (championship.gender || 'MALE').toUpperCase() as IChampionshipResponse['gender'],
       seasonType: seasonType,
       season: championship.season?.id || null,

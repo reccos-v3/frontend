@@ -1,20 +1,26 @@
 <!-- Scrollable Content -->
-<div class="flex-1 overflow-y-auto p-8">
-  <div class="max-w-5xl mx-auto w-full flex flex-col gap-6 pb-20">
+<div class="flex-1 overflow-y-auto">
+  <div class="max-w-5xl flex flex-col gap-6 pb-20">
     <!-- Alert Message -->
-    <div
-      class="flex gap-4 p-4 rounded-xl bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700/50"
-    >
-      <div class="flex items-start pt-0.5 text-orange-600 dark:text-orange-500">
-        <span class="material-symbols-outlined fill">warning</span>
-      </div>
-      <div class="flex flex-col gap-1">
-        <p class="text-orange-900 dark:text-orange-100 text-sm font-bold">Atenção Necessária</p>
-        <p class="text-orange-800 dark:text-orange-200/80 text-sm">
-          A quantidade de times precisa ser compatível com a estrutura definida (Grupos de 4 times).
-        </p>
-      </div>
+    <div class="flex flex-col gap-2">
+      <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">
+        Adicionar Times
+      </h2>
+      <p class="text-text-secondary dark:text-gray-400">
+        Adicione os times que participarão do campeonato.
+      </p>
     </div>
+    <app-alert
+      class="block mb-8"
+      type="warning"
+      variant="left-accent"
+      message="<div class='flex flex-col gap-1'>
+        <p class='text-orange-900 dark:text-orange-100 text-sm font-bold'>Atenção Necessária</p>
+        <p class='text-orange-800 dark:text-orange-200/80 text-sm'>
+          A quantidade de times precisa ser compatível com a estrutura definida.
+        </p>
+      </div>"
+    />
     <!-- Stats & Summary -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Stat Card 1 -->
@@ -30,26 +36,18 @@
         </div>
       </div>
       <!-- Stat Card 2 (Blue Info) -->
-      <div
-        class="md:col-span-2 flex flex-col justify-center rounded-xl p-5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 relative overflow-hidden group"
-      >
+      <div class="md:col-span-2 flex flex-col relative w-full overflow-hidden group">
         <!-- Decorative background icon -->
-        <span
-          class="material-symbols-outlined absolute -right-4 -bottom-4 text-blue-100 dark:text-blue-800/30 text-9xl pointer-events-none"
-          >info</span
-        >
-        <div class="relative z-10 flex gap-4">
-          <div class="shrink-0 text-blue-600 dark:text-blue-400 mt-1">
-            <span class="material-symbols-outlined">auto_fix_high</span>
-          </div>
-          <div class="flex flex-col gap-1">
-            <p class="text-blue-900 dark:text-blue-100 font-bold text-sm">Ajuste Automático</p>
-            <p class="text-blue-800 dark:text-blue-200 text-sm leading-relaxed max-w-lg">
+        <app-alert
+          class="block"
+          type="info"
+          icon="auto_fix_high"
+          variant="left-accent"
+          message="<p class='text-blue-900 dark:text-blue-100 font-bold text-sm'>Ajuste Automático</p><p class='text-blue-800 dark:text-blue-200 text-sm leading-relaxed'>
               Com a quantidade atual, não há necessidade de Byes (folgas) na primeira fase. Se
               adicionar mais um time, o sistema criará uma fase preliminar.
-            </p>
-          </div>
-        </div>
+            </p>"
+        />
       </div>
     </div>
     <!-- Add Team Section -->

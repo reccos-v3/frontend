@@ -1,11 +1,12 @@
 import { Component, effect, input, output, signal } from '@angular/core';
 import { SetupStep, IChampionshipSetupRequest } from '../../../../interfaces/setup-types.interface';
 import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
+import { AppAlert } from '../../../../components/alert/alert';
 
 @Component({
   selector: 'app-setup-add-teams',
   standalone: true,
-  imports: [],
+  imports: [AppAlert],
   templateUrl: './setup-add-teams.html',
   styleUrl: './setup-add-teams.css',
 })

@@ -1,4 +1,4 @@
-import { Component, effect, input, OnInit, output, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, output, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import {
@@ -6,13 +6,15 @@ import {
   ISchedulePreferences,
   IKnockoutConfig,
   IChampionshipSetupRequest,
+  FormatType,
 } from '../../../../interfaces/setup-types.interface';
 import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 import { SetupChampionshipFormat } from '../setup-championship-format/setup-championship-format';
 import { AppAlert } from '../../../../components/alert/alert';
 import { SetupFormatKnockout } from '../setup-format-knockout/setup-format-knockout';
 import { FormatCalendarPreferences } from '../format-calendar-preferences/format-calendar-preferences';
-import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
+import { ChampionshipStore } from '../../../../services/championship.store';
+import { Router } from '@angular/router';
 
 interface IFormat {
   id: 'groups_and_knockout' | 'knockout' | 'points';
@@ -35,11 +37,17 @@ interface IFormat {
   styleUrl: './setup-format.css',
 })
 export class SetupFormat implements OnInit {
-  advanced = output<SetupStep>();
   valid = output<boolean>();
-  dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  advanced = output<SetupStep>();
   phasesChange = output<IPhase[]>();
-  data = input<IChampionshipResponse>();
+  dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  router = inject(Router);
+
+  championshipStore = inject(ChampionshipStore);
+
+  championship = this.championshipStore.championship;
+  canEdit = this.championshipStore.canEdit;
+  loading = signal(false);
 
   selectedFormat = signal<IFormat['id']>('groups_and_knockout');
   totalTeams = signal(16);
@@ -89,7 +97,7 @@ export class SetupFormat implements OnInit {
   }
 
   ngOnInit() {
-    const initial = this.data();
+    const initial = this.championship();
     if (initial?.format) {
       this.selectedFormat.set(initial.format.formatType.toLowerCase() as IFormat['id']);
     }
@@ -142,63 +150,42 @@ export class SetupFormat implements OnInit {
   }
 
   saveAndContinue() {
-    if (this.isValid()) {
-      const currentFormat = this.selectedFormat();
-
-      // If we are in selection mode
-      if (this.internalStep() === 'selection') {
-        if (currentFormat === 'points') {
-          // Round robin goes directly to teams
-          // For points format, set knockoutConfig based on turno/returno
-          const legs = this.isDoubleRound() ? 2 : 1;
-          this.knockoutConfig.set({
-            defaultLegs: legs,
-            defaultAdvanceRule: 'REGULAR_OR_PENALTIES',
-            phases: [
-              {
-                phaseOrder: 1,
-                legs: legs,
-                advanceRule: 'REGULAR_OR_PENALTIES',
-              },
-            ],
-          });
-
-          this.emitDataUpdate();
-          this.advanced.emit('teams'); // Skip seeding for points
-        } else {
-          // Others go to configuration
-          this.internalStep.set('configuration');
-        }
-      }
-      // If we are in configuration mode
-      else {
-        this.emitDataUpdate();
-        this.advanced.emit('teams');
-      }
+    if (this.internalStep() === 'selection' && this.selectedFormat() !== 'points') {
+      this.internalStep.set('configuration');
+      return;
     }
-  }
+    const currentChampionship = this.championship();
+    if (!currentChampionship) return;
 
-  emitDataUpdate() {
-    this.dataUpdate.emit({
+    this.championshipStore.replace({
+      ...currentChampionship,
       format: {
-        formatType: this.selectedFormat().toUpperCase(),
+        id: currentChampionship.format?.id || '',
+        formatType: this.selectedFormat().toUpperCase() as FormatType,
       },
-      knockoutConfig: this.knockoutConfig(),
       structure: {
         totalTeams: this.totalTeams(),
         groupsCount: this.groupsCount(),
         qualifiedPerGroup: this.qualifiedPerGroup(),
         firstPhaseType: this.firstPhaseType(),
+        knockoutConfig: this.knockoutConfig(),
       },
       schedulePreferences: this.schedulePreferences(),
     });
+    console.log(this.championship());
+
+    // Volta para o setup principal (SEM refetch)
+    this.router.navigate(['/admin/championships/setup', currentChampionship.id]);
   }
 
   returnToPrevious() {
     if (this.internalStep() === 'configuration') {
       this.internalStep.set('selection');
     } else {
-      this.advanced.emit('rules');
+      const championship = this.championship();
+      if (!championship) return;
+
+      this.router.navigate(['/admin/championships/setup', championship.id]);
     }
   }
 

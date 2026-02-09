@@ -16,14 +16,17 @@ export interface ISetupRules {
   hasHomeAway: boolean;
 }
 
+export type FormatType = 'KNOCKOUT' | 'GROUPS_AND_KNOCKOUT' | 'POINTS';
+
 export interface ISetupFormat {
-  formatType: string;
+  id?: string;
+  formatType: FormatType;
 }
 
 export interface IKnockoutConfig {
   defaultLegs: number;
   defaultAdvanceRule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
-  phases: IPhaseOverride[];
+  phases: IPhaseOverride[] | null;
 }
 
 export interface IPhaseOverride {
@@ -47,6 +50,7 @@ export interface ISetupStructure {
   groupsCount: number;
   qualifiedPerGroup: number;
   firstPhaseType: string;
+  knockoutConfig?: IKnockoutConfig;
 }
 
 export interface ISetupTiebreakCriteria {
@@ -155,9 +159,8 @@ export interface ISeedingConfig {
   targetPhaseId?: string;
   criteria?: string[];
   globalSeed?: string;
-  results: ISeedingResult[];
-  justification?: string;
-  // New policy fields
+  // results: ISeedingResult[];
+  // justification?: string;
   policyType?: SeedingPolicyType;
   technicalSource?: SeedingTechnicalSource;
   applicationContext?: ISeedingApplicationContext;

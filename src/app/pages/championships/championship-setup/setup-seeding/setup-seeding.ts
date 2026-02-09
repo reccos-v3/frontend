@@ -12,6 +12,7 @@ import {
   ISeedPolicy,
 } from '../../../../interfaces/setup-types.interface';
 import { AppAlert } from '../../../../components/alert/alert';
+import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
 
 @Component({
   selector: 'app-setup-seeding',
@@ -21,7 +22,7 @@ import { AppAlert } from '../../../../components/alert/alert';
   styleUrl: './setup-seeding.css',
 })
 export class SetupSeeding {
-  setupData = input.required<IChampionshipSetupRequest>();
+  data = input.required<IChampionshipResponse>();
   status = input.required<'CONFIGURING' | 'ACTIVE'>();
   updateData = output<Partial<IChampionshipSetupRequest>>();
   seedingChange = output<ISeedingConfig>();
@@ -80,7 +81,7 @@ export class SetupSeeding {
     },
   ];
 
-  formatType = computed(() => this.setupData()?.format?.formatType);
+  formatType = computed(() => this.data()?.format?.formatType);
 
   hasSeedPolicy = computed(() => {
     const format = this.formatType();
@@ -105,11 +106,11 @@ export class SetupSeeding {
 
   constructor() {
     effect(() => {
-      const existing = this.setupData().seeding;
+      const existing = this.data().seedingPolicy;
       if (!existing) return;
 
-      if (existing.policyType) {
-        this.policyType.set(existing.policyType);
+      if (existing.type) {
+        this.policyType.set(existing.type);
       }
 
       if (existing.mode) {
@@ -155,8 +156,8 @@ export class SetupSeeding {
       const config: ISeedingConfig = {
         type: this.policyType() === 'DRAW' ? 'DRAW' : 'RANKING',
         mode: this.decisionMode(),
-        results: this.setupData().seeding?.results || [],
-        justification: this.setupData().seeding?.justification || '',
+        // results: this.data().seedingPolicy?.results || [],
+        // justification: this.data().seedingPolicy?.justification || '',
         policyType: this.policyType(),
         ...(techSource !== undefined ? { technicalSource: techSource } : {}),
         applicationContext: {

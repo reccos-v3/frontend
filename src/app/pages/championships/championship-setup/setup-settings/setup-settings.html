@@ -1,17 +1,22 @@
-@switch (activeComponent()) {
-  @case ('info') {
-    <app-championship-create [initialData]="data()" />
+<div class="max-w-[1100px] w-full mx-auto p-8">
+  @switch (activeComponent()) {
+    @case ('info') {
+      <app-championship-create [initialData]="data()" />
+    }
+    @case ('rules') {
+      <app-setup-rules [data]="data()" />
+    }
+    @case ('periods') {
+      <app-setup-periods />
+    }
+    @case ('format') {
+      <app-setup-format />
+    }
+    @case ('teams') {
+      <app-setup-add-teams [data]="data()" />
+    }
+    @case ('seeding') {
+      <app-setup-seeding [status]="'CONFIGURING'" [data]="data()" />
+    }
   }
-  @case ('rules') {
-    <app-setup-rules [data]="data()" />
-  }
-  @case ('periods') {
-    <app-setup-periods [data]="data()" />
-  }
-  @case ('format') {
-    <app-setup-format [data]="data()" />
-  }
-  @case ('teams') {
-    <app-setup-add-teams [data]="data()" />
-  }
-}
+</div>

@@ -1,11 +1,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChampionshipService } from '../../../services/championship.service';
-import { IChampionshipResponse } from '../../../interfaces/championship.interface';
 import { CommonModule } from '@angular/common';
 import { SetupModuleCard, ISetupModule } from './components/setup-module-card/setup-module-card';
 import { SetupSidebar } from './setup-sidebar/setup-sidebar';
 import { SetupProgress } from './setup-progress/setup-progress';
+import { ChampionshipStore } from '../../../services/championship.store';
 
 @Component({
   selector: 'app-championship-setup',
@@ -17,16 +16,12 @@ import { SetupProgress } from './setup-progress/setup-progress';
 export class ChampionshipSetup implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private championshipService = inject(ChampionshipService);
+  private championshipStore = inject(ChampionshipStore);
 
   championshipId = signal<string | null>(null);
-  championship = signal<IChampionshipResponse | null>(null);
-  isLoading = signal(true);
-
-  canEdit = computed(() => {
-    const data = this.championship();
-    return data ? data.status !== 'ACTIVE' : false;
-  });
+  canEdit = this.championshipStore.canEdit;
+  isLoading = this.championshipStore.loading;
+  championship = this.championshipStore.championship;
 
   statusLabel = computed(() => {
     const data = this.championship();
@@ -136,8 +131,8 @@ export class ChampionshipSetup implements OnInit {
         title: 'Informações Básicas',
         description: 'Nome, logo e descrição do campeonato.',
         icon: 'info',
-        status: p.basicsDone ? 'COMPLETED' : 'PENDING',
-        statusLabel: p.basicsDone ? 'Concluído' : 'Incompleto',
+        status: 'COMPLETED',
+        statusLabel: 'Concluído',
         isLocked: !editable,
         payload: data,
       },
@@ -172,22 +167,22 @@ export class ChampionshipSetup implements OnInit {
         payload: data,
       },
       {
-        id: 'seeding',
-        title: 'Política de Seed',
-        description: 'Critérios para definição de cabeças de chave.',
-        icon: 'psychology',
-        status: p.seedingDone ? 'COMPLETED' : 'PENDING',
-        statusLabel: p.seedingDone ? 'Concluído' : 'Incompleto',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
         id: 'teams',
         title: 'Times',
         description: 'Gerenciar inscrições e times participantes.',
         icon: 'groups_2',
         status: p.teamsDone ? 'COMPLETED' : 'PENDING',
         statusLabel: p.teamsDone ? 'Concluído' : 'Pendente',
+        isLocked: !editable,
+        payload: data,
+      },
+      {
+        id: 'seeding',
+        title: 'Política de Seed',
+        description: 'Critérios para definição de cabeças de chave.',
+        icon: 'psychology',
+        status: p.seedingDone ? 'COMPLETED' : 'PENDING',
+        statusLabel: p.seedingDone ? 'Concluído' : 'Incompleto',
         isLocked: !editable,
         payload: data,
       },
@@ -209,28 +204,17 @@ export class ChampionshipSetup implements OnInit {
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.championshipId.set(id);
-    if (id) this.loadChampionship(id);
-  }
 
-  loadChampionship(id: string): void {
-    this.isLoading.set(true);
-    this.championshipService.getChampionshipById(id).subscribe({
-      next: (data) => {
-        this.championship.set(data);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        console.error('Error loading championship:', error);
-        this.isLoading.set(false);
-      },
-    });
+    if (id) {
+      this.championshipStore.ensureLoaded(id);
+    }
   }
 
   onModuleAction(moduleId: string): void {
     const module = this.setupModules().find((m) => m.id === moduleId);
 
     this.router.navigate(['/admin/championships/setup', this.championshipId(), 'settings'], {
-      state: { id: moduleId, isEdit: true, component: 'rules', payload: module?.payload },
+      state: { id: moduleId, isEdit: true, payload: module?.payload },
     });
   }
 }

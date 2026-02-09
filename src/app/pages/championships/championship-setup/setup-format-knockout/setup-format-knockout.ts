@@ -84,24 +84,28 @@ export class SetupFormatKnockout {
   });
 
   constructor() {
+    // effect(() => {
+    //   const phases = this.phases();
+    //   const config: IKnockoutConfig = {
+    //     defaultLegs: this.defaultLegs(),
+    //     defaultAdvanceRule: this.defaultAdvanceRule(),
+    //     phases: phases
+    //       .filter(
+    //         (p) =>
+    //           p.legs !== (this.defaultLegs() === 2 ? 2 : 1) ||
+    //           p.advanceRule !== this.defaultAdvanceRule(),
+    //       )
+    //       .map((p) => ({
+    //         phaseOrder: p.order,
+    //         legs: p.legs,
+    //         advanceRule: p.advanceRule || this.defaultAdvanceRule(),
+    //       })),
+    //   };
+    //   this.knockoutConfigChange.emit(config);
+    // });
+
     effect(() => {
-      const phases = this.phases();
-      const config: IKnockoutConfig = {
-        defaultLegs: this.defaultLegs(),
-        defaultAdvanceRule: this.defaultAdvanceRule(),
-        phases: phases
-          .filter(
-            (p) =>
-              p.legs !== (this.defaultLegs() === 2 ? 2 : 1) ||
-              p.advanceRule !== this.defaultAdvanceRule(),
-          )
-          .map((p) => ({
-            phaseOrder: p.order,
-            legs: p.legs,
-            advanceRule: p.advanceRule || this.defaultAdvanceRule(),
-          })),
-      };
-      this.knockoutConfigChange.emit(config);
+      this.knockoutConfigChange.emit(this.buildConfig());
     });
   }
 
@@ -143,5 +147,21 @@ export class SetupFormatKnockout {
 
   isSelectionInvalid(phase: IPhaseConfig): boolean {
     return phase.matchType === 'home_away' && phase.teamsCount % 2 !== 0;
+  }
+
+  private buildConfig(): IKnockoutConfig {
+    return {
+      defaultLegs: this.defaultLegs(),
+      defaultAdvanceRule: this.defaultAdvanceRule(),
+      phases: this.phases().map((p) => ({
+        phaseOrder: p.order,
+        legs: p.legs,
+        advanceRule: p.advanceRule || this.defaultAdvanceRule(),
+      })),
+    };
+  }
+
+  confirm() {
+    this.knockoutConfigChange.emit(this.buildConfig());
   }
 }
