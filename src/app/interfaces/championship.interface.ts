@@ -1,3 +1,4 @@
+import { IUpdateRulesAndScoringResponse } from './championship-setup.interface';
 import {
   IActivationPolicy,
   IPostActivationRules,
@@ -34,20 +35,9 @@ export interface IChampionshipSeason {
   updatedAt: string;
 }
 
-export interface IChampionshipRules {
-  id: string;
-  pointsWin: number;
-  pointsDraw: number;
-  pointsLoss: number;
-  hasHomeAway: boolean;
-  tieBreakerOrder: string[];
-}
-
-export interface IChampionshipTiebreaks {
-  criteria: {
-    criteriaId: string;
-    priorityOrder: number;
-  }[];
+export interface ITieBreakerOrder {
+  criteriaId: string;
+  priorityOrder: number;
 }
 
 export interface IChampionshipResponse {
@@ -69,8 +59,8 @@ export interface IChampionshipResponse {
     formatType: 'KNOCKOUT' | 'GROUPS_AND_KNOCKOUT' | 'POINTS';
   } | null;
   structure: ISetupStructure | null;
-  rules: IChampionshipRules | null;
-  tiebreaks: IChampionshipTiebreaks | null;
+  rules: IUpdateRulesAndScoringResponse | null;
+  tiebreaks: ITieBreakerOrder[] | null;
   activationPolicy: IActivationPolicy | null;
   postActivationRules: IPostActivationRules | null;
   schedulePreferences: ISchedulePreferences | null;

@@ -1,142 +1,155 @@
-<!-- Scrollable Content -->
-<div class="flex-1 overflow-y-auto">
-  <div class="max-w-5xl flex flex-col gap-6 pb-20">
-    <!-- Alert Message -->
-    <div class="flex flex-col gap-2">
-      <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">
-        Adicionar Times
-      </h2>
-      <p class="text-text-secondary dark:text-gray-400">
-        Adicione os times que participarão do campeonato.
-      </p>
-    </div>
-    <app-alert
-      class="block mb-8"
-      type="warning"
-      variant="left-accent"
-      message="<div class='flex flex-col gap-1'>
-        <p class='text-orange-900 dark:text-orange-100 text-sm font-bold'>Atenção Necessária</p>
-        <p class='text-orange-800 dark:text-orange-200/80 text-sm'>
-          A quantidade de times precisa ser compatível com a estrutura definida.
-        </p>
-      </div>"
-    />
-    <!-- Stats & Summary -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <!-- Stat Card 1 -->
+<div class="flex flex-col gap-6 pb-28">
+  <div class="flex flex-col gap-2">
+    <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">
+      Gestão de equipes
+    </h2>
+    <p class="text-text-secondary dark:text-gray-400">
+      Adicione os times que participarão do campeonato.
+    </p>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Left Column: Search & Config -->
+    <div class="lg:col-span-4 space-y-6">
       <div
-        class="flex flex-col justify-between rounded-xl p-5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark shadow-sm"
+        class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
       >
-        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total de Times</p>
-        <div class="flex items-end justify-between mt-2">
-          <p class="text-3xl font-bold text-secondary dark:text-white">12</p>
-          <span class="material-symbols-outlined text-gray-200 dark:text-gray-700 text-4xl"
-            >groups</span
-          >
-        </div>
-      </div>
-      <!-- Stat Card 2 (Blue Info) -->
-      <div class="md:col-span-2 flex flex-col relative w-full overflow-hidden group">
-        <!-- Decorative background icon -->
-        <app-alert
-          class="block"
-          type="info"
-          icon="auto_fix_high"
-          variant="left-accent"
-          message="<p class='text-blue-900 dark:text-blue-100 font-bold text-sm'>Ajuste Automático</p><p class='text-blue-800 dark:text-blue-200 text-sm leading-relaxed'>
-              Com a quantidade atual, não há necessidade de Byes (folgas) na primeira fase. Se
-              adicionar mais um time, o sistema criará uma fase preliminar.
-            </p>"
-        />
-      </div>
-    </div>
-    <!-- Add Team Section -->
-    <div class="flex flex-col gap-4 mt-2">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold text-primary dark:text-white">Adicionar Times</h3>
-        <span class="text-xs text-gray-500">Mínimo: 4 times</span>
-      </div>
-      <div class="flex gap-3">
-        <div class="relative flex-1">
-          <input
-            class="w-full h-12 rounded-xl border border-[#cfe7db] dark:border-[#2a4538] bg-white dark:bg-[#1a3326] px-4 pl-11 text-sm outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-[#0d1b14] dark:text-white placeholder-gray-400"
-            placeholder="Digite o nome do time..."
-            type="text"
-          />
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            >search</span
-          >
-        </div>
-        <button
-          class="bg-primary dark:bg-white text-white dark:text-[#0d1b14] h-12 px-6 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-lg shadow-black/5"
-        >
-          <span class="material-symbols-outlined text-[20px]">add</span>
-          Adicionar
-        </button>
-      </div>
-    </div>
-    <!-- Team Grid List -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      @for (team of teams(); track team.name) {
-        <div
-          class="group flex items-center gap-4 p-3 pr-4 rounded-xl border border-[#cfe7db] dark:border-[#2a4538] bg-white dark:bg-surface-dark hover:shadow-md transition-shadow"
-        >
-          <div
-            class="size-12 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0"
-          >
-            <div
-              class="size-8 rounded-full bg-cover bg-center"
-              [style.background-image]="'url(' + team.image + ')'"
-            ></div>
-          </div>
-          <div class="flex flex-col flex-1 min-w-0">
-            <p class="font-bold text-[#0d1b14] dark:text-white truncate">
-              {{ team.name }}
+        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-slate-400">person_add</span>
+          Adicionar à Lista
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <label
+              for="search-federation"
+              class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5"
+              >Buscar na Federação</label
+            >
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+              </span>
+              <input
+                id="search-federation"
+                class="block w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary transition-all text-sm"
+                placeholder="Nome ou sigla da equipe..."
+                type="text"
+              />
+            </div>
+            <p class="mt-2 text-xs text-slate-400">
+              Apenas equipes registradas e ativas aparecerão na busca.
             </p>
-            <p class="text-xs text-gray-500 truncate">{{ team.added }}</p>
           </div>
           <button
-            class="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 opacity-0 group-hover:opacity-100 focus:opacity-100"
+            class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
           >
-            <span class="material-symbols-outlined text-[20px]">delete</span>
+            <span class="material-symbols-outlined text-sm">add_circle_outline</span>
+            Vincular Equipe
           </button>
         </div>
-      }
+      </div>
+      <!-- Validation Alert -->
+      <div
+        class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 rounded-xl flex gap-3"
+      >
+        <span class="material-symbols-outlined text-amber-500">info</span>
+        <div>
+          <p class="text-sm font-semibold text-amber-800 dark:text-amber-200">Requisito Mínimo</p>
+          <p class="text-xs text-amber-700/80 dark:text-amber-400/80 leading-relaxed">
+            Você precisa de no mínimo 1 equipe vinculada para salvar as configurações desta etapa.
+          </p>
+        </div>
+      </div>
+      <div
+        class="hidden lg:block bg-slate-100 dark:bg-slate-900/50 p-6 rounded-xl border border-dashed border-slate-300 dark:border-slate-700"
+      >
+        <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-widest">
+          Resumo do Hub
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+            <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+            Inscrições abertas
+          </li>
+          <li class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+            <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+            Categoria Sub-20
+          </li>
+        </ul>
+      </div>
     </div>
-    <!-- Empty State Placeholder (Visual only, implying scrolling/more content) -->
-    <div
-      class="flex items-center justify-center py-8 border-t border-dashed border-[#cfe7db] dark:border-[#2a4538] mt-4"
-    >
-      <p class="text-sm text-gray-400 flex items-center gap-2">
-        <span class="material-symbols-outlined text-lg">arrow_downward</span>
-        Continue adicionando times para ver mais
-      </p>
+    <!-- Right Column: List of Teams -->
+    <div class="lg:col-span-8">
+      <div
+        class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50"
+        >
+          <h3 class="font-bold text-slate-700 dark:text-slate-200">Equipes Inscritas</h3>
+          <div class="text-xs font-medium text-slate-500">Exibindo 12 de 12 times</div>
+        </div>
+        <div class="divide-y divide-slate-100 dark:divide-slate-800">
+          <!-- Team Item 1 -->
+          @for (team of teams(); track $index) {
+            <div
+              class="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+            >
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden flex items-center justify-center"
+                >
+                  <img
+                    class="w-10 h-10 object-contain"
+                    alt="Escudo de time de futebol verde"
+                    [src]="team.image"
+                  />
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-800 dark:text-slate-200">{{ team.name }}</h4>
+                  <p class="text-xs text-slate-500 uppercase font-semibold">{{ team.id }}</p>
+                </div>
+              </div>
+              <button
+                class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+              >
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          }
+        </div>
+        <!-- Pagination / View More -->
+        <div
+          class="p-4 flex justify-center bg-slate-50/30 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800"
+        >
+          <button class="text-sm font-semibold text-white hover:underline flex items-center gap-1">
+            Ver todas as equipes
+            <span class="material-symbols-outlined text-sm">expand_more</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<!-- Footer Actions -->
-<footer
-  class="bg-surface-light dark:bg-surface-dark border-t border-[#e7f3ed] dark:border-[#2a4538] p-6 shrink-0 z-20"
->
-  <div class="max-w-5xl mx-auto w-full flex justify-between items-center">
-    <button
-      type="button"
-      (click)="returnToPrevious()"
-      class="text-gray-600 dark:text-gray-300 font-medium text-sm hover:text-[#0d1b14] dark:hover:text-white px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-    >
-      Voltar
-    </button>
-    <div class="flex gap-4 items-center">
-      <span class="text-xs text-gray-400 hidden sm:block">Próximo passo: Revisão final</span>
+
+  <!-- Footer Actions -->
+  <footer
+    class="fixed bottom-0 left-0 md:left-64 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] z-50 transition-all"
+  >
+    <div class="max-w-[1100px] mx-auto px-8 py-5 flex items-center justify-between">
       <button
-        type="button"
-        (click)="saveAndContinue()"
-        class="bg-primary hover:bg-primary-dark text-white dark:text-[#0d1b14] px-8 py-3 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 transition-all transform active:scale-95 flex items-center gap-2"
+        class="flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+        (click)="returnHub()"
       >
-        Próximo
-        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        <span class="material-symbols-outlined text-sm"> arrow_back </span>
+        Voltar ao Hub
+      </button>
+
+      <button
+        (click)="saveAndContinue()"
+        [disabled]="!isValid()"
+        class="flex items-center gap-2 px-10 py-3 rounded-lg bg-primary text-white font-bold hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <span class="material-symbols-outlined text-sm"> save </span> Salvar Regras
       </button>
     </div>
-  </div>
-</footer>
+  </footer>
+</div>

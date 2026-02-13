@@ -44,6 +44,7 @@ export class ChampionshipStore {
       ...current,
       ...patch,
     });
+    console.log('ESTAMOS NO UPDATE ARA ATUALIZAR CAMPEONATO', this._championship());
   }
 
   replace(championship: IChampionshipResponse): void {

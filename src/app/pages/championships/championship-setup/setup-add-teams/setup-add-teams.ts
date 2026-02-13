@@ -1,16 +1,17 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { SetupStep, IChampionshipSetupRequest } from '../../../../interfaces/setup-types.interface';
 import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
-import { AppAlert } from '../../../../components/alert/alert';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-setup-add-teams',
   standalone: true,
-  imports: [AppAlert],
+  imports: [],
   templateUrl: './setup-add-teams.html',
   styleUrl: './setup-add-teams.css',
 })
 export class SetupAddTeams {
+  private router = inject(Router);
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
@@ -86,7 +87,8 @@ export class SetupAddTeams {
     }
   }
 
-  returnToPrevious() {
-    this.advanced.emit('format');
+  returnHub() {
+    const championshipId = this.data()?.id || '';
+    this.router.navigate(['/admin/championships/setup', championshipId]);
   }
 }

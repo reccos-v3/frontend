@@ -4,7 +4,7 @@
       <app-championship-create [initialData]="data()" />
     }
     @case ('rules') {
-      <app-setup-rules [data]="data()" />
+      <app-setup-rules />
     }
     @case ('periods') {
       <app-setup-periods />
@@ -17,6 +17,9 @@
     }
     @case ('seeding') {
       <app-setup-seeding [status]="'CONFIGURING'" [data]="data()" />
+    }
+    @case ('advanced-rules') {
+      <app-setup-advanced-rules />
     }
   }
 </div>

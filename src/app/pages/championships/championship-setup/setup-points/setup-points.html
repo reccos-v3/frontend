@@ -1,71 +1,71 @@
 <section
-  [formGroup]="form()"
-  [class]="
-    embedded()
-      ? 'flex flex-col gap-6'
-      : 'flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark'
-  "
+  class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800"
 >
-  <div class="flex items-center gap-3 pb-4 border-b border-border-light dark:border-border-dark">
-    <div class="p-2 rounded-lg bg-primary/10 text-primary">
-      <span class="material-symbols-outlined">scoreboard</span>
+  <div class="flex items-center gap-2 mb-6">
+    <div class="bg-primary/10 p-2 rounded-lg">
+      <span class="material-symbols-outlined text-primary">scoreboard</span>
     </div>
-    <h3 class="text-lg font-bold text-text-main dark:text-white">Sistema de Pontuação</h3>
+    <h3 class="font-bold text-lg">Pontuação</h3>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Victory -->
-    <div class="flex flex-col gap-2">
-      <label for="pointsWin" class="text-sm font-bold text-text-main dark:text-gray-200"
-        >Vitória</label
-      >
-      <div class="relative">
+  <div class="space-y-6">
+    <div
+      class="flex items-center justify-between p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700"
+    >
+      <label class="font-medium" for="win-points">Vitória</label>
+      <div class="flex items-center gap-3">
         <input
-          class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+          class="w-16 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600 rounded text-center font-bold focus:ring-primary focus:border-primary"
+          id="win-points"
           type="number"
-          id="pointsWin"
-          formControlName="pointsWin"
+          value="3"
         />
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
-          >pts</span
-        >
+        <span class="text-slate-400 text-sm">pts</span>
       </div>
     </div>
     <!-- Draw -->
-    <div class="flex flex-col gap-2">
-      <label for="pointsDraw" class="text-sm font-bold text-text-main dark:text-gray-200"
-        >Empate</label
-      >
-      <div class="relative">
+    <div
+      class="flex items-center justify-between p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700"
+    >
+      <label class="font-medium" for="draw-points">Empate</label>
+      <div class="flex items-center gap-3">
         <input
-          class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+          class="w-16 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600 rounded text-center font-bold focus:ring-primary focus:border-primary"
+          id="draw-points"
           type="number"
-          id="pointsDraw"
-          formControlName="pointsDraw"
+          value="1"
         />
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
-          >pts</span
-        >
+        <span class="text-slate-400 text-sm">pts</span>
       </div>
     </div>
     <!-- Loss -->
-    <div class="flex flex-col gap-2">
-      <label for="pointsLoss" class="text-sm font-bold text-text-main dark:text-gray-200"
-        >Derrota</label
-      >
-      <div class="relative">
+    <div
+      class="flex items-center justify-between p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700"
+    >
+      <label class="font-medium" for="loss-points">Derrota</label>
+      <div class="flex items-center gap-3">
         <input
-          class="w-full h-12 pl-4 pr-12 rounded-xl bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none font-display font-medium transition-all"
+          class="w-16 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600 rounded text-center font-bold focus:ring-primary focus:border-primary"
+          id="loss-points"
           type="number"
-          id="pointsLoss"
-          formControlName="pointsLoss"
+          value="0"
         />
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-secondary font-medium"
-          >pts</span
-        >
+        <span class="text-slate-400 text-sm">pts</span>
       </div>
+    </div>
+    <!-- Toggle Games -->
+    <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input checked="" class="sr-only peer" type="checkbox" value="" />
+        <div
+          class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+        ></div>
+        <span class="ml-3 text-sm font-medium text-slate-700 dark:text-slate-300"
+          >Habilitar Jogos de Ida e Volta</span
+        >
+      </label>
+      <p class="mt-2 text-xs text-slate-400 italic">
+        Cada confronto terá dois jogos (turno e returno).
+      </p>
     </div>
   </div>
 </section>

@@ -187,6 +187,16 @@ export class ChampionshipSetup implements OnInit {
         payload: data,
       },
       {
+        id: 'advanced-rules',
+        title: 'Configurações Avançadas',
+        description: 'Configurações avançadas do campeonato.',
+        icon: 'settings',
+        status: 'COMPLETED',
+        statusLabel: 'Concluído',
+        isLocked: !editable,
+        payload: data,
+      },
+      {
         id: 'review',
         title: 'Revisão Final',
         description: 'Validação completa para ativação.',

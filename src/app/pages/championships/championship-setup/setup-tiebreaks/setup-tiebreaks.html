@@ -1,93 +1,69 @@
 <section
-  class="flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-surface-dark shadow-sm border border-border-light dark:border-border-dark"
+  class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 h-full"
 >
-  <div
-    class="flex items-center justify-between pb-4 border-b border-border-light dark:border-border-dark"
-  >
-    <div class="flex items-start gap-3">
-      <div class="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-        <span class="material-symbols-outlined">sort</span>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">
-          Critérios de Desempate
-        </h3>
-        <p class="text-sm font-medium text-orange-800 dark:text-orange-400">
-          Pontos é sempre o primeiro critério por regra do sistema.
-        </p>
-      </div>
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">sort</span>
+      <h3 class="font-bold text-lg">Critérios de Desempate</h3>
     </div>
     <button
       (click)="openModal.emit()"
-      class="text-sm font-bold text-primary hover:text-primary-hover transition-colors"
+      class="text-sm font-bold text-primary hover:text-primary transition-colors"
     >
       + Adicionar critério
     </button>
   </div>
-  <div class="flex flex-col gap-3">
-    @if (tiebreaks().length > 1) {
-      <p class="text-sm text-text-secondary dark:text-gray-400 mb-2">
-        Arraste para reordenar a prioridade dos demais critérios.
-      </p>
-    }
 
+  <div class="space-y-2">
     @for (tiebreak of tiebreaks(); track $index) {
-      <div
-        class="group flex items-center justify-between p-4 rounded-xl border transition-all duration-200"
-        [class.bg-background-light]="dragOverIndex !== $index"
-        [class.dark:bg-background-dark]="dragOverIndex !== $index"
-        [class.border-border-light]="dragOverIndex !== $index"
-        [class.dark:border-border-dark]="dragOverIndex !== $index"
-        [class.border-primary]="dragOverIndex === $index"
-        [class.bg-primary/5]="dragOverIndex === $index"
-        [class.opacity-50]="dragIndex === $index"
-        [class.cursor-grab]="tiebreak.code !== 'POINTS'"
-        [class.active:cursor-grabbing]="tiebreak.code !== 'POINTS'"
-        [attr.draggable]="tiebreak.code !== 'POINTS'"
-        (dragstart)="tiebreak.code !== 'POINTS' ? onDragStart($index) : null"
-        (dragover)="tiebreak.code !== 'POINTS' ? onDragOver($event, $index) : null"
-        (dragleave)="onDragLeave()"
-        (drop)="onDrop($index)"
-      >
-        <div class="flex items-center gap-4">
-          @if (tiebreak.code !== 'POINTS') {
-            <span class="material-symbols-outlined text-gray-400 cursor-grab">drag_indicator</span>
-          } @else {
-            <span class="material-symbols-outlined text-primary/40">lock</span>
-          }
-          <span class="font-bold text-text-main dark:text-white"
-            >{{ $index + 1 }}. {{ tiebreak.name }}</span
+      <!-- ITEM FIXO -->
+      @if (tiebreak.code === 'POINTS') {
+        <div
+          class="flex items-center gap-4 p-4 bg-primary/10 border border-primary/20 rounded-lg opacity-80 cursor-not-allowed"
+        >
+          <span class="material-symbols-outlined text-slate-400">lock</span>
+          <span class="font-bold text-primary"> 1º {{ tiebreak.name }} </span>
+          <span
+            class="ml-auto text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded uppercase"
           >
+            Fixo
+          </span>
         </div>
-        @if (tiebreak.code !== 'POINTS') {
+      } @else {
+        <!-- DRAGGABLE ITEM -->
+        <div
+          class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg hover:border-primary/50 transition-colors shadow-sm group"
+          draggable="true"
+          (dragstart)="onDragStart($index)"
+          (dragover)="onDragOver($event, $index)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($index)"
+        >
+          <span
+            class="material-symbols-outlined text-slate-300 group-hover:text-primary cursor-move"
+          >
+            drag_indicator
+          </span>
+
+          <div class="flex items-center gap-3">
+            <span
+              class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold"
+            >
+              {{ $index + 1 }}
+            </span>
+            <span class="font-medium">
+              {{ tiebreak.name }}
+            </span>
+          </div>
+
           <button
             (click)="removeTiebreak.emit($index)"
-            class="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+            class="ml-auto text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
           >
             <span class="material-symbols-outlined">delete</span>
           </button>
-        }
-      </div>
-    } @empty {
-      <button
-        (click)="openModal.emit()"
-        class="group flex flex-col items-center justify-center gap-4 p-10 rounded-[2rem] border-2 border-dashed border-border-light dark:border-border-dark hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all duration-300"
-      >
-        <div
-          class="w-16 h-16 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-        >
-          <span
-            class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors"
-            >playlist_add</span
-          >
         </div>
-        <div class="flex flex-col items-center gap-1 text-center">
-          <h4 class="font-bold text-text-main dark:text-white">Selecione critérios adicionais</h4>
-          <p class="text-sm text-text-secondary dark:text-gray-400 max-w-[280px]">
-            Os pontos são obrigatórios, mas você pode adicionar outros critérios para desempate.
-          </p>
-        </div>
-      </button>
+      }
     }
   </div>
 </section>

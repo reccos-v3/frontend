@@ -3,7 +3,6 @@ import {
   computed,
   effect,
   inject,
-  input,
   output,
   PLATFORM_ID,
   signal,
@@ -21,11 +20,14 @@ import { IModalityResponse } from '../../../../interfaces/modality.interface';
 import { ISeasonResponse } from '../../../../interfaces/season.interface';
 
 import { TiebreakCriteriaModalComponent } from '../../../../components/tiebreak-criteria-modal/tiebreak-criteria-modal.component';
-import { SetupAdvancedRules } from '../setup-advanced-rules/setup-advanced-rules';
 import { SetupPointsComponent } from '../setup-points/setup-points';
 import { SetupTiebreaksComponent } from '../setup-tiebreaks/setup-tiebreaks';
 import { IPostActivationRules } from '../../../../interfaces/setup-types.interface';
-import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
+import { ChampionshipSetupService } from '../../../../services/championship-setup.service';
+import { ChampionshipStore } from '../../../../services/championship.store';
+import { IRulesAndScoringRequest } from '../../../../interfaces/championship-setup.interface';
+import { Router } from '@angular/router';
+import { AppAlert } from '../../../../components/alert/alert';
 
 @Component({
   selector: 'app-setup-rules',
@@ -34,24 +36,27 @@ import { IChampionshipResponse } from '../../../../interfaces/championship.inter
     CommonModule,
     ReactiveFormsModule,
     TiebreakCriteriaModalComponent,
-    SetupAdvancedRules,
     SetupPointsComponent,
     SetupTiebreaksComponent,
+    AppAlert,
   ],
   templateUrl: './setup-rules.html',
   styleUrl: './setup-rules.css',
 })
 export class SetupRules implements OnInit {
+  private readonly router = inject(Router);
+  private seasonService = inject(SeasonService);
   private tiebreakService = inject(TiebreakService);
   private modalityService = inject(ModalityService);
-  private seasonService = inject(SeasonService);
+  private championshipStore = inject(ChampionshipStore);
+  private championshipSetupService = inject(ChampionshipSetupService);
   private platformId = inject(PLATFORM_ID);
   private fb = inject(FormBuilder);
 
   advanced = output<SetupStep>();
   valid = output<boolean>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
-  data = input<IChampionshipResponse>();
+  data = this.championshipStore.championship;
 
   // Basics
   name = signal('');
@@ -93,11 +98,11 @@ export class SetupRules implements OnInit {
     effect(
       () => {
         const available = this.availableTiebreaks();
-        const initialTiebreaks = this.data()?.tiebreaks?.criteria;
+        const initialTiebreaks = this.data()?.rules?.tieBreakerOrder;
 
         if (available.length > 0 && initialTiebreaks && initialTiebreaks.length > 0) {
           const restored = initialTiebreaks
-            .map((c) => available.find((a) => a.id.toString() === c.criteriaId))
+            .map((c) => available.find((a) => a.id.toString() === c))
             .filter((t): t is ITiebreakResponse => !!t);
 
           if (restored.length > 0) {
@@ -213,34 +218,32 @@ export class SetupRules implements OnInit {
 
   saveAndContinue() {
     if (this.isValid()) {
-      const formValues = this.rulesForm.value;
-      this.dataUpdate.emit({
-        basics: {
-          name: this.name(),
-          modalityId: this.modalityId(),
-          gender: this.gender(),
-          type: this.type(),
-          seasonId: this.seasonId(),
+      const championship = this.data();
+      const championshipId = championship?.id || '';
+      const request: IRulesAndScoringRequest = {
+        ...this.rulesForm.value,
+        tieBreakerOrder: this.tiebreaks().map((t, index) => ({
+          criteriaId: t.id.toString(),
+          priorityOrder: index + 1,
+        })),
+      };
+      this.championshipSetupService.updateRulesAndScoring(championshipId, request).subscribe({
+        next: (response) => {
+          this.championshipStore.update({
+            rules: response,
+          });
+
+          this.router.navigate(['/admin/championships/setup', championshipId]);
         },
-        rules: {
-          pointsWin: formValues.pointsWin,
-          pointsDraw: formValues.pointsDraw,
-          pointsLoss: formValues.pointsLoss,
-          hasHomeAway: formValues.hasHomeAway,
-        },
-        tiebreaks: {
-          criteria: this.tiebreaks().map((t, index) => ({
-            criteriaId: t.id.toString(),
-            priorityOrder: index + 1,
-          })),
-        },
-        postActivationRules: this.postActivationRules() || {
-          allowTeamChanges: false,
-          allowScheduleChanges: false,
-          allowRuleChanges: false,
+        error: (error) => {
+          console.error(error);
         },
       });
-      this.advanced.emit('periods');
     }
+  }
+
+  returnHub() {
+    const championshipId = this.data()?.id || '';
+    this.router.navigate(['/admin/championships/setup', championshipId]);
   }
 }
