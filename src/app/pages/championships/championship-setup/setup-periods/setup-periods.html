@@ -1,51 +1,111 @@
-<div class="p-8 flex flex-col gap-8">
-  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-[#111814] dark:text-white text-3xl font-black leading-tight tracking-tight">
-        Períodos do Campeonato
-      </h2>
-      <p class="text-[#618975] dark:text-gray-400 text-base max-w-2xl">
-        Defina as janelas oficiais de inscrição e realização do campeonato.
+<div class="flex flex-col gap-6 pb-28">
+  <!-- Dashboard Intro -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">
+      Definição de Períodos
+    </h2>
+    <p class="text-text-secondary dark:text-gray-400">
+      Configure as datas cruciais para a automação das regras do seu torneio. O sistema abrirá e
+      fechará funcionalidades automaticamente com base nestes horários.
+    </p>
+  </div>
+
+  <!-- Alert for blocked transfer window -->
+  @if (isTransferBlocked()) {
+    <app-alert
+      type="warning"
+      variant="left-accent"
+      title="Recurso Restrito: Janela de Transferência"
+      message="As configurações de datas para transferências estão desabilitadas porque a regra de <strong>Alterações de Elenco</strong> não foi permitida. Deseja habilitar este recurso agora?"
+    >
+      <div actions>
+        <button
+          (click)="showAdvancedModal.set(true)"
+          class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-lg text-xs font-bold hover:bg-amber-500/20 transition-all border border-amber-500/20"
+        >
+          <span class="material-symbols-outlined text-sm">settings</span>
+          Habilitar Agora
+        </button>
+      </div>
+    </app-alert>
+  }
+
+  <!-- Modal for Advanced Rules -->
+  <app-modal
+    [isOpen]="showAdvancedModal()"
+    [title]="'Configurações de Elencos'"
+    [icon]="'admin_panel_settings'"
+    (modalClose)="showAdvancedModal.set(false)"
+  >
+    <app-setup-advanced-rules
+      #advancedRules
+      [embedded]="true"
+      [initialData]="championship()?.settings || null"
+      (advancedRulesChange)="handleAdvancedRulesChange($event)"
+    ></app-setup-advanced-rules>
+
+    <div footer>
+      <button
+        (click)="advancedRules.submit(); showAdvancedModal.set(false)"
+        class="px-4 py-2 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all shadow-sm"
+      >
+        Salvar e Fechar
+      </button>
+    </div>
+  </app-modal>
+  <!-- Grid of Configuration Cards -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    @for (config of configs(); track config.key) {
+      <app-period-card
+        [tournament]="config"
+        [startDate]="getInitialDate(config.key, 'start')"
+        [endDate]="getInitialDate(config.key, 'end')"
+        (valuesChange)="handleValidity(config.key, $event)"
+      ></app-period-card>
+    }
+  </div>
+
+  <!-- System Message / Info -->
+  <div class="mt-8 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl flex gap-4 items-center">
+    <div
+      class="h-10 w-10 shrink-0 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400"
+    >
+      <span class="material-icons-round">public</span>
+    </div>
+    <div class="flex-grow">
+      <p class="text-sm font-medium text-blue-900 dark:text-blue-200">Fuso Horário Global</p>
+      <p class="text-xs text-blue-700 dark:text-blue-300">
+        As datas e horários configurados acima seguem o padrão (GMT-03:00) Horário de Brasília.
       </p>
     </div>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <div class="lg:col-span-2 space-y-6">
-      <app-period-range-dates
-        [initialValues]="tempValues()"
-        (validForm)="isValid.set($event)"
-        (periodValues)="handlePeriodValues($event)"
-      />
-    </div>
-    <div class="lg:col-span-1">
-      <app-period-sidebar [tempValues]="tempValues()" />
+  <!-- Map Section (Visual Context of Regional Rules) -->
+  <div class="mt-12 rounded-xl overflow-hidden h-64 relative group">
+    <img
+      alt="Região de Cobertura"
+      class="w-full h-full object-cover grayscale opacity-50 dark:opacity-20 transition-transform duration-700 group-hover:scale-105"
+      data-alt="Modern geometric map with data visualization points"
+      data-location="São Paulo"
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBraRbsaSGAaegJ0bzXxFB6ANefv_BOwpKYKFFXRPmlPI4odhfLmJeEzuj35MQ-ni7LRT_WkEFS2SjN9HSuTuqBIDkjzPuexo-aMj4p-LAvjsO5hy2j-rqTM0CE5Uld-VsCLt6VjNEbTy_IEJaltQPeREaOldmkkUMENzAJaXXiD6PNkjOzV4K05TioYbjnJqo27coyVj3DDY7L75csAWeTUxgHKXqtBrMHJdvE4BZSdeLYV2wTjdM7NHAsPTPlDkBC-nIFEj5OA5E"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent"
+    ></div>
+    <div class="absolute bottom-6 left-6">
+      <span
+        class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase tracking-widest"
+        >Regionalização</span
+      >
+      <h4 class="text-lg font-bold">Abrangência do Cronograma</h4>
+      <p class="text-xs text-slate-500">
+        Este cronograma será aplicado a todos os núcleos vinculados.
+      </p>
     </div>
   </div>
-  <div
-    class="flex items-center justify-between mt-8 pt-6 border-t border-[#E5E7EB] dark:border-[#1A2C24]"
-  >
-    <button
-      (click)="goBack()"
-      class="px-6 py-2.5 rounded-lg border border-[#E5E7EB] dark:border-[#1A2C24] text-[#111814] dark:text-white font-bold text-sm hover:bg-[#F6F8F7] dark:hover:bg-[#102219] transition-colors flex items-center gap-2"
-    >
-      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-      Voltar
-    </button>
-    <div class="flex gap-4">
-      <button
-        class="px-6 py-2.5 rounded-lg text-[#111814] dark:text-white font-bold text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      >
-        Salvar Rascunho
-      </button>
-      <button
-        (click)="saveAndContinue()"
-        [disabled]="!isValid()"
-        [class.opacity-50]="!isValid()"
-        class="px-10 py-2.5 rounded-lg bg-[#1E7F4F] text-white font-bold text-sm hover:bg-[#16633D] transition-all shadow-md flex items-center gap-2"
-      >
-        Próximo: Regras
-        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-      </button>
-    </div>
-  </div>
+  @if (!showAdvancedModal()) {
+    <app-setup-footer-buttons
+      [isValid]="isValid()"
+      (eventClickConfirmButton)="eventClickConfirmButton($event)"
+    />
+  }
 </div>

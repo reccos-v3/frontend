@@ -1,4 +1,7 @@
-import { IUpdateRulesAndScoringResponse } from './championship-setup.interface';
+import {
+  IAdvancedSettingsRequest,
+  IUpdateRulesAndScoringResponse,
+} from './championship-setup.interface';
 import {
   IActivationPolicy,
   IPostActivationRules,
@@ -50,6 +53,7 @@ export interface IChampionshipResponse {
   season: IChampionshipSeason | null;
   championshipPeriod: ISetupChampionshipPeriod | null;
   registrationPeriod: ISetupRegistrationPeriod | null;
+  transferWindowPeriod: ISetupRegistrationPeriod | null;
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -65,6 +69,7 @@ export interface IChampionshipResponse {
   postActivationRules: IPostActivationRules | null;
   schedulePreferences: ISchedulePreferences | null;
   seedingPolicy: ISeedingPolicyResponse | null;
+  settings: IAdvancedSettingsRequest | null;
   progress: IChampionshipProgress;
   teamsCount: number;
   pendingSteps: IChampionshipPendingStep[];

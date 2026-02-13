@@ -17,6 +17,9 @@ import { Component, computed, input } from '@angular/core';
           </p>
         }
         <p class="text-sm leading-relaxed" [ngClass]="messageClasses()" [innerHTML]="message()"></p>
+        <div class="mt-3">
+          <ng-content select="[actions]"></ng-content>
+        </div>
       </div>
     </div>
   `,

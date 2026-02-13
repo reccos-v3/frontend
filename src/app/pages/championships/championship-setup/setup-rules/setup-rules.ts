@@ -28,6 +28,7 @@ import { ChampionshipStore } from '../../../../services/championship.store';
 import { IRulesAndScoringRequest } from '../../../../interfaces/championship-setup.interface';
 import { Router } from '@angular/router';
 import { AppAlert } from '../../../../components/alert/alert';
+import { SetupFooterButtons } from '../setup-footer-buttons/setup-footer-buttons';
 
 @Component({
   selector: 'app-setup-rules',
@@ -39,6 +40,7 @@ import { AppAlert } from '../../../../components/alert/alert';
     SetupPointsComponent,
     SetupTiebreaksComponent,
     AppAlert,
+    SetupFooterButtons,
   ],
   templateUrl: './setup-rules.html',
   styleUrl: './setup-rules.css',
@@ -245,5 +247,13 @@ export class SetupRules implements OnInit {
   returnHub() {
     const championshipId = this.data()?.id || '';
     this.router.navigate(['/admin/championships/setup', championshipId]);
+  }
+
+  eventClickConfirmButton(event: 'saveAndContinue' | 'returnHub') {
+    if (event === 'saveAndContinue') {
+      this.saveAndContinue();
+    } else {
+      this.returnHub();
+    }
   }
 }

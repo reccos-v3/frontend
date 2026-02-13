@@ -1,0 +1,43 @@
+import { IPeriodCardConfig } from '../../interfaces/period-cards.interface';
+
+export const tournamentConfigs: IPeriodCardConfig[] = [
+  {
+    key: 'championshipPeriod',
+    title: 'Período do Campeonato',
+    icon: 'emoji_events',
+    description: 'Janela total de duração da competição, do primeiro ao último jogo.',
+    labelStart: 'Início dos Jogos',
+    labelEnd: 'Término dos Jogos',
+    inputType: 'date',
+    iconStart: 'schedule',
+    iconEnd: 'timer_off',
+    impactMessage: 'O calendário de jogos será gerado automaticamente dentro deste intervalo.',
+    infoTooltip: 'Define o início e fim oficial das partidas',
+  },
+  {
+    key: 'registrationPeriod',
+    title: 'Janela de Inscrição',
+    icon: 'person_add',
+    description: 'Período permitido para gestores de times inscreverem novos atletas.',
+    labelStart: 'Abertura',
+    labelEnd: 'Fechamento',
+    inputType: 'date',
+    iconStart: 'schedule',
+    iconEnd: 'timer_off',
+    impactMessage: "O botão 'Novo Atleta' será bloqueado fora deste período.",
+    infoTooltip: 'Define quando os times podem cadastrar atletas',
+  },
+  {
+    key: 'transferPeriod',
+    title: 'Janela de Transferência',
+    icon: 'swap_horiz',
+    description: 'Período em que os clubes podem negociar e trocar atletas entre si.',
+    labelStart: 'Início das Trocas',
+    labelEnd: 'Fim das Trocas',
+    inputType: 'date',
+    iconStart: 'sync_alt',
+    iconEnd: 'block',
+    impactMessage: 'Solicitações enviadas via app expiram ao fim deste período.',
+    infoTooltip: 'Define quando trocas entre clubes são permitidas',
+  },
+];
