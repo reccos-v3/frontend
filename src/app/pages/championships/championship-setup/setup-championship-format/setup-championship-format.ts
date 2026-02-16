@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SetupSystemFormat } from '../setup-system-format/setup-system-format';
 
 interface IFormat {
-  id: 'groups_and_knockout' | 'knockout' | 'points';
+  id: 'groups_and_knockout' | 'knockout' | 'points' | 'groups';
   icon: string;
   label: string;
   description: string;
@@ -16,16 +16,18 @@ interface IFormat {
   templateUrl: './setup-championship-format.html',
 })
 export class SetupChampionshipFormat {
-  selectedFormat = input.required<'groups_and_knockout' | 'knockout' | 'points'>();
+  selectedFormat = input.required<'groups_and_knockout' | 'knockout' | 'points' | 'groups'>();
   totalTeams = input.required<number>();
   groupsCount = input.required<number>();
   qualifiedPerGroup = input.required<number>();
+  wildcardCount = input<number>(0);
   isDoubleRound = input<boolean>(true);
 
-  updateFormat = output<'groups_and_knockout' | 'knockout' | 'points'>();
+  updateFormat = output<'groups_and_knockout' | 'knockout' | 'points' | 'groups'>();
   updateGroupsCount = output<number>();
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
+  updateWildcardCount = output<number>();
   updateDoubleRound = output<boolean>();
 
   isExpanded = true;
@@ -55,7 +57,7 @@ export class SetupChampionshipFormat {
     this.isExpanded = !this.isExpanded;
   }
 
-  changeFormat(id: 'groups_and_knockout' | 'knockout' | 'points') {
+  changeFormat(id: 'groups_and_knockout' | 'knockout' | 'points' | 'groups') {
     this.updateFormat.emit(id);
   }
 

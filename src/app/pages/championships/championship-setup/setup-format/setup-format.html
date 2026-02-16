@@ -26,11 +26,13 @@
               [groupsCount]="groupsCount()"
               [qualifiedPerGroup]="qualifiedPerGroup()"
               [totalTeams]="totalTeams()"
+              [wildcardCount]="wildcardCount()"
               [isDoubleRound]="isDoubleRound()"
               (updateFormat)="selectedFormat.set($event)"
               (updateGroupsCount)="updateGroupsCount($event)"
               (updateQualified)="updateQualified($event)"
               (updateTotalTeams)="updateTotalTeams($event)"
+              (updateWildcardCount)="updateWildcardCount($event)"
               (updateDoubleRound)="isDoubleRound.set($event)"
             />
 
@@ -79,8 +81,7 @@
     (click)="saveAndContinue()"
     class="flex items-center gap-2 px-8 py-3 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 font-bold text-sm"
   >
-    {{ this.internalStep() === 'selection' ? 'Ir para formato' : 'Concluir' }}
-    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+    Concluir
+    <span class="material-symbols-outlined text-lg">check</span>
   </button>
-  <!-- </div> -->
 </div>

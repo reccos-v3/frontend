@@ -6,7 +6,6 @@ import {
   ISchedulePreferences,
   IKnockoutConfig,
   IChampionshipSetupRequest,
-  FormatType,
 } from '../../../../interfaces/setup-types.interface';
 import { SetupSidebarFormat, IPhase } from '../setup-sidebar-format/setup-sidebar-format';
 import { SetupChampionshipFormat } from '../setup-championship-format/setup-championship-format';
@@ -15,9 +14,11 @@ import { SetupFormatKnockout } from '../setup-format-knockout/setup-format-knock
 import { FormatCalendarPreferences } from '../format-calendar-preferences/format-calendar-preferences';
 import { ChampionshipStore } from '../../../../services/championship.store';
 import { Router } from '@angular/router';
+import { ChampionshipSetupService } from '../../../../services/championship-setup.service';
+import { IFormatAndStructureRequest } from '../../../../interfaces/championship-setup.interface';
 
 interface IFormat {
-  id: 'groups_and_knockout' | 'knockout' | 'points';
+  id: 'groups_and_knockout' | 'knockout' | 'points' | 'groups';
   icon: string;
   label: string;
   description: string;
@@ -41,6 +42,7 @@ export class SetupFormat implements OnInit {
   advanced = output<SetupStep>();
   phasesChange = output<IPhase[]>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
+  private championshipSetupService = inject(ChampionshipSetupService);
   router = inject(Router);
 
   championshipStore = inject(ChampionshipStore);
@@ -53,10 +55,12 @@ export class SetupFormat implements OnInit {
   totalTeams = signal(16);
   groupsCount = signal(4);
   qualifiedPerGroup = signal(2);
-  firstPhaseType = signal('GROUPS');
+  wildcardCount = signal(0);
+  byesCount = signal(0);
+  knockoutStartPhase = signal<string | null>(null);
+  firstPhaseType = signal<string | null>('GROUPS');
   schedulePreferences = signal<ISchedulePreferences>({
-    allowedWeekDays: [],
-    preferredTimeSlots: [],
+    availability: [],
     avoidHolidays: false,
   });
 
@@ -103,8 +107,9 @@ export class SetupFormat implements OnInit {
     }
     if (initial?.structure) {
       this.totalTeams.set(initial.structure.totalTeams);
-      this.groupsCount.set(initial.structure.groupsCount);
-      this.qualifiedPerGroup.set(initial.structure.qualifiedPerGroup);
+      this.groupsCount.set(initial.structure.groupsCount || 0);
+      this.qualifiedPerGroup.set(initial.structure.qualifiedPerGroup || 0);
+      this.wildcardCount.set(initial.structure.wildcardCount || 0);
       this.firstPhaseType.set(initial.structure.firstPhaseType);
     }
     if (initial?.rules) {
@@ -131,6 +136,12 @@ export class SetupFormat implements OnInit {
       label: 'Pontos Corridos',
       description: 'Brasileirão',
     },
+    {
+      id: 'groups',
+      icon: 'groups',
+      label: 'Grupos Simples',
+      description: 'Fase de Grupos',
+    },
   ];
 
   updateGroupsCount(val: number) {
@@ -145,37 +156,121 @@ export class SetupFormat implements OnInit {
     this.totalTeams.update((c) => Math.max(2, c + val));
   }
 
+  updateWildcardCount(val: number) {
+    this.wildcardCount.update((c) => Math.max(0, c + val));
+  }
+
   updateSchedulePreferences(preferences: ISchedulePreferences) {
     this.schedulePreferences.set(preferences);
   }
 
   saveAndContinue() {
-    if (this.internalStep() === 'selection' && this.selectedFormat() !== 'points') {
-      this.internalStep.set('configuration');
-      return;
-    }
     const currentChampionship = this.championship();
     if (!currentChampionship) return;
 
-    this.championshipStore.replace({
-      ...currentChampionship,
-      format: {
-        id: currentChampionship.format?.id || '',
-        formatType: this.selectedFormat().toUpperCase() as FormatType,
-      },
-      structure: {
-        totalTeams: this.totalTeams(),
-        groupsCount: this.groupsCount(),
-        qualifiedPerGroup: this.qualifiedPerGroup(),
-        firstPhaseType: this.firstPhaseType(),
-        knockoutConfig: this.knockoutConfig(),
-      },
-      schedulePreferences: this.schedulePreferences(),
-    });
-    console.log(this.championship());
+    const format = this.selectedFormat();
+    const structurePayload = this.buildStructurePayload(format);
 
-    // Volta para o setup principal (SEM refetch)
-    this.router.navigate(['/admin/championships/setup', currentChampionship.id]);
+    this.loading.set(true);
+    // console.log(structurePayload);
+    // return;
+    this.championshipSetupService
+      .updateStructure(currentChampionship.id, structurePayload)
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.router.navigate(['/admin/championships/setup', currentChampionship.id]);
+        },
+        error: (error) => {
+          console.error('Erro ao salvar estrutura:', error);
+          this.loading.set(false);
+        },
+      });
+  }
+
+  private buildStructurePayload(format: IFormat['id']): IFormatAndStructureRequest {
+    const basePayload: IFormatAndStructureRequest = {
+      formatType: format.toUpperCase() as IFormatAndStructureRequest['formatType'],
+      totalTeams: this.totalTeams(),
+      groupsCount: null,
+      qualifiedPerGroup: null,
+      knockoutStartPhase: null,
+      byesCount: this.byesCount(),
+      firstPhaseType: null,
+      wildcardCount: this.wildcardCount(),
+      knockoutConfig: null,
+      schedulePreferences: this.schedulePreferences(),
+    };
+
+    switch (format) {
+      case 'points':
+        // Pontos corridos: apenas totalTeams e schedulePreferences
+        return basePayload;
+
+      case 'groups':
+        // Grupos simples: groupsCount obrigatório
+        return {
+          ...basePayload,
+          groupsCount: this.groupsCount(),
+          firstPhaseType: 'GROUPS',
+        };
+
+      case 'knockout':
+        // Mata-mata puro: knockoutStartPhase e knockoutConfig obrigatórios
+        return {
+          ...basePayload,
+          knockoutStartPhase: this.calculateKnockoutStartPhase(this.totalTeams()),
+          knockoutConfig: this.buildKnockoutConfig(),
+        };
+
+      case 'groups_and_knockout':
+        // Grupos + Mata-mata: tudo obrigatório
+        return {
+          ...basePayload,
+          groupsCount: this.groupsCount(),
+          qualifiedPerGroup: this.qualifiedPerGroup(),
+          knockoutStartPhase: this.calculateKnockoutStartPhase(
+            this.groupsCount() * this.qualifiedPerGroup() + this.wildcardCount(),
+          ),
+          firstPhaseType: 'GROUPS',
+          knockoutConfig: this.buildKnockoutConfig(),
+        };
+
+      default:
+        return basePayload;
+    }
+  }
+
+  private calculateKnockoutStartPhase(teams: number): string {
+    if (teams <= 2) return 'FINAL';
+    if (teams <= 4) return 'SEMI_FINALS';
+    if (teams <= 8) return 'QUARTER_FINALS';
+    if (teams <= 16) return 'ROUND_OF_16';
+    return 'ROUND_OF_32';
+  }
+
+  private buildKnockoutConfig() {
+    const config = this.knockoutConfig();
+    if (!config) {
+      // Configuração padrão se não houver customização
+      return {
+        defaultLegs: 2,
+        defaultAdvanceRule: 'AGGREGATE_OR_PENALTIES',
+        phases: null,
+      };
+    }
+
+    return {
+      defaultLegs: config.defaultLegs,
+      defaultAdvanceRule: config.defaultAdvanceRule,
+      phases:
+        config.phases?.map((phase, index) => ({
+          phaseOrder: index + 1,
+          legs: phase.legs,
+          advanceRule: phase.advanceRule,
+          phaseType: phase.phaseType || 'KNOCKOUT',
+        })) || null,
+    };
   }
 
   returnToPrevious() {

@@ -18,7 +18,7 @@ export interface IPhase {
   styleUrl: './setup-sidebar-format.css',
 })
 export class SetupSidebarFormat {
-  selectedFormat = input<'groups_and_knockout' | 'knockout' | 'points'>('knockout');
+  selectedFormat = input<'groups_and_knockout' | 'knockout' | 'points' | 'groups'>('knockout');
   totalTeams = input(16);
   groupsCount = input(4);
   qualifiedPerGroup = input(2);
@@ -33,6 +33,11 @@ export class SetupSidebarFormat {
 
     if (format === 'points') {
       return (teams - 1) * multiplier;
+    }
+
+    if (format === 'groups') {
+      const teamsPerGroup = Math.ceil(teams / this.groupsCount());
+      return (teamsPerGroup - 1) * multiplier;
     }
 
     if (format === 'knockout') {
@@ -71,6 +76,12 @@ export class SetupSidebarFormat {
       return ((teams * (teams - 1)) / 2) * multiplier;
     }
 
+    if (format === 'groups') {
+      const teamsPerGroup = Math.ceil(teams / this.groupsCount());
+      const groupsCount = this.groupsCount();
+      return ((teamsPerGroup * (teamsPerGroup - 1)) / 2) * groupsCount * multiplier;
+    }
+
     if (format === 'knockout') {
       return (teams - 1) * multiplier;
     }
@@ -92,6 +103,17 @@ export class SetupSidebarFormat {
     const phases: IPhase[] = [];
 
     if (format === 'points') return [];
+
+    if (format === 'groups') {
+      phases.push({
+        label: 'Fase Única',
+        title: 'Fase de Grupos',
+        description: `${this.groupsCount()} Grupos de ${Math.ceil(this.totalTeams() / this.groupsCount())} times`,
+        icon: 'grid_view',
+        isMain: true,
+      });
+      return phases;
+    }
 
     let knockoutTeams = 0;
 

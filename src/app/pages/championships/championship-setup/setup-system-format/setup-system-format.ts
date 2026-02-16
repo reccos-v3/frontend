@@ -17,11 +17,13 @@ export class SetupSystemFormat {
   groupsCount = input.required<number>();
   qualifiedPerGroup = input.required<number>();
   totalTeams = input.required<number>();
+  wildcardCount = input<number>(0);
   isDoubleRound = input<boolean>(true);
 
   updateGroupsCount = output<number>();
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
+  updateWildcardCount = output<number>();
   updateDoubleRound = output<boolean>();
 
   phaseName = computed(() => {
@@ -51,5 +53,9 @@ export class SetupSystemFormat {
     if (!isNaN(val)) {
       this.updateTotalTeams.emit(val - this.totalTeams());
     }
+  }
+
+  changeWildcardCount(val: number) {
+    this.updateWildcardCount.emit(val);
   }
 }

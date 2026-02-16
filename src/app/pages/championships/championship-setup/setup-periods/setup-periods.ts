@@ -71,8 +71,8 @@ export class SetupPeriods implements OnInit {
     endDate: '',
     registrationStartAt: '',
     registrationEndAt: '',
-    transferWindowStartAt: '',
-    transferWindowEndAt: '',
+    transferWindowStartAt: null,
+    transferWindowEndAt: null,
   });
 
   // ─────────────────────────────────────────────
@@ -82,14 +82,31 @@ export class SetupPeriods implements OnInit {
     const data = this.championship();
     if (!data) return;
 
+    const allowRosterChanges = data.settings?.allowRosterChanges ?? false;
+
     this.tempValues.set({
-      startDate: data.championshipPeriod?.startDate || '',
-      endDate: data.championshipPeriod?.endDate || '',
-      registrationStartAt: data.registrationPeriod?.startAt || '',
-      registrationEndAt: data.registrationPeriod?.endAt || '',
-      transferWindowStartAt: data.transferWindowPeriod?.startAt || '',
-      transferWindowEndAt: data.transferWindowPeriod?.endAt || '',
+      startDate: this.parseFromLocalDateTime(data.championshipPeriod?.startDate),
+      endDate: this.parseFromLocalDateTime(data.championshipPeriod?.endDate),
+      registrationStartAt: this.parseFromLocalDateTime(data.registrationPeriod?.startAt),
+      registrationEndAt: this.parseFromLocalDateTime(data.registrationPeriod?.endAt),
+      transferWindowStartAt: allowRosterChanges
+        ? this.parseFromLocalDateTime(data.transferWindowPeriod?.startAt) || null
+        : null,
+      transferWindowEndAt: allowRosterChanges
+        ? this.parseFromLocalDateTime(data.transferWindowPeriod?.endAt) || null
+        : null,
     });
+  }
+
+  private parseFromLocalDateTime(date: string | undefined | null): string {
+    if (!date) return '';
+    return date.split('T')[0];
+  }
+
+  private formatToLocalDateTime(date: string | null): string | null {
+    if (!date) return null;
+    if (date.includes('T')) return date;
+    return `${date}T00:00:00`;
   }
 
   getInitialDate(key: string, type: 'start' | 'end'): string {
@@ -97,15 +114,21 @@ export class SetupPeriods implements OnInit {
     if (!data) return '';
 
     if (key === 'championshipPeriod' && data.championshipPeriod) {
-      return type === 'start' ? data.championshipPeriod.startDate : data.championshipPeriod.endDate;
+      return type === 'start'
+        ? this.parseFromLocalDateTime(data.championshipPeriod.startDate)
+        : this.parseFromLocalDateTime(data.championshipPeriod.endDate);
     }
 
     if (key === 'registrationPeriod' && data.registrationPeriod) {
-      return type === 'start' ? data.registrationPeriod.startAt : data.registrationPeriod.endAt;
+      return type === 'start'
+        ? this.parseFromLocalDateTime(data.registrationPeriod.startAt)
+        : this.parseFromLocalDateTime(data.registrationPeriod.endAt);
     }
 
     if (key === 'transferPeriod' && data.transferWindowPeriod) {
-      return type === 'start' ? data.transferWindowPeriod.startAt : data.transferWindowPeriod.endAt;
+      return type === 'start'
+        ? this.parseFromLocalDateTime(data.transferWindowPeriod.startAt)
+        : this.parseFromLocalDateTime(data.transferWindowPeriod.endAt);
     }
 
     return '';
@@ -152,6 +175,8 @@ export class SetupPeriods implements OnInit {
     // Só atualiza se houver mudança real para evitar loops
     if (JSON.stringify(championship.settings) === JSON.stringify(settings)) return;
 
+    console.log('Atualizando configurações avançadas', settings);
+
     this.championshipSetupService.updateSettings(championship.id, settings).subscribe({
       next: (updatedSettings) => {
         this.championshipStore.update({ settings: updatedSettings });
@@ -172,15 +197,29 @@ export class SetupPeriods implements OnInit {
   // SAVE FLOW (PADRÃO OFICIAL)
   // ─────────────────────────────────────────────
   saveAndContinue(): void {
-    const values = this.tempValues();
+    const values = { ...this.tempValues() };
     const championship = this.championship();
 
     if (!this.isValid() || !values || !championship) return;
 
+    // Formatar todas as datas para LocalDateTime esperado pelo Java
+    const payload: IPeriodsAndTransferWindowsRequest = {
+      startDate: this.formatToLocalDateTime(values.startDate) || '',
+      endDate: this.formatToLocalDateTime(values.endDate) || '',
+      registrationStartAt: this.formatToLocalDateTime(values.registrationStartAt) || '',
+      registrationEndAt: this.formatToLocalDateTime(values.registrationEndAt) || '',
+      transferWindowStartAt: this.isTransferBlocked()
+        ? null
+        : this.formatToLocalDateTime(values.transferWindowStartAt),
+      transferWindowEndAt: this.isTransferBlocked()
+        ? null
+        : this.formatToLocalDateTime(values.transferWindowEndAt),
+    };
+
     this.loading.set(true);
 
     this.championshipSetupService
-      .updatePeriodsAndTransferWindows(championship.id, values)
+      .updatePeriodsAndTransferWindows(championship.id, payload)
       .subscribe({
         next: () => {
           this.router.navigate(['/admin/championships/setup', championship.id]);

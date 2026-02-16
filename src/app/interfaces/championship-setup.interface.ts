@@ -20,12 +20,34 @@ export interface ITieBreakerOrder {
   priorityOrder: number;
 }
 
+export interface IFormatRequest {
+  formatType: 'GROUPS_AND_KNOCKOUT' | 'KNOCKOUT' | 'POINTS';
+}
+
 export interface IFormatAndStructureRequest {
+  formatType: 'GROUPS_AND_KNOCKOUT' | 'KNOCKOUT' | 'POINTS' | 'GROUPS';
   totalTeams: number;
-  groupsCount: number;
-  qualifiedPerGroup: number;
+  groupsCount: number | null;
+  qualifiedPerGroup: number | null;
+  knockoutStartPhase: string | null;
+  byesCount: number;
+  firstPhaseType: string | null;
   wildcardCount: number;
+  knockoutConfig: IKnockoutConfigRequest | null;
   schedulePreferences: ISchedulePreferences;
+}
+
+export interface IKnockoutConfigRequest {
+  defaultLegs: number;
+  defaultAdvanceRule: string;
+  phases: IPhaseConfigRequest[] | null;
+}
+
+export interface IPhaseConfigRequest {
+  phaseOrder: number;
+  legs: number;
+  advanceRule: string;
+  phaseType: string;
 }
 
 export interface ISchedulePreferences {
@@ -43,8 +65,8 @@ export interface IPeriodsAndTransferWindowsRequest {
   endDate: string;
   registrationStartAt: string;
   registrationEndAt: string;
-  transferWindowStartAt: string;
-  transferWindowEndAt: string;
+  transferWindowStartAt: string | null;
+  transferWindowEndAt: string | null;
 }
 
 export interface IBracketConfigRequest {

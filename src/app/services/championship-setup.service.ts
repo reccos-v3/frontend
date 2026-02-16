@@ -5,6 +5,7 @@ import {
   IAdvancedSettingsRequest,
   IBracketConfigRequest,
   IFormatAndStructureRequest,
+  IFormatRequest,
   IMatchRulesRequest,
   IPeriodsAndTransferWindowsRequest,
   IRulesAndScoringRequest,
@@ -61,11 +62,15 @@ export class ChampionshipSetupService {
     return this.put<IUpdateRulesAndScoringResponse>(championshipId, 'rules', request);
   }
 
-  updateFormatAndStructure(
+  updateStructure(
     championshipId: string,
     request: IFormatAndStructureRequest,
   ): Observable<IFormatAndStructureRequest> {
     return this.put<IFormatAndStructureRequest>(championshipId, 'structure', request);
+  }
+
+  updateFormat(championshipId: string, request: IFormatRequest): Observable<IFormatRequest> {
+    return this.put<IFormatRequest>(championshipId, 'format', request);
   }
 
   updatePeriodsAndTransferWindows(

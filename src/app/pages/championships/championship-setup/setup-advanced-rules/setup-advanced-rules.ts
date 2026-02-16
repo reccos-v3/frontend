@@ -2,6 +2,13 @@ import { Component, output, signal, input, OnInit } from '@angular/core';
 import { IAdvancedSettingsRequest } from '../../../../interfaces/championship-setup.interface';
 import { AppAlert } from '../../../../components/alert/alert';
 
+interface ActivationOption {
+  id: 'MANUAL' | 'AUTOMATIC';
+  title: string;
+  description: string;
+  icon: string;
+}
+
 @Component({
   selector: 'app-setup-advanced-rules',
   standalone: true,
@@ -17,33 +24,41 @@ export class SetupAdvancedRules implements OnInit {
   // Iniciar todos como false conforme solicitado
   allowRosterChanges = signal(false);
   allowScheduleChanges = signal(false);
-  allowRuleChanges = signal(false);
   activationMode = signal<'MANUAL' | 'AUTOMATIC'>('MANUAL');
 
   toggles = [
     {
       id: 'roster',
-      label: 'Janela de Transferência & Elencos',
+      label: 'Permitir Mudanças no Elenco',
       description:
-        'Permite que gestores adicionem atletas e realizem trocas após o início do torneio.',
+        'Define se os times podem adicionar ou remover jogadores após o início do campeonato (Respeitando Janela de Transferência).',
       value: this.allowRosterChanges,
       action: () => this.toggleRosterChanges(),
     },
     {
       id: 'schedule',
-      label: 'Flexibilidade de Calendário',
+      label: 'Permitir Mudanças na Tabela',
       description:
-        'Habilita a remarcação de partidas e alteração de horários com a competição em curso.',
+        'Controla se as datas e horários dos jogos podem ser alterados depois que o campeonato já começou.',
       value: this.allowScheduleChanges,
       action: () => this.toggleScheduleChanges(),
     },
+  ];
+
+  activationOptions: ActivationOption[] = [
     {
-      id: 'rules',
-      label: 'Edição de Regulamento',
+      id: 'MANUAL',
+      title: 'Ativação Manual',
       description:
-        'Permite ajustar critérios de desempate e configurações de pontuação durante a liga.',
-      value: this.allowRuleChanges,
-      action: () => this.toggleRuleChanges(),
+        'O organizador precisa clicar em um botão para iniciar o campeonato oficialmente.',
+      icon: 'touch_app',
+    },
+    {
+      id: 'AUTOMATIC',
+      title: 'Ativação Automática',
+      description:
+        'O sistema inicia o campeonato sozinho assim que todas as etapas estiverem prontas.',
+      icon: 'auto_mode',
     },
   ];
 
@@ -52,7 +67,6 @@ export class SetupAdvancedRules implements OnInit {
     if (data) {
       this.allowRosterChanges.set(data.allowRosterChanges);
       this.allowScheduleChanges.set(data.allowScheduleChanges);
-      this.allowRuleChanges.set(data.allowRuleChanges);
       this.activationMode.set(data.activationMode);
     }
   }
@@ -62,7 +76,7 @@ export class SetupAdvancedRules implements OnInit {
     this.advancedRulesChange.emit({
       allowRosterChanges: this.allowRosterChanges(),
       allowScheduleChanges: this.allowScheduleChanges(),
-      allowRuleChanges: this.allowRuleChanges(),
+      allowRuleChanges: false,
       activationMode: this.activationMode(),
     });
   }
@@ -73,9 +87,5 @@ export class SetupAdvancedRules implements OnInit {
 
   toggleScheduleChanges() {
     this.allowScheduleChanges.update((v) => !v);
-  }
-
-  toggleRuleChanges() {
-    this.allowRuleChanges.update((v) => !v);
   }
 }

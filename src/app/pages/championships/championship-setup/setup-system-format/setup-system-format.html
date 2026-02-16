@@ -4,9 +4,11 @@
       [groupsCount]="groupsCount()"
       [qualifiedPerGroup]="qualifiedPerGroup()"
       [totalTeams]="totalTeams()"
+      [wildcardCount]="wildcardCount()"
       (updateGroupsCount)="changeGroupsCount($event)"
       (updateQualified)="changeQualified($event)"
       (updateTotalTeams)="changeTotalTeams($event)"
+      (updateWildcardCount)="changeWildcardCount($event)"
     />
   }
   @case ('knockout') {

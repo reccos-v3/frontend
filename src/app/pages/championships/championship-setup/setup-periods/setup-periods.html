@@ -44,10 +44,18 @@
       (advancedRulesChange)="handleAdvancedRulesChange($event)"
     ></app-setup-advanced-rules>
 
-    <div footer>
+    <div footer class="flex justify-end gap-3">
       <button
+        type="button"
+        (click)="showAdvancedModal.set(false)"
+        class="px-4 py-2 text-gray-500 dark:text-gray-400 font-bold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all active:scale-95"
+      >
+        Fechar
+      </button>
+      <button
+        type="button"
         (click)="advancedRules.submit(); showAdvancedModal.set(false)"
-        class="px-4 py-2 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all shadow-sm"
+        class="px-4 py-2 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all shadow-md active:scale-95"
       >
         Salvar e Fechar
       </button>

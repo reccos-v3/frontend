@@ -33,6 +33,7 @@ export interface IPhaseOverride {
   phaseOrder: number;
   legs: number;
   advanceRule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
+  phaseType?: string;
 }
 
 export interface IPhaseConfig {
@@ -49,6 +50,7 @@ export interface ISetupStructure {
   totalTeams: number;
   groupsCount: number;
   qualifiedPerGroup: number;
+  wildcardCount: number;
   firstPhaseType: string;
   knockoutConfig?: IKnockoutConfig;
 }
@@ -85,17 +87,13 @@ export interface IPostActivationRules {
   allowRuleChanges: boolean;
 }
 
+export interface IAvailability {
+  day: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
+  periods: ('MORNING' | 'AFTERNOON' | 'NIGHT' | 'ALL_DAY')[];
+}
+
 export interface ISchedulePreferences {
-  allowedWeekDays: (
-    | 'MONDAY'
-    | 'TUESDAY'
-    | 'WEDNESDAY'
-    | 'THURSDAY'
-    | 'FRIDAY'
-    | 'SATURDAY'
-    | 'SUNDAY'
-  )[];
-  preferredTimeSlots: ('MORNING' | 'AFTERNOON' | 'EVENING')[];
+  availability: IAvailability[];
   avoidHolidays: boolean;
 }
 
