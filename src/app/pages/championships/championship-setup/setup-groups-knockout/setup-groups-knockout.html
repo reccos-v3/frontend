@@ -1,89 +1,113 @@
 <div class="space-y-6">
-  <!-- Main Configuration Card: Total Teams -->
+  <!-- Capacidade do Torneio -->
   <div
-    class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm"
+    class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
   >
     <app-setup-team-counter
       title="Capacidade do Torneio"
-      description="Defina o número total de participantes"
+      description="Total de participantes inscritos"
       icon="groups"
       [value]="totalTeams()"
       (updateValue)="onUpdateTotalTeams($event)"
     />
   </div>
 
-  <!-- Secondary Configuration Grid: Group Details -->
+  <!-- Configuração de Grupos e Wildcards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div
-      class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
-    >
-      <label
-        for="description"
-        class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
-        >Quantidade de Grupos</label
+    @for (field of configFields(); track field.id) {
+      <div
+        class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
       >
-      <div class="flex items-center gap-4">
-        <div
-          class="h-10 w-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+        <label
+          [for]="field.id"
+          class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
         >
-          <span class="material-symbols-outlined text-blue-500">grid_view</span>
-        </div>
-        <div class="relative flex-1">
-          <button
-            (click)="updateGroupsCount.emit(-1)"
-            class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
-          >
-            <span class="material-symbols-outlined text-sm">remove</span>
-          </button>
-          <input
-            class="w-full text-center bg-transparent border-gray-200 dark:border-gray-700 rounded-xl font-bold dark:text-white py-2"
-            readonly
-            [value]="groupsCount()"
-          />
-          <button
-            (click)="updateGroupsCount.emit(1)"
-            class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
-          >
-            <span class="material-symbols-outlined text-sm">add</span>
-          </button>
-        </div>
-      </div>
-    </div>
+          {{ field.label }}
+        </label>
 
-    <div
-      class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
-    >
-      <label
-        for="qualifiedPerGroup"
-        class="block text-xs font-bold uppercase tracking-wider text-secondary mb-3"
-        >Classificados por Grupo</label
-      >
-      <div class="flex items-center gap-4">
-        <div
-          class="h-10 w-10 flex items-center justify-center bg-green-50 dark:bg-green-900/20 rounded-lg"
-        >
-          <span class="material-symbols-outlined text-green-500">done_all</span>
-        </div>
-        <div class="relative flex-1">
-          <button
-            (click)="updateQualified.emit(-1)"
-            class="absolute left-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
+        <div class="flex items-center gap-4">
+          <div
+            class="h-10 w-10 flex items-center justify-center rounded-lg"
+            [ngClass]="{
+              'bg-blue-50 dark:bg-blue-900/20': field.iconColor === 'blue',
+              'bg-green-50 dark:bg-green-900/20': field.iconColor === 'green',
+              'bg-purple-50 dark:bg-purple-900/20': field.iconColor === 'purple',
+            }"
           >
-            <span class="material-symbols-outlined text-sm">remove</span>
-          </button>
-          <input
-            class="w-full text-center bg-transparent border-gray-200 dark:border-gray-700 rounded-xl font-bold dark:text-white py-2"
-            readonly
-            [value]="qualifiedPerGroup()"
-          />
-          <button
-            (click)="updateQualified.emit(1)"
-            class="absolute right-1 top-1 bottom-1 w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 text-main dark:text-white"
+            <span
+              class="material-symbols-outlined"
+              [ngClass]="{
+                'text-blue-500': field.iconColor === 'blue',
+                'text-green-500': field.iconColor === 'green',
+                'text-purple-500': field.iconColor === 'purple',
+              }"
+            >
+              {{ field.icon }}
+            </span>
+          </div>
+
+          <div
+            class="relative flex-1 flex items-center justify-between bg-gray-50 dark:bg-gray-900 rounded-xl px-2 py-1"
           >
-            <span class="material-symbols-outlined text-sm">add</span>
-          </button>
+            <button
+              type="button"
+              (click)="field.onUpdate(-1)"
+              class="p-1 hover:text-orange-500 transition-colors"
+            >
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+
+            <span class="font-bold dark:text-white">
+              {{ field.getValue() }}
+            </span>
+
+            <button
+              type="button"
+              (click)="field.onUpdate(1)"
+              class="p-1 hover:text-orange-500 transition-colors"
+            >
+              <span class="material-symbols-outlined">add</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    }
+  </div>
+
+  <!-- Alertas de Validação e Estrutura -->
+  <div class="space-y-3">
+    @for (alert of validationAlerts(); track alert.title) {
+      <div
+        class="p-4 rounded-xl border-l-4"
+        [ngClass]="{
+          'bg-blue-50 border-blue-500 dark:bg-blue-900/20': alert.type === 'info',
+          'bg-red-50 border-red-500 dark:bg-red-900/20': alert.type === 'error',
+          'bg-green-50 border-green-500 dark:bg-green-900/20': alert.type === 'success',
+        }"
+      >
+        <div class="flex gap-3">
+          <span
+            class="material-symbols-outlined"
+            [ngClass]="{
+              'text-blue-500': alert.type === 'info',
+              'text-red-500': alert.type === 'error',
+              'text-green-500': alert.type === 'success',
+            }"
+          >
+            {{ alert.type === 'info' ? 'info' : alert.type === 'error' ? 'report' : 'verified' }}
+          </span>
+
+          <div>
+            <h4 class="text-sm font-bold">
+              {{ alert.title }}
+            </h4>
+
+            <p class="text-xs mt-1">
+              {{ alert.message }}
+            </p>
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </div>
