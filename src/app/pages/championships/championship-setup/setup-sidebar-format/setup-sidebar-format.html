@@ -5,19 +5,6 @@
     class="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"
   >
     <h3 class="font-bold text-main dark:text-white text-sm">Resumo da Estrutura</h3>
-    @if (selectedFormat() === 'groups_and_knockout') {
-      <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
-        >Auto-gerado</span
-      >
-    } @else if (selectedFormat() === 'points') {
-      <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
-        >Pontos Corridos</span
-      >
-    } @else if (selectedFormat() === 'knockout') {
-      <span class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-lg font-bold uppercase"
-        >Mata-mata Direto</span
-      >
-    }
   </div>
 
   @if (selectedFormat() === 'groups_and_knockout' || selectedFormat() === 'knockout') {

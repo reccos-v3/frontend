@@ -1,0 +1,348 @@
+<!-- Main Container -->
+<div class="max-w-7xl mx-auto gap-6 pb-28">
+  <!-- Header Section -->
+  <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div>
+      <nav class="flex items-center gap-2 text-sm text-slate-500 mb-2">
+        <span>Setup de Campeonato</span>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <span class="text-primary font-medium">Regras de Partida</span>
+      </nav>
+      <div class="flex items-center gap-3">
+        <h1 class="text-3xl font-bold tracking-tight">Regras de Mata-Mata</h1>
+        @if (championship()?.format?.formatType; as type) {
+          <span
+            class="bg-primary/20 text-emerald-700 dark:text-primary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-primary/30"
+          >
+            {{
+              type === 'KNOCKOUT' ? 'Mata-Mata' : type === 'GROUPS_AND_KNOCKOUT' ? 'Híbrido' : type
+            }}
+          </span>
+        }
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <button
+        class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary px-6 py-2.5 rounded-full font-semibold transition-all flex items-center gap-2"
+      >
+        <span class="material-symbols-outlined text-lg text-slate-400">help_outline</span>
+        Como funciona?
+      </button>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Left Column: Global Configuration -->
+    <div class="lg:col-span-4 space-y-6">
+      <div
+        class="bg-white dark:bg-slate-900/50 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+      >
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary">settings</span>
+          </div>
+          <h2 class="text-xl font-bold">Configuração Geral</h2>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label
+              for="defaultLegs"
+              class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2"
+              >Nº de Jogos Padrão</label
+            >
+            <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-full">
+              <button
+                type="button"
+                (click)="updateDefaultLegs(1)"
+                class="py-2 px-4 rounded-full text-sm font-bold transition-all"
+                [class.bg-primary]="defaultLegs() === 1"
+                [class.text-white]="defaultLegs() === 1"
+                [class.text-slate-500]="defaultLegs() !== 1"
+              >
+                Jogo Único
+              </button>
+              <button
+                type="button"
+                (click)="updateDefaultLegs(2)"
+                class="py-2 px-4 rounded-full text-sm font-bold transition-all"
+                [class.bg-primary]="defaultLegs() === 2"
+                [class.text-white]="defaultLegs() === 2"
+                [class.text-slate-500]="defaultLegs() !== 2"
+              >
+                Ida/Volta
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="defaultTieBreaker"
+              class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2"
+              >Desempate Padrão</label
+            >
+            <select
+              [value]="defaultAdvanceRule()"
+              (change)="updateDefaultAdvanceRule($any($event.target).value)"
+              class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-full px-4 py-3 focus:ring-primary focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+            >
+              <option value="REGULAR_OR_PENALTIES">Pênaltis (Empate)</option>
+              <option value="AGGREGATE_SCORE">Placar Agregado</option>
+              <option value="AGGREGATE_WITH_AWAY_GOALS">Gols Fora de Casa</option>
+            </select>
+          </div>
+
+          <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="relative">
+              <button
+                type="button"
+                (click)="toggleReplicaDropdown()"
+                class="group w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20"
+                [class.border-primary/30]="isReplicaOpen()"
+                [class.ring-2]="isReplicaOpen()"
+                [class.ring-primary/10]="isReplicaOpen()"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-primary transition-colors shadow-sm"
+                  >
+                    <span class="material-symbols-outlined text-sm">dynamic_form</span>
+                  </div>
+                  <div class="text-left">
+                    <span class="block text-xs font-bold text-slate-700 dark:text-slate-200"
+                      >Replicar em...</span
+                    >
+                    <span class="block text-[10px] text-slate-500"
+                      >{{ selectedPhasesForReplica().length }} fases selecionadas</span
+                    >
+                  </div>
+                </div>
+                <span
+                  class="material-symbols-outlined text-sm text-slate-300 group-hover:text-primary transition-all"
+                  [class.rotate-90]="isReplicaOpen()"
+                  >chevron_right</span
+                >
+              </button>
+
+              <!-- Selective Dropdown Popover -->
+              @if (isReplicaOpen()) {
+                <div
+                  class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-20 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
+                >
+                  <div class="p-2 max-h-64 overflow-y-auto custom-scrollbar">
+                    <!-- Toggle All -->
+                    <label
+                      class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors border-b border-slate-100 dark:border-slate-800 mb-1"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="allPhasesSelected()"
+                        (change)="toggleAllReplicaPhases()"
+                        class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700 transition-all cursor-pointer"
+                      />
+                      <span class="text-xs font-bold text-slate-900 dark:text-white"
+                        >Replicar em todos</span
+                      >
+                    </label>
+
+                    <!-- Individual Phases -->
+                    <div class="space-y-1">
+                      @for (p of phases(); track p.order) {
+                        <label
+                          class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            [checked]="selectedPhasesForReplica().includes(p.order)"
+                            (change)="toggleReplicaPhaseSelection(p.order)"
+                            class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700 transition-all cursor-pointer"
+                          />
+                          <div class="flex flex-col text-left">
+                            <div class="flex items-center gap-2">
+                              <span
+                                class="text-[11px] font-semibold text-slate-700 dark:text-slate-200"
+                                >{{ p.name }}</span
+                              >
+                              @if (p.isPreliminary) {
+                                <span
+                                  class="text-[8px] font-black bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-1 border border-amber-200 dark:border-amber-800 rounded"
+                                  >PRELIMINAR</span
+                                >
+                              }
+                            </div>
+                            <span class="text-[9px] text-slate-400 font-mono uppercase"
+                              >{{ p.teamsCount }} Equipes</span
+                            >
+                          </div>
+                        </label>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Footer Action -->
+                  <div
+                    class="p-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end"
+                  >
+                    <button
+                      type="button"
+                      (click)="propagateDefaults()"
+                      [disabled]="selectedPhasesForReplica().length === 0"
+                      class="bg-primary text-slate-900 px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider hover:shadow-lg hover:shadow-primary/20 transition-all disabled:opacity-30 disabled:grayscale"
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div
+              class="flex items-start gap-2 text-[11px] text-primary leading-relaxed px-1 text-left"
+            >
+              <span class="material-symbols-outlined text-xs mt-0.5">info</span>
+              <p>
+                As regras gerais servem como base. Use o menu acima para escolher quais fases devem
+                receber estas definições.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Card -->
+      <app-alert
+        class="block mb-8"
+        type="info"
+        variant="left-accent"
+        title="Informação"
+        message="Você está configurando as regras de partidas do mata-mata. Fases finais podem ter
+        regulamentos diferentes das fases iniciais através das exceções."
+      />
+    </div>
+
+    <!-- Right Column: Exceptions by Phase -->
+    <div class="lg:col-span-8">
+      <div class="flex items-center justify-between mb-6 px-2">
+        <div>
+          <h2 class="text-xl font-bold tracking-tight">Configurações Específicas</h2>
+          <p class="text-sm text-slate-500 font-medium font-mono uppercase tracking-tighter">
+            Ajustes por etapa do torneio
+          </p>
+        </div>
+        <button
+          type="button"
+          (click)="overrides.set({})"
+          class="group flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:text-primary/80 transition-all"
+        >
+          <span
+            class="material-symbols-outlined text-sm group-hover:rotate-[-45deg] transition-transform"
+            >restart_alt</span
+          >
+          Restaurar Padrão
+        </button>
+      </div>
+
+      <div class="relative space-y-4">
+        <!-- Vertical Connection Line -->
+        <div
+          class="absolute left-[26px] top-6 bottom-6 w-0.5 bg-slate-200 dark:bg-slate-800 hidden md:block"
+        ></div>
+
+        @for (phase of phases(); track phase.order; let last = $last) {
+          <div
+            class="relative flex flex-col md:flex-row items-stretch md:items-center gap-6 p-5 bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:border-primary/30 transition-all group"
+            [class.border-l-4]="phase.teamsCount === 2"
+            [class.border-l-primary]="phase.teamsCount === 2"
+          >
+            <!-- Phase Indicator Anchor -->
+            <div
+              class="hidden md:flex flex-none w-14 h-14 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 items-center justify-center z-10 group-hover:border-primary/50 transition-colors"
+            >
+              @if (phase.teamsCount === 2) {
+                <span class="material-symbols-outlined text-primary text-2xl">emoji_events</span>
+              } @else {
+                <span class="text-xs font-black text-slate-400 font-mono">{{
+                  phase.teamsCount
+                }}</span>
+              }
+            </div>
+
+            <!-- Information Structure -->
+            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <!-- Phase Identity -->
+              <div class="flex flex-col">
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 font-mono"
+                  >Etapa</span
+                >
+                <div class="flex items-center gap-2">
+                  <span
+                    class="font-bold text-slate-900 dark:text-white truncate"
+                    [class.text-primary]="phase.teamsCount === 2"
+                  >
+                    {{ phase.name }}
+                  </span>
+                  @if (phase.isPreliminary) {
+                    <span
+                      class="text-[8px] font-black bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 border border-amber-200 dark:border-amber-800 rounded uppercase tracking-tighter"
+                      >Preliminar</span
+                    >
+                  }
+                </div>
+              </div>
+
+              <!-- Games Setup -->
+              <div class="flex flex-col">
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 font-mono"
+                  >Partidas</span
+                >
+                <div class="flex items-center gap-2">
+                  <span
+                    class="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                  >
+                    {{ phase.legs }} {{ phase.legs === 1 ? 'Jogo' : 'Jogos' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Strategy Selection -->
+              <div class="flex flex-col">
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 font-mono"
+                  >Formato</span
+                >
+                <select
+                  [value]="phase.matchType"
+                  (change)="toggleMatchType(phase.order, $any($event.target).value)"
+                  class="bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 cursor-pointer text-slate-700 dark:text-slate-200 hover:text-primary transition-colors"
+                >
+                  <option value="single">Jogo Único</option>
+                  <option value="home_away">Ida e Volta</option>
+                </select>
+              </div>
+
+              <!-- Tie-breaker Selection -->
+              <div class="flex flex-col items-start lg:items-end">
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 font-mono"
+                  >Desempate</span
+                >
+                <select
+                  [value]="phase.advanceRule"
+                  (change)="toggleAdvanceRule(phase.order, $any($event.target).value)"
+                  class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer text-right min-w-[140px]"
+                  [class.text-primary]="overrides()[phase.order]?.advanceRule"
+                >
+                  <option value="REGULAR_OR_PENALTIES">Pênaltis (Empate)</option>
+                  <option value="AGGREGATE_SCORE">Placar Agregado</option>
+                  <option value="AGGREGATE_WITH_AWAY_GOALS">Gols Fora de Casa</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

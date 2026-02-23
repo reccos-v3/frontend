@@ -7,5 +7,16 @@
       [value]="totalTeams()"
       (updateValue)="onUpdateTotalTeams($event)"
     />
+
+    <div class="mt-6">
+      @for (alert of validationAlerts(); track alert.title) {
+        <app-alert
+          [type]="alert.type"
+          variant="left-accent"
+          [title]="alert.title"
+          [message]="alert.message"
+        />
+      }
+    </div>
   </div>
 </div>

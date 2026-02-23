@@ -78,19 +78,17 @@ export interface IChampionshipResponse {
 
 export interface IChampionshipProgress {
   id: string;
-  basicsDone: boolean;
-  periodDone: boolean;
-  rulesDone: boolean;
-  formatDone: boolean;
-  structureDone: boolean;
-  teamsDone: boolean;
-  tiebreaksDone: boolean;
-  registrationDone: boolean;
-  scheduleDone: boolean;
-  activationDone: boolean;
-  postActivationDone: boolean;
-  seedingDone: boolean;
-  reviewDone: boolean;
+  basics: boolean;
+  bracket: boolean;
+  format: boolean;
+  matchRules: boolean;
+  period: boolean;
+  review: boolean;
+  rules: boolean;
+  seeding: boolean;
+  settings: boolean;
+  structure: boolean;
+  teams: boolean;
 }
 
 export type IChampionshipPendingStep =

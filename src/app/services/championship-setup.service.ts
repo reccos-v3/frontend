@@ -8,6 +8,7 @@ import {
   IFormatRequest,
   IMatchRulesRequest,
   IPeriodsAndTransferWindowsRequest,
+  IPeriodsAndTransferWindowsResponse,
   IRulesAndScoringRequest,
   ISeedingPoliciesRequest,
   ITeamSelectionRequest,
@@ -76,8 +77,8 @@ export class ChampionshipSetupService {
   updatePeriodsAndTransferWindows(
     championshipId: string,
     request: IPeriodsAndTransferWindowsRequest,
-  ): Observable<IPeriodsAndTransferWindowsRequest> {
-    return this.put<IPeriodsAndTransferWindowsRequest>(championshipId, 'period', request);
+  ): Observable<IPeriodsAndTransferWindowsResponse> {
+    return this.put<IPeriodsAndTransferWindowsResponse>(championshipId, 'period', request);
   }
 
   updateBracketConfig(

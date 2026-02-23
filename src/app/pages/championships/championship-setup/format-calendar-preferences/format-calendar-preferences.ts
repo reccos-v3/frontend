@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ISchedulePreferences, IAvailability } from '../../../../interfaces/setup-types.interface';
 
@@ -10,7 +10,21 @@ import { ISchedulePreferences, IAvailability } from '../../../../interfaces/setu
   styleUrl: './format-calendar-preferences.css',
 })
 export class FormatCalendarPreferences {
+  initialPreferences = input<ISchedulePreferences | null>(null);
   updatePreferences = output<ISchedulePreferences>();
+
+  private _initialized = false;
+
+  constructor() {
+    effect(() => {
+      const prefs = this.initialPreferences();
+      if (prefs && !this._initialized) {
+        this._initialized = true;
+        this.availabilities.set(prefs.availability || []);
+        this.avoidHolidays.set(prefs.avoidHolidays ?? true);
+      }
+    });
+  }
 
   // Auxiliares para renderização
   weekDays = [

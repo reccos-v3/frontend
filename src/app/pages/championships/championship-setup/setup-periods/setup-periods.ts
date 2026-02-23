@@ -13,6 +13,7 @@ import { AppModal } from '../../../../components/modal/modal';
 import {
   IAdvancedSettingsRequest,
   IPeriodsAndTransferWindowsRequest,
+  IPeriodsAndTransferWindowsResponse,
 } from '../../../../interfaces/championship-setup.interface';
 
 @Component({
@@ -221,7 +222,26 @@ export class SetupPeriods implements OnInit {
     this.championshipSetupService
       .updatePeriodsAndTransferWindows(championship.id, payload)
       .subscribe({
-        next: () => {
+        next: (response: IPeriodsAndTransferWindowsResponse) => {
+          const currentProgress = this.championship()?.progress;
+
+          this.championshipStore.update({
+            championshipPeriod: {
+              startDate: response.startDate,
+              endDate: response.endDate,
+            },
+            registrationPeriod: {
+              startAt: response.registrationStartAt,
+              endAt: response.registrationEndAt,
+            },
+            transferWindowPeriod: response.transferWindowStartAt
+              ? {
+                  startAt: response.transferWindowStartAt,
+                  endAt: response.transferWindowEndAt!,
+                }
+              : null,
+            progress: currentProgress ? { ...currentProgress, period: true } : undefined,
+          });
           this.router.navigate(['/admin/championships/setup', championship.id]);
         },
         error: (err: unknown) => {

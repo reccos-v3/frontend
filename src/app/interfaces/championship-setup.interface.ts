@@ -69,6 +69,16 @@ export interface IPeriodsAndTransferWindowsRequest {
   transferWindowEndAt: string | null;
 }
 
+export interface IPeriodsAndTransferWindowsResponse {
+  id: string;
+  startDate: string;
+  endDate: string;
+  registrationStartAt: string;
+  registrationEndAt: string;
+  transferWindowStartAt: string | null;
+  transferWindowEndAt: string | null;
+}
+
 export interface IBracketConfigRequest {
   strategyId: string;
   bracketModel: 'FIXED_BALANCED' | 'SEQUENTIAL' | 'DYNAMIC_RESEEDING' | 'MANUAL';

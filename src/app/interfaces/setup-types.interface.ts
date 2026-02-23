@@ -16,7 +16,7 @@ export interface ISetupRules {
   hasHomeAway: boolean;
 }
 
-export type FormatType = 'KNOCKOUT' | 'GROUPS_AND_KNOCKOUT' | 'POINTS';
+export type FormatType = 'KNOCKOUT' | 'GROUPS_AND_KNOCKOUT' | 'POINTS' | 'GROUPS';
 
 export interface ISetupFormat {
   id?: string;
@@ -25,14 +25,14 @@ export interface ISetupFormat {
 
 export interface IKnockoutConfig {
   defaultLegs: number;
-  defaultAdvanceRule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
+  defaultAdvanceRule: string;
   phases: IPhaseOverride[] | null;
 }
 
 export interface IPhaseOverride {
   phaseOrder: number;
   legs: number;
-  advanceRule: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
+  advanceRule: string;
   phaseType?: string;
 }
 
@@ -41,18 +41,65 @@ export interface IPhaseConfig {
   name: string;
   matchType: 'single' | 'home_away';
   legs: number;
-  advanceRule?: 'REGULAR_OR_PENALTIES' | 'AGGREGATE_OR_PENALTIES';
+  advanceRule?: string;
   teamsCount: number;
   isPreliminary: boolean;
 }
 
+export const KNOCKOUT_PHASE_SLOTS: Record<string, number> = {
+  FINAL: 2,
+  SEMI_FINALS: 4,
+  QUARTER_FINALS: 8,
+  ROUND_OF_16: 16,
+  ROUND_OF_32: 32,
+  ROUND_OF_64: 64,
+  ROUND_OF_128: 128,
+  ROUND_OF_256: 256,
+  ROUND_OF_512: 512,
+};
+
+export const getKnockoutPhaseName = (slots: number): string => {
+  switch (slots) {
+    case 2:
+      return 'Grande Final';
+    case 4:
+      return 'Semifinal';
+    case 8:
+      return 'Quartas de Final';
+    case 16:
+      return 'Oitavas de Final';
+    case 32:
+      return '16 avos de Final';
+    case 64:
+      return '32 avos de Final';
+    case 128:
+      return '64 avos de Final';
+    case 256:
+      return '128 avos de Final';
+    case 512:
+      return '256 avos de Final';
+    default:
+      return `${slots} Equipes`;
+  }
+};
+
+export const getKnockoutPhaseKey = (slots: number): string | null => {
+  return (
+    Object.keys(KNOCKOUT_PHASE_SLOTS).find((key) => KNOCKOUT_PHASE_SLOTS[key] === slots) || null
+  );
+};
+
 export interface ISetupStructure {
+  id?: string;
+  formatType?: FormatType;
+  byesCount: number;
   totalTeams: number;
-  groupsCount: number;
-  qualifiedPerGroup: number;
+  groupsCount: number | null;
+  qualifiedPerGroup: number | null;
+  knockoutStartPhase: string | null;
   wildcardCount: number;
-  firstPhaseType: string;
-  knockoutConfig?: IKnockoutConfig;
+  firstPhaseType: string | null;
+  knockoutConfig?: IKnockoutConfig | null;
 }
 
 export interface ISetupTiebreakCriteria {

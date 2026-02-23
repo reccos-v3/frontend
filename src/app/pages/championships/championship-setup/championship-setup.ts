@@ -5,6 +5,7 @@ import { SetupModuleCard, ISetupModule } from './components/setup-module-card/se
 import { SetupSidebar } from './setup-sidebar/setup-sidebar';
 import { SetupProgress } from './setup-progress/setup-progress';
 import { ChampionshipStore } from '../../../services/championship.store';
+import { STEP_MODULES, IStepModuleTemplate } from '../../../utils/setp-modules/step-modules';
 
 @Component({
   selector: 'app-championship-setup',
@@ -122,93 +123,19 @@ export class ChampionshipSetup implements OnInit {
     const data = this.championship();
     if (!data || !data.progress) return [];
 
-    const p = data.progress;
     const editable = this.canEdit();
 
-    return [
-      {
-        id: 'info',
-        title: 'Informações Básicas',
-        description: 'Nome, logo e descrição do campeonato.',
-        icon: 'info',
-        status: 'COMPLETED',
-        statusLabel: 'Concluído',
-        isLocked: !editable,
+    return STEP_MODULES.filter((tmpl) =>
+      tmpl.shouldShow ? tmpl.shouldShow({ data, editable }) : true,
+    ).map((tmpl: IStepModuleTemplate) => {
+      const dynamicProps = tmpl.getDynamicProps({ data, editable });
+
+      return {
+        ...tmpl,
+        ...dynamicProps,
         payload: data,
-      },
-      {
-        id: 'rules',
-        title: 'Regras e Pontuação',
-        description: 'Pontuação e critérios de desempate.',
-        icon: 'gavel',
-        status: p.rulesDone ? 'COMPLETED' : 'WARNING',
-        statusLabel: p.rulesDone ? 'Concluído' : 'Atenção',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
-        id: 'periods',
-        title: 'Períodos',
-        description: 'Inscrições e duração do campeonato.',
-        icon: 'calendar_month',
-        status: p.periodDone ? 'COMPLETED' : 'PENDING',
-        statusLabel: p.periodDone ? 'Concluído' : 'Incompleto',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
-        id: 'format',
-        title: 'Formato e Estrutura',
-        description: 'Grupos, eliminatórias e total de times.',
-        icon: 'account_tree',
-        status: p.structureDone ? 'COMPLETED' : 'PENDING',
-        statusLabel: p.structureDone ? 'Concluído' : 'Incompleto',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
-        id: 'teams',
-        title: 'Times',
-        description: 'Gerenciar inscrições e times participantes.',
-        icon: 'groups_2',
-        status: p.teamsDone ? 'COMPLETED' : 'PENDING',
-        statusLabel: p.teamsDone ? 'Concluído' : 'Pendente',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
-        id: 'seeding',
-        title: 'Política de Seed',
-        description: 'Critérios para definição de cabeças de chave.',
-        icon: 'psychology',
-        status: p.seedingDone ? 'COMPLETED' : 'PENDING',
-        statusLabel: p.seedingDone ? 'Concluído' : 'Incompleto',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
-        id: 'advanced-rules',
-        title: 'Configurações Avançadas',
-        description: 'Configurações avançadas do campeonato.',
-        icon: 'settings',
-        status: 'COMPLETED',
-        statusLabel: 'Concluído',
-        isLocked: !editable,
-        payload: data,
-      },
-      {
-        id: 'review',
-        title: 'Revisão Final',
-        description: 'Validação completa para ativação.',
-        icon: 'verified',
-        // O review tem uma lógica extra: precisa estar editável E apto para ativar
-        status: data.canActivate ? 'COMPLETED' : 'LOCKED',
-        statusLabel: data.canActivate ? 'Pronto' : 'Bloqueado',
-        isLocked: !editable || !data.canActivate,
-        actionLabel: data.canActivate ? 'Revisar' : 'Aguardando etapas',
-        payload: data,
-      },
-    ];
+      };
+    });
   });
 
   ngOnInit(): void {

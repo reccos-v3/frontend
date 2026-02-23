@@ -1,164 +1,121 @@
-<section [class]="embedded() ? 'flex flex-col gap-1' : 'flex flex-col gap-1'">
-  <details
-    [open]="embedded()"
+<section class="flex flex-col gap-1">
+  <div
     [class]="
       embedded()
-        ? 'group border-none bg-transparent overflow-hidden'
-        : 'group bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300'
+        ? 'p-0 space-y-8 animate-in fade-in slide-in-from-top-2 duration-300'
+        : 'bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 space-y-8 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-top-2 duration-300'
     "
   >
-    <summary
-      [class.hidden]="embedded()"
-      class="list-none cursor-pointer flex items-center justify-between p-6 bg-gray-50/30 dark:bg-gray-900/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-    >
-      <div class="flex items-center gap-4">
-        <div
-          class="bg-primary/10 dark:bg-primary/20 p-2.5 rounded-xl group-open:bg-primary group-open:text-white transition-all duration-300"
-        >
-          <span
-            class="material-symbols-outlined text-primary group-open:text-white transition-colors"
+    <div class="space-y-6">
+      <h3 class="text-base font-bold text-secondary dark:text-white px-1">
+        Regras após o início do campeonato
+      </h3>
+
+      <div class="grid gap-4">
+        @for (toggle of toggles; track toggle.id) {
+          <div
+            (click)="toggle.action()"
+            (keydown.enter)="toggle.action()"
+            (keydown.space)="$event.preventDefault(); toggle.action()"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="toggle.label"
+            class="flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/30 hover:bg-white dark:hover:bg-gray-900 hover:border-primary/30 transition-all cursor-pointer group/item focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
-            admin_panel_settings
-          </span>
-        </div>
-        <div class="flex flex-col">
-          <h2 class="text-lg font-bold text-secondary dark:text-white tracking-tight leading-tight">
-            Configurações Avançadas
-          </h2>
-          <p class="text-[13px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">
-            Gerencie permissões e regras especiais pós-início
-          </p>
-        </div>
-      </div>
-      <div
-        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors"
-      >
-        <span
-          class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-open:rotate-180 transition-transform duration-300 text-lg"
-        >
-          expand_more
-        </span>
-      </div>
-    </summary>
-
-    <div
-      [class]="
-        embedded()
-          ? 'p-0 pt-6 space-y-8 animate-in fade-in slide-in-from-top-2 duration-300'
-          : 'p-8 pt-2 space-y-8 animate-in fade-in slide-in-from-top-2 duration-300'
-      "
-    >
-      <div class="space-y-6">
-        <h3 class="text-base font-bold text-secondary dark:text-white px-1">
-          Regras após o início do campeonato
-        </h3>
-
-        <div class="grid gap-4">
-          @for (toggle of toggles; track toggle.id) {
-            <div
-              (click)="toggle.action()"
-              (keydown.enter)="toggle.action()"
-              (keydown.space)="$event.preventDefault(); toggle.action()"
-              tabindex="0"
-              role="button"
-              [attr.aria-label]="toggle.label"
-              class="flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/30 hover:bg-white dark:hover:bg-gray-900 hover:border-primary/30 transition-all cursor-pointer group/item focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              <div class="flex flex-col gap-0.5">
-                <span class="text-sm font-bold text-secondary dark:text-gray-100">{{
-                  toggle.label
-                }}</span>
-                <span class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-sm">
-                  {{ toggle.description }}
-                </span>
-              </div>
-              <label class="relative inline-flex items-center cursor-pointer pointer-events-none">
-                <input class="sr-only peer" type="checkbox" [checked]="toggle.value()" />
-                <div
-                  class="w-10 h-5.5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-                ></div>
-              </label>
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-bold text-secondary dark:text-gray-100">{{
+                toggle.label
+              }}</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-sm">
+                {{ toggle.description }}
+              </span>
             </div>
-          }
-        </div>
+            <label class="relative inline-flex items-center cursor-pointer pointer-events-none">
+              <input class="sr-only peer" type="checkbox" [checked]="toggle.value()" />
+              <div
+                class="w-10 h-5.5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+              ></div>
+            </label>
+          </div>
+        }
       </div>
-
-      <div class="space-y-4">
-        <h3 class="text-base font-bold text-secondary dark:text-white px-1">Modo de Ativação</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          @for (option of activationOptions; track option.id) {
-            <button
-              (click)="activationMode.set(option.id)"
-              (keydown.enter)="activationMode.set(option.id)"
-              tabindex="0"
-              role="radio"
-              [attr.aria-checked]="activationMode() === option.id"
-              [class]="
-                activationMode() === option.id
-                  ? 'border-primary bg-primary/5 ring-1 ring-primary/20 shadow-sm'
-                  : 'border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 hover:border-gray-200 dark:hover:border-gray-700'
-              "
-              class="flex flex-col p-5 rounded-2xl border-2 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              <div class="flex items-center justify-between mb-3">
-                <div
-                  class="w-10 h-10 flex items-center justify-center rounded-xl transition-colors"
-                  [class]="
-                    activationMode() === option.id
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-gray-700'
-                  "
-                >
-                  <span class="material-symbols-outlined text-[22px]">
-                    {{ option.icon }}
-                  </span>
-                </div>
-
-                @if (activationMode() === option.id) {
-                  <span class="material-symbols-outlined text-primary text-lg"> check_circle </span>
-                }
-              </div>
-
-              <div class="flex flex-col gap-1">
-                <span
-                  class="text-sm font-bold"
-                  [class]="
-                    activationMode() === option.id
-                      ? 'text-primary'
-                      : 'text-secondary dark:text-gray-100'
-                  "
-                >
-                  {{ option.title }}
-                </span>
-
-                <p class="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
-                  {{ option.description }}
-                </p>
-              </div>
-            </button>
-          }
-        </div>
-      </div>
-
-      <app-alert
-        class="block mb-8"
-        type="info"
-        variant="left-accent"
-        title="Regras de Alterações"
-        message="As alterações de regras serão bloqueadas automaticamente conforme essas regras. Isso
-          garante a integridade da competição e evita conflitos entre as equipes participantes."
-      />
-
-      @if (!embedded()) {
-        <div class="flex justify-end pt-4 border-t border-gray-100 dark:border-gray-800">
-          <button
-            (click)="submit()"
-            class="px-6 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark transition-all shadow-md hover:shadow-lg active:scale-95"
-          >
-            Salvar Configurações
-          </button>
-        </div>
-      }
     </div>
-  </details>
+
+    <div class="space-y-4">
+      <h3 class="text-base font-bold text-secondary dark:text-white px-1">Modo de Ativação</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @for (option of activationOptions; track option.id) {
+          <button
+            (click)="activationMode.set(option.id)"
+            (keydown.enter)="activationMode.set(option.id)"
+            tabindex="0"
+            role="radio"
+            [attr.aria-checked]="activationMode() === option.id"
+            [class]="
+              activationMode() === option.id
+                ? 'border-primary bg-primary/5 ring-1 ring-primary/20 shadow-sm'
+                : 'border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 hover:border-gray-200 dark:hover:border-gray-700'
+            "
+            class="flex flex-col p-5 rounded-2xl border-2 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <div
+                class="w-10 h-10 flex items-center justify-center rounded-xl transition-colors"
+                [class]="
+                  activationMode() === option.id
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-gray-700'
+                "
+              >
+                <span class="material-symbols-outlined text-[22px]">
+                  {{ option.icon }}
+                </span>
+              </div>
+
+              @if (activationMode() === option.id) {
+                <span class="material-symbols-outlined text-primary text-lg"> check_circle </span>
+              }
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span
+                class="text-sm font-bold"
+                [class]="
+                  activationMode() === option.id
+                    ? 'text-primary'
+                    : 'text-secondary dark:text-gray-100'
+                "
+              >
+                {{ option.title }}
+              </span>
+
+              <p class="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
+                {{ option.description }}
+              </p>
+            </div>
+          </button>
+        }
+      </div>
+    </div>
+
+    <app-alert
+      class="block mb-8"
+      type="info"
+      variant="left-accent"
+      title="Regras de Alterações"
+      message="As alterações de regras serão bloqueadas automaticamente conforme essas regras. Isso
+        garante a integridade da competição e evita conflitos entre as equipes participantes."
+    />
+
+    @if (!embedded()) {
+      <div class="flex justify-end pt-4 border-t border-gray-100 dark:border-gray-800">
+        <button
+          (click)="submit()"
+          class="px-6 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark transition-all shadow-md hover:shadow-lg active:scale-95"
+        >
+          Salvar Configurações
+        </button>
+      </div>
+    }
+  </div>
 </section>

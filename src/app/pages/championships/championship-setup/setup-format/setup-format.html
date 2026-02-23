@@ -19,35 +19,25 @@
       <section
         class="bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800"
       >
-        @switch (internalStep()) {
-          @case ('selection') {
-            <app-setup-championship-format
-              [selectedFormat]="selectedFormat()"
-              [groupsCount]="groupsCount()"
-              [qualifiedPerGroup]="qualifiedPerGroup()"
-              [totalTeams]="totalTeams()"
-              [wildcardCount]="wildcardCount()"
-              [isDoubleRound]="isDoubleRound()"
-              (updateFormat)="selectedFormat.set($event)"
-              (updateGroupsCount)="updateGroupsCount($event)"
-              (updateQualified)="updateQualified($event)"
-              (updateTotalTeams)="updateTotalTeams($event)"
-              (updateWildcardCount)="updateWildcardCount($event)"
-              (updateDoubleRound)="isDoubleRound.set($event)"
-            />
+        <app-setup-championship-format
+          [selectedFormat]="selectedFormat()"
+          [groupsCount]="groupsCount()"
+          [qualifiedPerGroup]="qualifiedPerGroup()"
+          [totalTeams]="totalTeams()"
+          [wildcardCount]="wildcardCount()"
+          [isDoubleRound]="isDoubleRound()"
+          (updateFormat)="selectedFormat.set($event)"
+          (updateGroupsCount)="updateGroupsCount($event)"
+          (updateQualified)="updateQualified($event)"
+          (updateTotalTeams)="updateTotalTeams($event)"
+          (updateWildcardCount)="updateWildcardCount($event)"
+          (updateDoubleRound)="isDoubleRound.set($event)"
+        />
 
-            <app-format-calendar-preferences
-              (updatePreferences)="updateSchedulePreferences($event)"
-            />
-          }
-          @case ('configuration') {
-            <app-setup-format-knockout
-              [totalTeams]="totalTeams()"
-              [externalPhases]="storedPhases()"
-              (knockoutConfigChange)="handleKnockoutConfigChange($event)"
-            />
-          }
-        }
+        <app-format-calendar-preferences
+          [initialPreferences]="schedulePreferences()"
+          (updatePreferences)="updateSchedulePreferences($event)"
+        />
       </section>
     </div>
     <!-- Right Column: Visualization Preview -->
