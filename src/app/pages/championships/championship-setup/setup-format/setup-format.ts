@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, output, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import {
@@ -15,6 +15,8 @@ import { ChampionshipStore } from '../../../../services/championship.store';
 import { Router } from '@angular/router';
 import { ChampionshipSetupService } from '../../../../services/championship-setup.service';
 import { IFormatAndStructureRequest } from '../../../../interfaces/championship-setup.interface';
+import { KnockoutStructureService } from '../../../../services/knockout-structure.service';
+import { SetupFooterButtons } from '../setup-footer-buttons/setup-footer-buttons';
 
 interface IFormat {
   id: 'groups_and_knockout' | 'knockout' | 'points' | 'groups';
@@ -26,7 +28,13 @@ interface IFormat {
 @Component({
   selector: 'app-setup-format',
   standalone: true,
-  imports: [SetupSidebarFormat, SetupChampionshipFormat, AppAlert, FormatCalendarPreferences],
+  imports: [
+    SetupSidebarFormat,
+    SetupChampionshipFormat,
+    AppAlert,
+    FormatCalendarPreferences,
+    SetupFooterButtons,
+  ],
   templateUrl: './setup-format.html',
   styleUrl: './setup-format.css',
 })
@@ -36,6 +44,7 @@ export class SetupFormat implements OnInit {
   phasesChange = output<IPhase[]>();
   dataUpdate = output<Partial<IChampionshipSetupRequest>>();
   private championshipSetupService = inject(ChampionshipSetupService);
+  private knockoutService = inject(KnockoutStructureService);
   router = inject(Router);
 
   championshipStore = inject(ChampionshipStore);
@@ -57,6 +66,8 @@ export class SetupFormat implements OnInit {
     avoidHolidays: false,
   });
 
+  byePolicy = signal<'STANDARD' | 'MAX_ENGAGEMENT'>('STANDARD');
+
   isDoubleRound = signal(true);
 
   // Store phases from sidebar to pass to knockout config
@@ -77,6 +88,7 @@ export class SetupFormat implements OnInit {
     initialValue: this.qualifiedPerGroup(),
   });
 
+  isSidebarOpen = signal(false);
   isValid = signal(false);
 
   constructor() {
@@ -88,7 +100,39 @@ export class SetupFormat implements OnInit {
       },
       { allowSignalWrites: true },
     );
+
+    effect(
+      () => {
+        const teams =
+          this.selectedFormat() === 'groups_and_knockout'
+            ? this.groupsCount() * this.qualifiedPerGroup() + this.wildcardCount()
+            : this.totalTeams();
+
+        const suggested = this.knockoutService.suggestByes(teams, this.byePolicy());
+        this.byesCount.set(suggested);
+      },
+      { allowSignalWrites: true },
+    );
   }
+
+  validationAlerts = computed(() => {
+    const format = this.selectedFormat();
+    if (format === 'points' || format === 'groups') return [];
+
+    const teams =
+      format === 'groups_and_knockout'
+        ? this.groupsCount() * this.qualifiedPerGroup() + this.wildcardCount()
+        : this.totalTeams();
+
+    return this.knockoutService.buildAlerts(
+      teams,
+      128, // Capacity limit
+      format === 'groups_and_knockout' ? 'groups' : 'knockout',
+      this.byePolicy(),
+    );
+  });
+
+  hasErrors = computed(() => this.validationAlerts().some((a) => a.type === 'error'));
 
   ngOnInit() {
     const initial = this.championship();
@@ -104,6 +148,10 @@ export class SetupFormat implements OnInit {
 
       if (initial.structure.knockoutConfig) {
         this.knockoutConfig.set(initial.structure.knockoutConfig);
+      }
+
+      if (initial.structure.byePolicy) {
+        this.byePolicy.set(initial.structure.byePolicy);
       }
     }
     if (initial?.rules) {
@@ -174,10 +222,12 @@ export class SetupFormat implements OnInit {
       .subscribe({
         next: (response) => {
           this.loading.set(false);
+          const currentProgress = this.championship()?.progress;
           this.championshipStore.update({
             structure: {
               ...response,
             },
+            progress: currentProgress ? { ...currentProgress, structure: true } : undefined,
           });
           this.router.navigate(['/admin/championships/setup', currentChampionship.id]);
         },
@@ -200,6 +250,7 @@ export class SetupFormat implements OnInit {
       wildcardCount: this.wildcardCount(),
       knockoutConfig: null,
       schedulePreferences: this.schedulePreferences(),
+      byePolicy: this.byePolicy(),
     };
 
     switch (format) {
@@ -217,7 +268,7 @@ export class SetupFormat implements OnInit {
 
       case 'knockout': {
         // Mata-mata puro: knockoutStartPhase e knockoutConfig obrigatórios
-        const knockoutByes = this.calculateByes(this.totalTeams());
+        const knockoutByes = this.byesCount();
         const totalSlots = this.totalTeams() + knockoutByes;
 
         return {
@@ -232,7 +283,7 @@ export class SetupFormat implements OnInit {
         // Grupos + Mata-mata: tudo obrigatório
         const teamsEnteringKnockout =
           this.groupsCount() * this.qualifiedPerGroup() + this.wildcardCount();
-        const groupsKnockoutByes = this.calculateByes(teamsEnteringKnockout);
+        const groupsKnockoutByes = this.byesCount();
         const totalKnockoutSlots = teamsEnteringKnockout + groupsKnockoutByes;
 
         return {
@@ -261,17 +312,6 @@ export class SetupFormat implements OnInit {
     if (teams <= 128) return 'ROUND_OF_128';
     if (teams <= 256) return 'ROUND_OF_256';
     return 'ROUND_OF_512';
-  }
-
-  private calculateByes(teams: number): number {
-    if (teams <= 0) return 0;
-
-    let power = 1;
-    while (power < teams) {
-      power *= 2;
-    }
-
-    return power - teams;
   }
 
   private buildKnockoutConfig() {
@@ -311,5 +351,20 @@ export class SetupFormat implements OnInit {
 
   handleKnockoutConfigChange(config: IKnockoutConfig) {
     this.knockoutConfig.set(config);
+  }
+
+  eventClickConfirmButton(event: 'saveAndContinue' | 'returnHub') {
+    if (event === 'saveAndContinue') {
+      this.saveAndContinue();
+    } else {
+      this.returnHub();
+    }
+  }
+
+  returnHub() {
+    const championship = this.championship();
+    if (!championship) return;
+
+    this.router.navigate(['/admin/championships/setup', championship.id]);
   }
 }

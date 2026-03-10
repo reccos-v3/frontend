@@ -63,11 +63,13 @@
         [totalTeams]="totalTeams()"
         [wildcardCount]="wildcardCount()"
         [isDoubleRound]="isDoubleRound()"
+        [byePolicy]="byePolicy()"
         (updateGroupsCount)="changeGroupsCount($event)"
         (updateQualified)="changeQualified($event)"
         (updateTotalTeams)="changeTotalTeams($event)"
         (updateWildcardCount)="updateWildcardCount.emit($event)"
         (updateDoubleRound)="updateDoubleRound.emit($event)"
+        (updateByePolicy)="updateByePolicy.emit($event)"
       />
     </div>
   }

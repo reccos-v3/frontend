@@ -22,6 +22,7 @@ export class SetupChampionshipFormat {
   qualifiedPerGroup = input.required<number>();
   wildcardCount = input<number>(0);
   isDoubleRound = input<boolean>(true);
+  byePolicy = input<'STANDARD' | 'MAX_ENGAGEMENT'>('STANDARD');
 
   updateFormat = output<'groups_and_knockout' | 'knockout' | 'points' | 'groups'>();
   updateGroupsCount = output<number>();
@@ -29,6 +30,7 @@ export class SetupChampionshipFormat {
   updateTotalTeams = output<number>();
   updateWildcardCount = output<number>();
   updateDoubleRound = output<boolean>();
+  updateByePolicy = output<'STANDARD' | 'MAX_ENGAGEMENT'>();
 
   isExpanded = true;
 

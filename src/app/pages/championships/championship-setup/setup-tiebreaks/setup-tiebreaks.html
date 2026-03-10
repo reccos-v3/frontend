@@ -1,66 +1,133 @@
 <section
-  class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 h-full"
+  class="flex flex-col gap-6 p-6 md:p-8 rounded-[2rem] bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 h-full transition-all"
 >
-  <div class="flex items-center justify-between mb-6">
-    <div class="flex items-center gap-2">
-      <span class="material-symbols-outlined text-primary">sort</span>
-      <h3 class="font-bold text-lg">Critérios de Desempate</h3>
+  <div
+    class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800"
+  >
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 rounded-xl bg-primary/10 text-primary shadow-inner">
+        <span class="material-symbols-outlined">sort</span>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white leading-none">
+          Critérios de Desempate
+        </h3>
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1.5 font-mono">
+          Hierarquia de Classificação
+        </p>
+      </div>
     </div>
     <button
       (click)="openModal.emit()"
-      class="text-sm font-bold text-primary hover:text-primary transition-colors"
+      class="group flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-dark transition-all px-4 py-2 rounded-full hover:bg-primary/5 border border-transparent hover:border-primary/20"
     >
-      + Adicionar critério
+      <span class="material-symbols-outlined text-sm group-hover:rotate-90 transition-transform"
+        >add</span
+      >
+      Adicionar critério
     </button>
   </div>
 
-  <div class="space-y-2">
+  <div class="flex flex-col gap-3">
+    <!-- Help Text -->
+    @if (tiebreaks().length > 0) {
+      <p class="text-xs text-slate-500 font-medium px-1 flex items-center gap-2 mb-1">
+        <span class="material-symbols-outlined text-sm text-primary">drag_click</span>
+        Arraste para reordenar a prioridade dos critérios.
+      </p>
+    }
+
+    <!-- Empty State / Guidance -->
+    @if (tiebreaks().length === 0) {
+      <button
+        type="button"
+        (click)="openModal.emit()"
+        class="w-full p-8 bg-slate-50/50 dark:bg-slate-800/10 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center text-center gap-5 animate-in fade-in slide-in-from-top-4 duration-500 hover:bg-slate-100 dark:hover:bg-slate-800/20 hover:border-primary/40 transition-all group/box shadow-sm hover:shadow-md cursor-pointer outline-none focus:ring-2 focus:ring-primary/20"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-primary/5 flex items-center justify-center group-hover/box:scale-110 group-hover/box:bg-primary/10 transition-all duration-300"
+        >
+          <span class="material-symbols-outlined text-primary text-4xl">add_task</span>
+        </div>
+        <div class="space-y-1">
+          <p
+            class="text-lg font-bold text-slate-900 dark:text-white group-hover/box:text-primary transition-colors"
+          >
+            Nenhum critério definido
+          </p>
+          <p class="text-xs text-slate-500 max-w-[260px] leading-relaxed mx-auto">
+            Toque para selecionar os critérios e definir a hierarquia de desempate para este
+            torneio.
+          </p>
+        </div>
+        <div
+          class="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest group-hover/box:bg-primary group-hover/box:text-white transition-all shadow-sm group-hover/box:shadow-lg group-hover/box:shadow-primary/20"
+        >
+          Configurar Agora
+        </div>
+      </button>
+    }
+
     @for (tiebreak of tiebreaks(); track $index) {
       <!-- ITEM FIXO -->
       @if (tiebreak.code === 'POINTS') {
         <div
-          class="flex items-center gap-4 p-4 bg-primary/10 border border-primary/20 rounded-lg opacity-80 cursor-not-allowed"
+          class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 opacity-90 cursor-not-allowed group relative overflow-hidden"
         >
-          <span class="material-symbols-outlined text-slate-400">lock</span>
-          <span class="font-bold text-primary"> 1º {{ tiebreak.name }} </span>
+          <div class="flex items-center gap-4">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary"
+            >
+              <span class="material-symbols-outlined text-base">lock</span>
+            </div>
+            <div class="flex flex-col">
+              <span
+                class="text-[9px] font-black text-primary uppercase tracking-widest leading-none mb-1"
+                >Prioridade Máxima</span
+              >
+              <span class="font-bold text-slate-900 dark:text-white">1. {{ tiebreak.name }}</span>
+            </div>
+          </div>
           <span
-            class="ml-auto text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded uppercase"
+            class="text-[9px] font-black bg-white dark:bg-slate-900 text-slate-400 px-2 py-1 border border-slate-200 dark:border-slate-800 rounded-md uppercase tracking-tighter"
           >
-            Fixo
+            Sistêmico
           </span>
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
         </div>
       } @else {
         <!-- DRAGGABLE ITEM -->
         <div
-          class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg hover:border-primary/50 transition-colors shadow-sm group"
+          class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-800 hover:border-primary/50 cursor-grab active:cursor-grabbing transition-all hover:shadow-md hover:translate-x-1"
           draggable="true"
           (dragstart)="onDragStart($index)"
           (dragover)="onDragOver($event, $index)"
           (dragleave)="onDragLeave()"
           (drop)="onDrop($index)"
         >
-          <span
-            class="material-symbols-outlined text-slate-300 group-hover:text-primary cursor-move"
-          >
-            drag_indicator
-          </span>
-
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-4">
             <span
-              class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold"
+              class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors cursor-grab"
+              >drag_indicator</span
             >
-              {{ $index + 1 }}
-            </span>
-            <span class="font-medium">
-              {{ tiebreak.name }}
-            </span>
+            <div class="flex items-center gap-3">
+              <span
+                class="flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-900 text-[10px] font-black text-slate-500 font-mono border border-slate-200 dark:border-slate-800 group-hover:border-primary/30 group-hover:text-primary transition-all shadow-inner"
+              >
+                {{ $index + 1 }}
+              </span>
+              <span
+                class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"
+              >
+                {{ tiebreak.name }}
+              </span>
+            </div>
           </div>
-
           <button
             (click)="removeTiebreak.emit($index)"
-            class="ml-auto text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+            class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
           >
-            <span class="material-symbols-outlined">delete</span>
+            <span class="material-symbols-outlined text-sm">delete</span>
           </button>
         </div>
       }

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ISeasonRequest, ISeasonResponse } from '../interfaces/season.interface';
 import { environment } from '../../environments/environment';
 import { catchError, Observable, of, throwError } from 'rxjs';
-import { IAuth } from '../interfaces/auth.interface';
 import { TokenService } from './token.service';
 
 @Injectable({

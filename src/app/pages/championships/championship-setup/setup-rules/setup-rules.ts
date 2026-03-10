@@ -233,6 +233,9 @@ export class SetupRules implements OnInit {
         next: (response) => {
           this.championshipStore.update({
             rules: response,
+            progress: championship?.progress
+              ? { ...championship.progress, rules: true }
+              : undefined,
           });
 
           this.router.navigate(['/admin/championships/setup', championshipId]);

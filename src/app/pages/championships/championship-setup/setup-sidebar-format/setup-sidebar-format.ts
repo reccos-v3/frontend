@@ -1,4 +1,5 @@
 import { Component, computed, input, output, effect } from '@angular/core';
+import { IPhaseConfig } from '../../../../interfaces/setup-types.interface';
 
 export interface IPhase {
   label: string;
@@ -8,6 +9,12 @@ export interface IPhase {
   icon: string;
   isMain?: boolean;
   opacity?: string;
+  // Match rules extras (quando gerado a partir de IPhaseConfig)
+  legs?: number;
+  advanceRule?: string;
+  matchType?: 'single' | 'home_away';
+  teamsCount?: number;
+  isPreliminaryPhase?: boolean;
 }
 
 @Component({
@@ -23,7 +30,13 @@ export class SetupSidebarFormat {
   groupsCount = input(4);
   qualifiedPerGroup = input(2);
   isDoubleRound = input(true);
+  byePolicy = input<'STANDARD' | 'MAX_ENGAGEMENT'>('STANDARD');
   tiebreakers = input<string[]>(['Saldo de Gols']);
+  /**
+   * Quando fornecido, as fases do sidebar são derivadas diretamente deste input
+   * (gerado pelo KnockoutPhaseGeneratorService), ignorando a lógica interna de preview.
+   */
+  knockoutPhases = input<IPhaseConfig[] | null>(null);
   phasesChange = output<IPhase[]>();
 
   totalRounds = computed(() => {
@@ -98,7 +111,80 @@ export class SetupSidebarFormat {
     return 0;
   });
 
+  /**
+   * Converte IPhaseConfig[] (do KnockoutPhaseGeneratorService) em IPhase[] para o sidebar.
+   * Quando `knockoutPhases` está disponível, usa essa lógica ao invés da interna.
+   */
+  phasesFromKnockoutInput = computed<IPhase[] | null>(() => {
+    const inputPhases = this.knockoutPhases();
+    if (!inputPhases || inputPhases.length === 0) return null;
+
+    const format = this.selectedFormat();
+    const result: IPhase[] = [];
+
+    // Se o formato tem fase de grupos, adiciona primeiro
+    if (format === 'groups_and_knockout') {
+      result.push({
+        label: 'Fase 1',
+        title: 'Fase de Grupos',
+        description: `${this.groupsCount()} Grupos de ${Math.ceil(this.totalTeams() / this.groupsCount())} times`,
+        subDescription: `Classificam ${this.qualifiedPerGroup()} por grupo`,
+        icon: 'grid_view',
+        isMain: true,
+      });
+    }
+
+    inputPhases.forEach((phase, index) => {
+      const isGrandFinal = phase.teamsCount === 2;
+      const icon = isGrandFinal
+        ? 'emoji_events'
+        : phase.teamsCount === 4
+          ? 'filter_4'
+          : phase.teamsCount === 8
+            ? 'filter_8'
+            : phase.teamsCount === 16
+              ? 'layers'
+              : phase.isPreliminary
+                ? index === 0
+                  ? 'stars'
+                  : 'account_tree'
+                : 'account_tree';
+
+      const legsLabel = phase.legs === 2 ? 'Ida e Volta' : 'Jogo Único';
+
+      const advanceLabel =
+        phase.advanceRule === 'AGGREGATE_SCORE'
+          ? 'Placar Agregado'
+          : phase.advanceRule === 'AGGREGATE_WITH_AWAY_GOALS'
+            ? 'Gols Fora de Casa'
+            : 'Pênaltis (Empate)';
+
+      const baseIndex = format === 'groups_and_knockout' ? 2 : 1;
+      const label = isGrandFinal ? 'Final' : `Fase ${baseIndex + index}`;
+
+      result.push({
+        label,
+        title: phase.name,
+        description: `${phase.teamsCount} Times · ${legsLabel}`,
+        subDescription: advanceLabel,
+        icon,
+        isMain: !phase.isPreliminary,
+        legs: phase.legs,
+        advanceRule: phase.advanceRule,
+        matchType: phase.matchType,
+        teamsCount: phase.teamsCount,
+        isPreliminaryPhase: phase.isPreliminary,
+      });
+    });
+
+    return result;
+  });
+
   phases = computed(() => {
+    // Se há fases externas fornecidas pelo componente pai, usa-as
+    const external = this.phasesFromKnockoutInput();
+    if (external !== null) return external;
+    // Lógica interna de preview (usada quando knockoutPhases não é fornecido)
     const format = this.selectedFormat();
     const phases: IPhase[] = [];
 
@@ -134,53 +220,67 @@ export class SetupSidebarFormat {
     // Generate knockout phases [Initial, ..., Final]
     const knockoutPhasesList: IPhase[] = [];
     let currentTeams = knockoutTeams;
-    let roundCounter = 1;
+
+    // Special logic for first rounds based on policy
+    if (this.byePolicy() === 'MAX_ENGAGEMENT') {
+      const isPerfect = (currentTeams & (currentTeams - 1)) === 0;
+      if (!isPerfect) {
+        knockoutPhasesList.push({
+          label: '',
+          title: 'Rodada de Estreia',
+          description: `${currentTeams} Times`,
+          subDescription: 'Engajamento Máximo (Todos jogam)',
+          icon: 'stars',
+        });
+        currentTeams = Math.floor(currentTeams / 2) + (currentTeams % 2);
+      }
+    }
 
     while (currentTeams >= 2) {
+      let slots = 1;
+      while (slots < currentTeams) {
+        slots *= 2;
+      }
+
       let phaseTitle = '';
       let phaseIcon = '';
 
-      if (currentTeams === 2) {
+      if (slots === 2) {
         phaseTitle = 'Grande Final';
         phaseIcon = 'emoji_events';
-      } else if (currentTeams === 4) {
+      } else if (slots === 4) {
         phaseTitle = 'Semifinal';
         phaseIcon = 'filter_4';
-      } else if (currentTeams === 8) {
+      } else if (slots === 8) {
         phaseTitle = 'Quartas de Final';
         phaseIcon = 'filter_8';
-      } else if (currentTeams === 16) {
+      } else if (slots === 16) {
         phaseTitle = 'Oitavas de Final';
         phaseIcon = 'layers';
       } else {
-        phaseTitle = `Rodada ${roundCounter}`;
+        phaseTitle = `Fase de ${slots}`;
         phaseIcon = 'account_tree';
-        roundCounter++;
       }
 
       knockoutPhasesList.push({
         label: '',
         title: phaseTitle,
         description: `${currentTeams} Times`,
-        subDescription: currentTeams === 2 ? undefined : 'Mata-mata (Jogo único)',
+        subDescription: currentTeams === slots ? 'Chave Completa' : 'Contém Folgas Técnicas',
         icon: phaseIcon,
       });
 
-      currentTeams = Math.floor(currentTeams / 2);
+      currentTeams = slots / 2;
     }
 
-    const baseIndex = format === 'groups_and_knockout' ? 2 : 1;
-    knockoutPhasesList.forEach((phase, index) => {
-      if (phase.title === 'Grande Final') {
-        phase.label = 'Final';
-      } else {
-        phase.label = `Fase ${baseIndex + index}`;
-      }
+    const currentFormat = this.selectedFormat();
+    const baseIndex = currentFormat === 'groups_and_knockout' ? 2 : 1;
 
-      if (format === 'knockout' && index === 0) {
+    knockoutPhasesList.forEach((phase, index) => {
+      phase.label = phase.title === 'Grande Final' ? 'Final' : `Fase ${baseIndex + index}`;
+      if (currentFormat === 'knockout' && index === 0) {
         phase.isMain = true;
       }
-
       phases.push(phase);
     });
 

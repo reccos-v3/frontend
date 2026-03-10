@@ -2,29 +2,29 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppAlert } from '../../../../components/alert/alert';
-import {
-  IPhaseConfig,
-  KNOCKOUT_PHASE_SLOTS,
-  getKnockoutPhaseName,
-  getKnockoutPhaseKey,
-} from '../../../../interfaces/setup-types.interface';
+import { IPhaseConfig, getKnockoutPhaseKey } from '../../../../interfaces/setup-types.interface';
 import { ChampionshipStore } from '../../../../services/championship.store';
 import { ChampionshipSetupService } from '../../../../services/championship-setup.service';
 import { IMatchRulesRequest } from '../../../../interfaces/championship-setup.interface';
+import { SetupFooterButtons } from '../setup-footer-buttons/setup-footer-buttons';
+import { SetupSidebarFormat } from '../setup-sidebar-format/setup-sidebar-format';
+import { KnockoutPhaseGeneratorService } from '../../../../services/knockout-phase-generator.service';
 
 @Component({
   selector: 'app-setup-match-rules',
   standalone: true,
-  imports: [CommonModule, AppAlert],
+  imports: [CommonModule, AppAlert, SetupFooterButtons, SetupSidebarFormat],
   templateUrl: './setup-match-rules.html',
   styleUrl: './setup-match-rules.css',
 })
 export class SetupMatchRules {
   private championshipStore = inject(ChampionshipStore);
+  private phaseGenerator = inject(KnockoutPhaseGeneratorService);
   private championshipSetupService = inject(ChampionshipSetupService);
   private router = inject(Router);
 
   championship = this.championshipStore.championship;
+
   loading = signal(false);
 
   constructor() {
@@ -45,59 +45,62 @@ export class SetupMatchRules {
   overrides = signal<Record<number, Partial<IPhaseConfig>>>({});
 
   phases = computed<IPhaseConfig[]>(() => {
-    const data = this.championship();
-    if (!data?.structure?.knockoutStartPhase) return [];
+    const champ = this.championship();
+    if (!champ?.structure?.knockoutStartPhase) return [];
 
-    const result: IPhaseConfig[] = [];
-    const struct = data.structure;
-    const startPhaseStr = struct.knockoutStartPhase;
+    const policy = (champ.structure.byePolicy as 'STANDARD' | 'MAX_ENGAGEMENT') ?? 'STANDARD';
 
-    let currentSlots = KNOCKOUT_PHASE_SLOTS[startPhaseStr!] || 0;
-    let order = 1;
+    return this.phaseGenerator.generatePhases(policy, {
+      totalTeams: champ.structure.totalTeams,
+      byesCount: champ.structure.byesCount,
+      knockoutStartPhase: champ.structure.knockoutStartPhase,
+      existingPhases: champ.structure.knockoutConfig?.phases || [],
+    });
+  });
 
-    // Se houver primeira fase de grupos, o mata-mata começa na ordem 2
-    if (struct.firstPhaseType === 'GROUPS') {
-      order = 2;
+  policyLabel = computed(() => {
+    const policy = this.championship()?.structure?.byePolicy;
+    if (policy === 'MAX_ENGAGEMENT') return 'Engajamento Máximo';
+    if (policy === 'STANDARD') return 'Padrão / Tradicional';
+    return 'Não definido';
+  });
+
+  // Exemplo: computed para mostrar byes/folgas de forma contextual
+  byesDescription = computed(() => {
+    const policy = this.championship()?.structure?.byePolicy;
+    const byes = this.championship()?.structure?.byesCount || 0;
+
+    if (policy === 'MAX_ENGAGEMENT') {
+      return byes <= 1
+        ? 'Mínimas ou zero folgas na estreia'
+        : `${byes} folgas (ver fase de ajuste)`;
     }
-
-    const phaseOverrides = this.overrides();
-    const existingPhases = struct.knockoutConfig?.phases || [];
-
-    while (currentSlots >= 2) {
-      const key = getKnockoutPhaseKey(currentSlots) || 'PRELIMINARY';
-      const isStandard = ['FINAL', 'SEMI_FINALS', 'QUARTER_FINALS', 'ROUND_OF_16'].includes(key);
-      const isPreliminary = !isStandard;
-
-      const name = isStandard ? getKnockoutPhaseName(currentSlots) : 'Fase Preliminar';
-
-      const override = phaseOverrides[order];
-      const existing = existingPhases.find((p) => p.phaseOrder === order);
-
-      // Hardcoded defaults for specific phases as requested for the "Initial Configuration"
-      const defaultLegs = 1;
-      const defaultRule = 'REGULAR_OR_PENALTIES';
-
-      const legs = override?.legs || existing?.legs || defaultLegs;
-      const advanceRule = override?.advanceRule || existing?.advanceRule || defaultRule;
-      const matchType = override?.matchType || (legs === 2 ? 'home_away' : 'single');
-
-      result.push({
-        order: order++,
-        name,
-        matchType: matchType as 'single' | 'home_away',
-        legs,
-        advanceRule,
-        teamsCount: currentSlots,
-        isPreliminary,
-      });
-
-      currentSlots /= 2;
-    }
-
-    return result;
+    return `${byes} folgas na primeira rodada`;
   });
 
   hasPreliminary = computed(() => this.phases().some((p) => p.isPreliminary));
+
+  totalTeams = computed(() => this.championship()?.structure?.totalTeams || 0);
+  byesCount = computed(() => this.championship()?.structure?.byesCount || 0);
+
+  isValid = computed(() => this.phases().every((p) => !this.isSelectionInvalid(p)));
+
+  /**
+   * Fases com overrides aplicados — passadas ao sidebar para refletir o estado atual
+   */
+  phasesForSidebar = computed<IPhaseConfig[]>(() => {
+    const overrides = this.overrides();
+    return this.phases().map((phase) => {
+      const override = overrides[phase.order];
+      if (!override) return phase;
+      return {
+        ...phase,
+        legs: override.legs ?? phase.legs,
+        matchType: override.matchType ?? phase.matchType,
+        advanceRule: override.advanceRule ?? phase.advanceRule,
+      };
+    });
+  });
 
   toggleMatchType(phaseOrder: number, type: 'single' | 'home_away') {
     this.overrides.update((prev) => ({
@@ -232,7 +235,26 @@ export class SetupMatchRules {
     this.championshipSetupService.updateMatchRules(championship.id, payload).subscribe({
       next: () => {
         this.loading.set(false);
-        // We could refresh the store here if needed, but the important is moving forward
+        this.championshipStore.update({
+          structure: championship.structure
+            ? {
+                ...championship.structure,
+                knockoutConfig: {
+                  defaultLegs: payload.defaultLegs,
+                  defaultAdvanceRule: payload.defaultAdvanceRule,
+                  phases: payload.phases.map((p, idx) => ({
+                    phaseOrder: this.phases()[idx]?.order || idx + 1,
+                    legs: p.legs,
+                    advanceRule: p.advanceRule,
+                    phaseType: p.phaseType,
+                  })),
+                },
+              }
+            : null,
+          progress: championship.progress
+            ? { ...championship.progress, matchRules: true }
+            : undefined,
+        });
         this.router.navigate(['/admin/championships/setup', championship.id]);
       },
       error: (err) => {
@@ -246,5 +268,13 @@ export class SetupMatchRules {
     const championship = this.championship();
     if (!championship) return;
     this.router.navigate(['/admin/championships/setup', championship.id]);
+  }
+
+  eventClickConfirmButton(event: 'saveAndContinue' | 'returnHub') {
+    if (event === 'saveAndContinue') {
+      this.saveAndContinue();
+    } else {
+      this.returnToPrevious();
+    }
   }
 }

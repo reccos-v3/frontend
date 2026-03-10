@@ -1,7 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { PeriodCard } from './components/period-card/period-card';
-import { ChampionshipService } from '../../../../services/championship.service';
 import { ChampionshipStore } from '../../../../services/championship.store';
 import { IPeriodCardConfig } from '../../../../interfaces/period-cards.interface';
 import { tournamentConfigs } from '../../../../utils/periods-card/period-cards-items';
@@ -26,7 +25,6 @@ import {
 export class SetupPeriods implements OnInit {
   private router = inject(Router);
   private championshipStore = inject(ChampionshipStore);
-  private championshipService = inject(ChampionshipService);
   private championshipSetupService = inject(ChampionshipSetupService);
 
   // ─────────────────────────────────────────────

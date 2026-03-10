@@ -1,0 +1,125 @@
+<section
+  class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+>
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-bold text-text-main dark:text-text-light flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">analytics</span>
+      Simulador de Estrutura
+    </h2>
+    <div class="flex items-center gap-3">
+      <p class="text-xs font-bold uppercase text-text-secondary dark:text-neutral-gray/70">
+        Número de Times:
+      </p>
+      <div
+        class="px-4 py-1.5 bg-neutral-gray/10 dark:bg-secondary-dark/50 border border-neutral-gray/30 dark:border-neutral-gray/40 rounded-lg font-black text-lg text-primary"
+      >
+        {{ totalTeams() }}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    @for (policy of policies(); track policy.id) {
+      <div
+        class="p-5 rounded-xl border transition-all flex flex-col h-full overflow-hidden"
+        [class.border-primary]="visualSelected() === policy.id"
+        [class.bg-primary/5]="visualSelected() === policy.id"
+        [class.border-neutral-gray/50]="visualSelected() !== policy.id"
+        [class.dark:border-neutral-gray/40]="visualSelected() !== policy.id"
+        [class.bg-neutral-gray/10]="visualSelected() !== policy.id"
+        [class.dark:bg-secondary-dark/20]="visualSelected() !== policy.id"
+      >
+        <div class="flex justify-between items-start mb-3">
+          <span
+            class="text-[10px] font-black uppercase px-2 py-1 rounded"
+            [class.bg-info-medium/10]="policy.colorClass === 'info-medium'"
+            [class.text-info-medium]="policy.colorClass === 'info-medium'"
+            [class.bg-success-light/10]="policy.colorClass === 'success-light'"
+            [class.text-success-light]="policy.colorClass === 'success-light'"
+            [class.bg-alert-yellow/10]="policy.colorClass === 'alert-yellow'"
+            [class.text-alert-yellow]="policy.colorClass === 'alert-yellow'"
+          >
+            {{ policy.tag }}
+          </span>
+          <span
+            class="material-symbols-outlined"
+            [class.text-info-medium]="policy.colorClass === 'info-medium'"
+            [class.text-success-light]="policy.colorClass === 'success-light'"
+            [class.text-alert-yellow]="policy.colorClass === 'alert-yellow'"
+          >
+            {{ policy.icon }}
+          </span>
+        </div>
+
+        <h4 class="text-sm font-bold text-text-main dark:text-text-light mb-1">
+          {{ policy.label }}
+        </h4>
+        <p
+          class="text-[11px] text-text-secondary dark:text-neutral-gray/70 mb-4 flex-grow leading-relaxed"
+        >
+          {{ policy.description }}
+        </p>
+
+        <!-- Stats Box -->
+        <div
+          class="bg-white dark:bg-secondary-dark/40 rounded-lg p-3 space-y-2 mb-4 border border-neutral-gray/20"
+        >
+          @if (policy.id === 'STANDARD') {
+            <div class="flex justify-between text-xs">
+              <span class="text-text-secondary dark:text-neutral-gray/60">Byes Sugeridos:</span>
+              <span class="font-bold text-primary">{{ stats().standard.byes }}</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="text-text-secondary dark:text-neutral-gray/60">Chave Total:</span>
+              <span class="font-bold"
+                >{{ stats().standard.total }} (2^{{
+                  Math.ceil(Math.log2(stats().standard.total))
+                }})</span
+              >
+            </div>
+          } @else if (policy.id === 'MAX_ENGAGEMENT') {
+            <div class="flex justify-between text-xs">
+              <span class="text-text-secondary dark:text-neutral-gray/60">Folgas em R1:</span>
+              <span class="font-bold text-primary">{{ totalTeams() % 2 }}</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="text-text-secondary dark:text-neutral-gray/60">Jogos em R1:</span>
+              <span class="font-bold">{{ Math.floor(totalTeams() / 2) }} jogos</span>
+            </div>
+          }
+        </div>
+
+        @if (policy.id === 'STANDARD') {
+          <div
+            class="text-[10px] leading-relaxed text-text-secondary dark:text-neutral-gray/70 italic mb-4"
+          >
+            * Folgas automáticas para completar a chave.
+          </div>
+        } @else if (policy.id === 'MAX_ENGAGEMENT') {
+          <div
+            class="text-[10px] leading-relaxed text-text-secondary dark:text-neutral-gray/70 mb-4"
+          >
+            Ajuste de chave adiado para a Fase 2.
+          </div>
+        }
+
+        <button
+          type="button"
+          (click)="selectPolicy(policy.id)"
+          class="w-full py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5"
+          [class.bg-primary]="visualSelected() === policy.id"
+          [class.text-white]="visualSelected() === policy.id"
+          [class.bg-primary/10]="visualSelected() !== policy.id"
+          [class.text-primary]="visualSelected() !== policy.id"
+          [class.hover:bg-primary/20]="visualSelected() !== policy.id"
+        >
+          @if (visualSelected() === policy.id) {
+            ATIVO <span class="material-symbols-outlined text-[16px]">check_circle</span>
+          } @else {
+            APLICAR <span class="material-symbols-outlined text-[16px]">add_circle</span>
+          }
+        </button>
+      </div>
+    }
+  </div>
+</section>

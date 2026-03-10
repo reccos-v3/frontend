@@ -4,10 +4,12 @@ import { SetupTeamCounter } from '../setup-team-counter/setup-team-counter';
 import { AppAlert } from '../../../../components/alert/alert';
 import { KnockoutStructureService } from '../../../../services/knockout-structure.service';
 
+import { SetupByePolicy } from '../setup-bye-policy/setup-bye-policy';
+
 @Component({
   selector: 'app-setup-groups-knockout',
   standalone: true,
-  imports: [CommonModule, SetupTeamCounter, AppAlert],
+  imports: [CommonModule, SetupTeamCounter, AppAlert, SetupByePolicy],
   templateUrl: './setup-groups-knockout.html',
 })
 export class SetupGroupsKnockout {
@@ -21,6 +23,7 @@ export class SetupGroupsKnockout {
   qualifiedPerGroup = input.required<number>();
   totalTeams = input.required<number>();
   wildcardCount = input<number>(0);
+  byePolicy = input<'STANDARD' | 'MAX_ENGAGEMENT'>('STANDARD');
 
   // ===============================
   // OUTPUTS
@@ -30,6 +33,7 @@ export class SetupGroupsKnockout {
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
   updateWildcardCount = output<number>();
+  updateByePolicy = output<'STANDARD' | 'MAX_ENGAGEMENT'>();
 
   // ===============================
   // DERIVED STATE
@@ -44,7 +48,12 @@ export class SetupGroupsKnockout {
   }
 
   validationAlerts = computed(() =>
-    this.knockoutService.buildAlerts(this.totalQualified(), this.totalTeams(), 'groups'),
+    this.knockoutService.buildAlerts(
+      this.totalQualified(),
+      this.totalTeams(),
+      'groups',
+      this.byePolicy(),
+    ),
   );
 
   // ===============================

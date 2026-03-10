@@ -81,16 +81,27 @@ export const STEP_MODULES: IStepModuleTemplate[] = [
     }),
   },
   {
-    id: 'pairing-strategies',
+    id: 'bracket',
     title: 'Configuração de Chaveamento',
     description: 'Configuração de chaveamento do campeonato.',
     icon: 'flowchart',
     shouldShow: ({ data }) => data.format?.formatType !== 'POINTS',
-    getDynamicProps: ({ data, editable }) => ({
-      status: data.progress.bracket ? 'COMPLETED' : 'PENDING',
-      statusLabel: data.progress.bracket ? 'Concluído' : 'Incompleto',
-      isLocked: !editable,
-    }),
+    getDynamicProps: ({ data, editable }) => {
+      const structureConfigured = data.structure !== null;
+      if (!structureConfigured) {
+        return {
+          status: 'LOCKED' as const,
+          statusLabel: 'Aguarda Estrutura',
+          isLocked: true,
+          actionLabel: 'Aguardando estrutura',
+        };
+      }
+      return {
+        status: data.progress.bracket ? 'COMPLETED' : 'PENDING',
+        statusLabel: data.progress.bracket ? 'Concluído' : 'Incompleto',
+        isLocked: !editable,
+      };
+    },
   },
   {
     id: 'teams',

@@ -1,3 +1,5 @@
+import { SeedingTechnicalSource } from './setup-types.interface';
+
 export interface IRulesAndScoringRequest {
   pointsWin: number;
   pointsDraw: number;
@@ -35,6 +37,7 @@ export interface IFormatAndStructureRequest {
   wildcardCount: number;
   knockoutConfig: IKnockoutConfigRequest | null;
   schedulePreferences: ISchedulePreferences;
+  byePolicy?: 'STANDARD' | 'MAX_ENGAGEMENT';
 }
 
 export interface IKnockoutConfigRequest {
@@ -92,7 +95,7 @@ export interface ITeamSelectionRequest {
 export interface ISeedingPoliciesRequest {
   type: 'RANKING' | 'DRAW' | 'HYBRID';
   mode: 'AUTOMATIC' | 'MANUAL';
-  technicalSource: 'GROUP_STAGE_RESULTS';
+  technicalSource: SeedingTechnicalSource | null;
   applicationContext: IApplicationContext;
 }
 

@@ -1,23 +1,90 @@
-<div class="max-w-[1000px] mx-auto">
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold text-main dark:text-white tracking-tight mb-2">
-      Estrutura da Disputa
-    </h1>
-    <p class="text-secondary text-base">
-      Defina como os jogos serão organizados, fases de grupos e critérios de classificação.
-    </p>
+<div class="max-w-[1240px] mx-auto">
+  <!-- Header Row: Title & Sidebar Accordion (Space Between) -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-main dark:text-white tracking-tight mb-2">
+        Estrutura da Disputa
+      </h1>
+      <p class="text-secondary text-base">
+        Defina como os jogos serão organizados, fases de grupos e critérios de classificação.
+      </p>
+    </div>
 
-    <app-alert
-      class="block mb-8"
-      type="info"
-      message="A estrutura selecionada impactará diretamente na geração automática da tabela de jogos. Certifique-se de que o número de times é compatível."
-    />
+    <!-- Sidebar Trigger (The "Accordion" Overlay) -->
+    <div class="relative">
+      <button
+        type="button"
+        (click)="isSidebarOpen.set(!isSidebarOpen())"
+        class="inline-flex items-center gap-3 px-6 py-3 bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm font-bold text-main dark:text-white group z-[70] relative"
+        [class.ring-2]="isSidebarOpen()"
+        [class.ring-primary/20]="isSidebarOpen()"
+      >
+        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span
+            class="material-symbols-outlined text-primary text-[20px] transition-transform group-hover:scale-110"
+            >analytics</span
+          >
+        </div>
+        Resumo da Estrutura
+        <span
+          class="material-symbols-outlined text-secondary transition-transform duration-300 ml-2"
+          [class.rotate-180]="isSidebarOpen()"
+          >expand_more</span
+        >
+      </button>
+
+      <!-- Overlay Content (The Sidebar) -->
+      @if (isSidebarOpen()) {
+        <!-- Backshadow button to close -->
+        <button
+          type="button"
+          class="fixed inset-0 z-[60] bg-transparent w-full h-full cursor-default"
+          (click)="isSidebarOpen.set(false)"
+          aria-label="Botão de fechamento"
+        ></button>
+
+        <div
+          class="absolute right-0 top-full mt-4 w-[420px] z-[80] origin-top-right animate-in fade-in zoom-in-95 slide-in-from-top-4 duration-300 pointer-events-auto"
+        >
+          <div
+            class="bg-white dark:bg-surface-dark rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden ring-1 ring-black/5"
+          >
+            <app-setup-sidebar-format
+              [selectedFormat]="debouncedFormat()!"
+              [totalTeams]="debouncedTotalTeams()!"
+              [groupsCount]="debouncedGroupsCount()!"
+              [qualifiedPerGroup]="debouncedQualified()!"
+              [isDoubleRound]="isDoubleRound()"
+              [byePolicy]="byePolicy()"
+              (phasesChange)="handlePhasesChange($event)"
+            />
+
+            <!-- Quick close area -->
+            <div
+              class="bg-gray-50/50 dark:bg-gray-800/30 p-4 border-t border-gray-100 dark:border-gray-800 flex justify-center"
+            >
+              <p class="text-[10px] text-secondary font-mono uppercase tracking-widest">
+                Clique fora para fechar
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
   </div>
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-    <!-- Left Column: Form Configuration -->
-    <div class="xl:col-span-2 space-y-8">
+
+  <!-- Info Alert -->
+  <app-alert
+    class="block mb-8"
+    type="info"
+    message="A estrutura selecionada impactará diretamente na geração automática da tabela de jogos. Certifique-se de que o número de times é compatível."
+  />
+
+  <div class="grid grid-cols-1 gap-8">
+    <!-- Main Form: Now takes full width of the primary area -->
+    <div class="space-y-8">
       <section
-        class="bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800"
+        class="bg-white dark:bg-surface-dark rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-gray-800"
       >
         <app-setup-championship-format
           [selectedFormat]="selectedFormat()"
@@ -26,52 +93,33 @@
           [totalTeams]="totalTeams()"
           [wildcardCount]="wildcardCount()"
           [isDoubleRound]="isDoubleRound()"
+          [byePolicy]="byePolicy()"
           (updateFormat)="selectedFormat.set($event)"
           (updateGroupsCount)="updateGroupsCount($event)"
           (updateQualified)="updateQualified($event)"
           (updateTotalTeams)="updateTotalTeams($event)"
           (updateWildcardCount)="updateWildcardCount($event)"
           (updateDoubleRound)="isDoubleRound.set($event)"
+          (updateByePolicy)="byePolicy.set($event)"
         />
 
-        <app-format-calendar-preferences
-          [initialPreferences]="schedulePreferences()"
-          (updatePreferences)="updateSchedulePreferences($event)"
-        />
+        <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+          <app-format-calendar-preferences
+            [initialPreferences]="schedulePreferences()"
+            (updatePreferences)="updateSchedulePreferences($event)"
+          />
+        </div>
       </section>
     </div>
-    <!-- Right Column: Visualization Preview -->
-    <div class="xl:col-span-1">
-      <app-setup-sidebar-format
-        [selectedFormat]="debouncedFormat()!"
-        [totalTeams]="debouncedTotalTeams()!"
-        [groupsCount]="debouncedGroupsCount()!"
-        [qualifiedPerGroup]="debouncedQualified()!"
-        [isDoubleRound]="isDoubleRound()"
-        (phasesChange)="handlePhasesChange($event)"
-      />
+
+    <!-- Empty space or auxiliary sidebar if needed in future, currently keeping it clear for focus -->
+    <div class="hidden lg:block lg:col-span-1">
+      <!-- Potencial área de ajuda rápida ou alertas secundários -->
     </div>
   </div>
 </div>
-<!-- Fixed Bottom Action Bar -->
-<!-- <div
-  class="fixed bottom-0 left-0 right-0 lg:left-[280px] bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 p-4 z-30"
-> -->
-<div class="mt-8 max-w-[1000px] mx-auto flex justify-end items-center relative z-50">
-  <button
-    type="button"
-    (click)="returnToPrevious()"
-    class="flex items-center gap-2 px-6 py-3 rounded-full text-secondary hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium text-sm"
-  >
-    <span class="material-symbols-outlined text-lg">arrow_back</span>
-    Voltar
-  </button>
-  <button
-    type="button"
-    (click)="saveAndContinue()"
-    class="flex items-center gap-2 px-8 py-3 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 font-bold text-sm"
-  >
-    Concluir
-    <span class="material-symbols-outlined text-lg">check</span>
-  </button>
-</div>
+
+<app-setup-footer-buttons
+  [isValid]="isValid()"
+  (eventClickConfirmButton)="eventClickConfirmButton($event)"
+/>

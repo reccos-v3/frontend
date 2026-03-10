@@ -62,10 +62,33 @@ export class KnockoutStructureService {
   }
 
   // =========================================================
-  // ALERT BUILDER (COM CONTEXTO)
+  // BYE SUGGESTIONS
   // =========================================================
 
-  buildAlerts(teams: number, totalCapacity: number, context: KnockoutContext): KnockoutAlert[] {
+  suggestByes(teams: number, policy: 'STANDARD' | 'MAX_ENGAGEMENT'): number {
+    if (teams <= 0) return 0;
+
+    if (policy === 'MAX_ENGAGEMENT') {
+      return teams % 2 === 0 ? 0 : 1;
+    }
+
+    // STANDARD: usa a next power of 2
+    let power = 2;
+    while (power < teams) {
+      power *= 2;
+    }
+    return power - teams;
+  }
+
+  // =========================================================
+  // ALERT BUILDER (COM CONTEXTO)
+  // =========================================================
+  buildAlerts(
+    teams: number,
+    totalCapacity: number,
+    context: KnockoutContext,
+    byePolicy: 'STANDARD' | 'MAX_ENGAGEMENT' = 'STANDARD',
+  ): KnockoutAlert[] {
     const alerts: KnockoutAlert[] = [];
 
     const lowerPower = this.getLargestPowerOfTwo(teams);
@@ -74,106 +97,64 @@ export class KnockoutStructureService {
     const isPerfect = teams === lowerPower;
     const isOverflow = teams > totalCapacity;
 
-    const nextPhase = this.getNextPhaseLabel(teams);
-
-    // ============================
-    // 1️⃣ OVERFLOW
-    // ============================
-
+    // ============ 1️⃣ OVERFLOW ============
     if (isOverflow) {
       alerts.push({
         type: 'error',
         title: 'Inconsistência Estrutural',
-        message:
-          context === 'groups'
-            ? `
-              A configuração atual prevê <strong>${teams} equipes classificadas</strong>,
-              enquanto a estrutura definida comporta até <strong>${totalCapacity} equipes</strong> na fase eliminatória.
-
-              <p>Revise a quantidade de classificados por grupo ou o número de grupos configurados.</p>
-
-              A geração do mata-mata ficará indisponível até a correção.
-            `
-            : `
-              A estrutura atual define <strong>${teams} equipes participantes</strong>,
-              porém o limite configurado para esta chave é de <strong>${totalCapacity} equipes</strong>.
-
-              Ajuste o total de participantes para restabelecer a consistência estrutural.
-            `,
+        message: 'A quantidade de equipes excede o limite configurado.',
       });
-
       return alerts;
     }
 
-    // ============================
-    // 2️⃣ ZERO TEAMS
-    // ============================
-
+    // ============ 2️⃣ ZERO TEAMS ============
     if (teams === 0) {
       alerts.push({
         type: 'info',
         title: 'Configuração Incompleta',
-        message: `
-          Nenhuma equipe foi definida para a fase eliminatória.
-
-          Defina ao menos um participante para que a estrutura do mata-mata possa ser organizada.
-        `,
+        message: 'Defina ao menos um participante.',
       });
-
       return alerts;
     }
 
-    // ============================
-    // 3️⃣ PERFECT STRUCTURE
-    // ============================
+    // ============ 3️⃣ MAX_ENGAGEMENT ============
+    if (byePolicy === 'MAX_ENGAGEMENT') {
+      const teamsEnteringR2 = Math.floor(teams / 2) + (teams % 2);
+      const p = this.getLargestPowerOfTwo(teamsEnteringR2);
+      const r2Byes = 2 * p - teamsEnteringR2;
 
+      if (r2Byes > 8) {
+        alerts.push({
+          type: 'error',
+          title: 'Engajamento Máximo Inválido',
+          message: `O limite de 8 folgas técnicas na R2 foi excedido (${r2Byes} necessárias).`,
+        });
+        return alerts;
+      }
+
+      alerts.push({
+        type: 'success',
+        title: 'Estrutura de Engajamento Máximo',
+        message: `Todos estreiam jogando${teams % 2 !== 0 ? ' (exceto 1)' : ''}.`,
+      });
+      return alerts;
+    }
+
+    // ============ 4️⃣ STANDARD ============
     if (isPerfect) {
       alerts.push({
         type: 'success',
         title: 'Estrutura Confirmada',
-        message: `
-          A configuração atual define <strong>${teams} equipes</strong>.
-
-          Essa quantidade permite iniciar diretamente a fase 
-          <strong>${target.label}</strong>, que exige <strong>${target.teams} equipes</strong>.
-
-          Nenhuma fase preliminar será necessária.
-        `,
+        message: `Simetria perfeita iniciando em <strong>${target.label}</strong>.`,
       });
-
-      return alerts;
+    } else {
+      const byes = this.suggestByes(teams, 'STANDARD');
+      alerts.push({
+        type: 'info',
+        title: 'Simetria com Folgas',
+        message: `Serão aplicadas <strong>${byes} folgas</strong> na 1ª rodada (Times melhor ranqueados avançam direto).`,
+      });
     }
-
-    // ============================
-    // 4️⃣ PRELIMINARY REQUIRED
-    // ============================
-
-    alerts.push({
-      type: 'info',
-      title: 'Fase Preliminar Necessária',
-      message:
-        context === 'groups'
-          ? `
-            A configuração atual define <strong>${teams} equipes classificadas</strong>.
-
-            A fase principal será organizada em <strong>${target.label}</strong>,
-            que comporta <strong>${target.teams} equipes</strong>.
-
-            As equipes excedentes disputarão uma <strong>fase preliminar</strong>
-            para definição das vagas restantes.
-
-            A fase principal iniciará em <strong>${nextPhase}</strong>.
-          `
-          : `
-            A configuração atual define <strong>${teams} equipes participantes</strong>.
-
-            O sistema organizará automaticamente uma <strong>fase preliminar</strong>
-            para ajustar o chaveamento.
-
-            A fase principal iniciará em <strong>${nextPhase}</strong>,
-            com <strong>${target.teams} equipes</strong>.
-          `,
-    });
 
     return alerts;
   }

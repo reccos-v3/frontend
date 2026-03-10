@@ -12,7 +12,7 @@
       <!-- Connecting Line -->
       <div class="absolute left-[31px] top-10 bottom-10 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
 
-      @for (phase of phases(); track phase.title; let index = $index; let last = $last) {
+      @for (phase of phases(); track $index; let index = $index; let last = $last) {
         <div class="relative flex gap-4" [class.pb-8]="!last">
           <!-- Status indicator circle -->
           <div
@@ -55,7 +55,16 @@
                   >{{ phase.icon }}</span
                 >
               </div>
-              <p class="text-sm font-bold text-main dark:text-white">{{ phase.title }}</p>
+              <div class="flex items-center gap-2 flex-wrap">
+                <p class="text-sm font-bold text-main dark:text-white">{{ phase.title }}</p>
+                @if (phase.isPreliminaryPhase) {
+                  <span
+                    class="text-[8px] font-black bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 border border-amber-200 dark:border-amber-800 rounded uppercase tracking-tighter"
+                  >
+                    Preliminar
+                  </span>
+                }
+              </div>
               @if (phase.description) {
                 <p class="text-xs text-secondary mt-1">{{ phase.description }}</p>
               }

@@ -8,6 +8,7 @@ import { SetupAddTeams } from '../setup-add-teams/setup-add-teams';
 import { SetupSeeding } from '../setup-seeding/setup-seeding';
 import { SetupAdvancedRules } from '../setup-advanced-rules/setup-advanced-rules';
 import { SetupMatchRules } from '../setup-match-rules/setup-match-rules';
+import { SetupBracket } from '../setup-bracket/setup-bracket';
 @Component({
   selector: 'app-setup-settings',
   imports: [
@@ -19,6 +20,7 @@ import { SetupMatchRules } from '../setup-match-rules/setup-match-rules';
     SetupSeeding,
     SetupAdvancedRules,
     SetupMatchRules,
+    SetupBracket,
   ],
   templateUrl: './setup-settings.html',
   styleUrl: './setup-settings.css',

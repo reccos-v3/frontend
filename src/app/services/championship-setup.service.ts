@@ -14,6 +14,7 @@ import {
   ITeamSelectionRequest,
   IUpdateRulesAndScoringResponse,
 } from '../interfaces/championship-setup.interface';
+import { ISeedingPolicyResponse } from '../interfaces/championship.interface';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -70,6 +71,13 @@ export class ChampionshipSetupService {
     return this.put<IFormatAndStructureRequest>(championshipId, 'structure', request);
   }
 
+  updateAdvancedRules(
+    championshipId: string,
+    request: IAdvancedSettingsRequest,
+  ): Observable<IAdvancedSettingsRequest> {
+    return this.put<IAdvancedSettingsRequest>(championshipId, 'settings', request);
+  }
+
   updateFormat(championshipId: string, request: IFormatRequest): Observable<IFormatRequest> {
     return this.put<IFormatRequest>(championshipId, 'format', request);
   }
@@ -98,8 +106,8 @@ export class ChampionshipSetupService {
   updateSeedingPolicies(
     championshipId: string,
     request: ISeedingPoliciesRequest,
-  ): Observable<ISeedingPoliciesRequest> {
-    return this.put<ISeedingPoliciesRequest>(championshipId, 'seeding/policy', request);
+  ): Observable<ISeedingPolicyResponse> {
+    return this.put<ISeedingPolicyResponse>(championshipId, 'seeding/policy', request);
   }
 
   updateMatchRules(

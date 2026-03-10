@@ -19,12 +19,14 @@ export class SetupSystemFormat {
   totalTeams = input.required<number>();
   wildcardCount = input<number>(0);
   isDoubleRound = input<boolean>(true);
+  byePolicy = input<'STANDARD' | 'MAX_ENGAGEMENT'>('STANDARD');
 
   updateGroupsCount = output<number>();
   updateQualified = output<number>();
   updateTotalTeams = output<number>();
   updateWildcardCount = output<number>();
   updateDoubleRound = output<boolean>();
+  updateByePolicy = output<'STANDARD' | 'MAX_ENGAGEMENT'>();
 
   phaseName = computed(() => {
     const teams = this.totalTeams();

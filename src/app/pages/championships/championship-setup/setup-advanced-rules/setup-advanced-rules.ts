@@ -1,6 +1,10 @@
-import { Component, output, signal, input, OnInit } from '@angular/core';
+import { Component, output, signal, input, OnInit, inject } from '@angular/core';
 import { IAdvancedSettingsRequest } from '../../../../interfaces/championship-setup.interface';
 import { AppAlert } from '../../../../components/alert/alert';
+import { ChampionshipSetupService } from '../../../../services/championship-setup.service';
+import { ChampionshipStore } from '../../../../services/championship.store';
+import { Router } from '@angular/router';
+import { SetupFooterButtons } from '../setup-footer-buttons/setup-footer-buttons';
 
 interface ActivationOption {
   id: 'MANUAL' | 'AUTOMATIC';
@@ -12,11 +16,15 @@ interface ActivationOption {
 @Component({
   selector: 'app-setup-advanced-rules',
   standalone: true,
-  imports: [AppAlert],
+  imports: [AppAlert, SetupFooterButtons],
   templateUrl: './setup-advanced-rules.html',
   styleUrl: './setup-advanced-rules.css',
 })
 export class SetupAdvancedRules implements OnInit {
+  private championshipSetupService = inject(ChampionshipSetupService);
+  private championshipStore = inject(ChampionshipStore);
+  private router = inject(Router);
+
   advancedRulesChange = output<IAdvancedSettingsRequest>();
   embedded = input(false);
   initialData = input<IAdvancedSettingsRequest | null>(null);
@@ -25,6 +33,10 @@ export class SetupAdvancedRules implements OnInit {
   allowRosterChanges = signal(false);
   allowScheduleChanges = signal(false);
   activationMode = signal<'MANUAL' | 'AUTOMATIC'>('MANUAL');
+
+  isValid = signal(true);
+  loading = signal(false);
+  championship = this.championshipStore.championship;
 
   toggles = [
     {
@@ -64,20 +76,54 @@ export class SetupAdvancedRules implements OnInit {
 
   ngOnInit(): void {
     const data = this.initialData();
+    const settings = this.championship()?.settings;
+
     if (data) {
       this.allowRosterChanges.set(data.allowRosterChanges);
       this.allowScheduleChanges.set(data.allowScheduleChanges);
       this.activationMode.set(data.activationMode);
+    } else if (settings) {
+      this.allowRosterChanges.set(settings.allowRosterChanges);
+      this.allowScheduleChanges.set(settings.allowScheduleChanges);
+      this.activationMode.set(settings.activationMode);
     }
   }
 
-  // Método explícito para enviar as informações apenas quando solicitado
-  submit() {
-    this.advancedRulesChange.emit({
+  returnHub() {
+    const championship = this.championship();
+    if (!championship) return;
+
+    this.router.navigate(['/admin/championships/setup', championship.id]);
+  }
+
+  saveAndContinue() {
+    const currentChampionship = this.championship();
+    if (!currentChampionship) return;
+
+    const payload = {
       allowRosterChanges: this.allowRosterChanges(),
       allowScheduleChanges: this.allowScheduleChanges(),
       allowRuleChanges: false,
       activationMode: this.activationMode(),
+    };
+
+    this.loading.set(true);
+    this.championshipSetupService.updateAdvancedRules(currentChampionship.id, payload).subscribe({
+      next: (response) => {
+        this.loading.set(false);
+        const currentProgress = this.championship()?.progress;
+        this.championshipStore.update({
+          settings: {
+            ...response,
+          },
+          progress: currentProgress ? { ...currentProgress, settings: true } : undefined,
+        });
+        this.router.navigate(['/admin/championships/setup', currentChampionship.id]);
+      },
+      error: (error) => {
+        console.error('Erro ao salvar estrutura:', error);
+        this.loading.set(false);
+      },
     });
   }
 
@@ -87,5 +133,13 @@ export class SetupAdvancedRules implements OnInit {
 
   toggleScheduleChanges() {
     this.allowScheduleChanges.update((v) => !v);
+  }
+
+  eventClickConfirmButton(event: 'saveAndContinue' | 'returnHub') {
+    if (event === 'saveAndContinue') {
+      this.saveAndContinue();
+    } else {
+      this.returnHub();
+    }
   }
 }

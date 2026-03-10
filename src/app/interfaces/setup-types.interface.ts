@@ -100,6 +100,7 @@ export interface ISetupStructure {
   wildcardCount: number;
   firstPhaseType: string | null;
   knockoutConfig?: IKnockoutConfig | null;
+  byePolicy?: 'STANDARD' | 'MAX_ENGAGEMENT';
 }
 
 export interface ISetupTiebreakCriteria {
@@ -195,7 +196,7 @@ export interface ISeedPolicy {
   mode: SeedingDecisionMode;
   technicalSource: SeedingTechnicalSource | null;
   applicationContext: ISeedingApplicationContext;
-  audit: ISeedingAudit;
+  audit?: ISeedingAudit;
 }
 
 export interface ISeedingConfig {

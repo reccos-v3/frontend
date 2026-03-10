@@ -22,12 +22,59 @@
       </div>
     </div>
     <div class="flex items-center gap-3">
-      <button
-        class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary px-6 py-2.5 rounded-full font-semibold transition-all flex items-center gap-2"
+      <!-- Compact Info Card: Total Teams -->
+      <div
+        class="flex items-center gap-3 px-4 py-2 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl"
       >
-        <span class="material-symbols-outlined text-lg text-slate-400">help_outline</span>
-        Como funciona?
-      </button>
+        <div
+          class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400"
+        >
+          <span class="material-symbols-outlined text-lg">groups</span>
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="text-[9px] font-black uppercase tracking-widest text-slate-400 leading-none mb-1"
+            >Equipes</span
+          >
+          <span class="text-sm font-bold text-slate-700 dark:text-slate-200 leading-none">{{
+            totalTeams()
+          }}</span>
+        </div>
+      </div>
+
+      <!-- Compact Info Card: Byes -->
+      <div
+        class="flex items-center gap-3 px-4 py-2 bg-amber-50 dark:bg-amber-900/10 border border-amber-200/50 dark:border-amber-800/50 rounded-2xl"
+      >
+        <div
+          class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-amber-500 shadow-sm"
+        >
+          <span class="material-symbols-outlined text-lg">skip_next</span>
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="text-[9px] font-black uppercase tracking-widest text-amber-600/60 dark:text-amber-400/60 leading-none mb-1"
+            >Avanço Direto</span
+          >
+          <span class="text-sm font-bold text-amber-700 dark:text-amber-400 leading-none">{{
+            byesCount()
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 mt-2">
+      <span class="text-sm font-medium text-slate-600 dark:text-slate-300">
+        Política de folgas:
+      </span>
+      <span
+        class="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-indigo-200 dark:border-indigo-800/50"
+      >
+        {{ policyLabel() }}
+      </span>
+      <span class="text-xs text-slate-500 italic">
+        {{ byesDescription() }}
+      </span>
     </div>
   </header>
 
@@ -218,6 +265,17 @@
         message="Você está configurando as regras de partidas do mata-mata. Fases finais podem ter
         regulamentos diferentes das fases iniciais através das exceções."
       />
+
+      <!-- Sidebar: Resumo da Estrutura -->
+      <app-setup-sidebar-format
+        [selectedFormat]="
+          championship()?.format?.formatType === 'GROUPS_AND_KNOCKOUT'
+            ? 'groups_and_knockout'
+            : 'knockout'
+        "
+        [totalTeams]="totalTeams()"
+        [knockoutPhases]="phasesForSidebar()"
+      />
     </div>
 
     <!-- Right Column: Exceptions by Phase -->
@@ -345,4 +403,9 @@
       </div>
     </div>
   </div>
+
+  <app-setup-footer-buttons
+    [isValid]="isValid()"
+    (eventClickConfirmButton)="eventClickConfirmButton($event)"
+  />
 </div>

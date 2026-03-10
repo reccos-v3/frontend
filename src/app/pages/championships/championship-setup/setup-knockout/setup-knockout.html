@@ -1,6 +1,8 @@
-<div class="space-y-6">
-  <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+<div class="space-y-10">
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+    <!-- Bloco 1: Contador de Times -->
     <app-setup-team-counter
+      class="block bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 lg:col-span-2"
       title="Número de Times na Chave"
       description="Defina a quantidade de participantes no mata-mata"
       icon="trophy"
@@ -8,15 +10,24 @@
       (updateValue)="onUpdateTotalTeams($event)"
     />
 
-    <div class="mt-6">
-      @for (alert of validationAlerts(); track alert.title) {
-        <app-alert
-          [type]="alert.type"
-          variant="left-accent"
-          [title]="alert.title"
-          [message]="alert.message"
-        />
-      }
-    </div>
+    <!-- Bloco 2: Simulador de Bye Policy -->
+    <app-setup-bye-policy
+      class="block lg:col-span-3"
+      [selectedPolicy]="byePolicy()"
+      [totalTeams]="totalTeams()"
+      (updatePolicy)="updateByePolicy.emit($event)"
+    />
   </div>
+
+  <!-- Bloco 3: Alertas (Linha Inteira) -->
+  <!-- <div class="space-y-3">
+    @for (alert of validationAlerts(); track alert.title) {
+      <app-alert
+        [type]="alert.type"
+        variant="left-accent"
+        [title]="alert.title"
+        [message]="alert.message"
+      />
+    }
+  </div> -->
 </div>

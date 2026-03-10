@@ -340,6 +340,11 @@
       </div>
     </section>
   }
+
+  <app-setup-footer-buttons
+    (eventClickConfirmButton)="eventClickConfirmButton($event)"
+    [isValid]="isValid()"
+  ></app-setup-footer-buttons>
   <!-- Actions -->
   <div class="flex justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
     <button

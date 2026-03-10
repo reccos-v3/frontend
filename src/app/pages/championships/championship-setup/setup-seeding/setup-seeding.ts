@@ -1,4 +1,4 @@
-import { Component, input, output, signal, computed, effect, model } from '@angular/core';
+import { Component, input, output, signal, computed, effect, model, inject } from '@angular/core';
 import { SetupStep } from '../../../../interfaces/setup-types.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,15 +9,19 @@ import {
   SeedingPolicyType,
   SeedingDecisionMode,
   SeedingTechnicalSource,
-  ISeedPolicy,
 } from '../../../../interfaces/setup-types.interface';
 import { AppAlert } from '../../../../components/alert/alert';
 import { IChampionshipResponse } from '../../../../interfaces/championship.interface';
+import { SetupFooterButtons } from '../setup-footer-buttons/setup-footer-buttons';
+import { ChampionshipStore } from '../../../../services/championship.store';
+import { Router } from '@angular/router';
+import { ChampionshipSetupService } from '../../../../services/championship-setup.service';
+import { ISeedingPoliciesRequest } from '../../../../interfaces/championship-setup.interface';
 
 @Component({
   selector: 'app-setup-seeding',
   standalone: true,
-  imports: [CommonModule, FormsModule, AppAlert],
+  imports: [CommonModule, FormsModule, AppAlert, SetupFooterButtons],
   templateUrl: './setup-seeding.html',
   styleUrl: './setup-seeding.css',
 })
@@ -28,6 +32,10 @@ export class SetupSeeding {
   seedingChange = output<ISeedingConfig>();
   advanced = output<SetupStep>();
 
+  router = inject(Router);
+  championshipStore = inject(ChampionshipStore);
+  championshipSetupService = inject(ChampionshipSetupService);
+
   policyType = model<SeedingPolicyType>('RANKING');
   decisionMode = model<SeedingDecisionMode>('AUTOMATIC');
   technicalSource = model<SeedingTechnicalSource | undefined>('GROUP_STAGE_RESULT');
@@ -35,6 +43,11 @@ export class SetupSeeding {
   knockoutEntry = model<boolean>(true);
   groupDistribution = model<boolean>(false);
   preliminaryRounds = model<boolean>(false);
+
+  isValid = signal(true);
+  loading = signal(false);
+
+  championship = this.championshipStore.championship;
 
   audit = signal<ISeedingAudit>({
     definedBy: null,
@@ -190,25 +203,50 @@ export class SetupSeeding {
   }
 
   saveAndContinue() {
-    const policy: ISeedPolicy = {
+    const currentChampionship = this.championship();
+    if (!currentChampionship) return;
+
+    const payload: ISeedingPoliciesRequest = {
       type: this.policyType(),
       mode: this.decisionMode(),
-      technicalSource: this.technicalSource() ?? null,
+      technicalSource: this.technicalSource() ?? 'GROUP_STAGE_RESULT',
       applicationContext: {
         knockoutEntry: this.knockoutEntry(),
         groupDistribution: this.groupDistribution(),
         preliminaryRounds: this.preliminaryRounds(),
       },
-      audit: {
-        ...this.audit(),
-        definedBy: 'ADMINISTRADOR',
-        createdAt: new Date().toISOString(),
-      },
     };
 
-    this.updateData.emit({
-      seedPolicy: policy,
+    this.loading.set(true);
+    this.championshipSetupService.updateSeedingPolicies(currentChampionship.id, payload).subscribe({
+      next: (response) => {
+        this.loading.set(false);
+        const currentProgress = this.championship()?.progress;
+        this.championshipStore.update({
+          seedingPolicy: response,
+          progress: currentProgress ? { ...currentProgress, seeding: true } : undefined,
+        });
+
+        this.router.navigate(['/admin/championships/setup', currentChampionship.id]);
+      },
+      error: (error) => {
+        console.error('Erro ao salvar estrutura:', error);
+        this.loading.set(false);
+      },
     });
-    this.advanced.emit('final_review');
+  }
+
+  eventClickConfirmButton(event: 'saveAndContinue' | 'returnHub') {
+    if (event === 'saveAndContinue') {
+      this.saveAndContinue();
+    } else {
+      this.returnToPrevious();
+    }
+  }
+
+  returnToPrevious() {
+    const championship = this.championship();
+    if (!championship) return;
+    this.router.navigate(['/admin/championships/setup', championship.id]);
   }
 }

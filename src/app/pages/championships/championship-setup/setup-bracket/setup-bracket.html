@@ -1,0 +1,224 @@
+<div class="flex-grow max-w-6xl mx-auto w-full">
+  <!-- Title Section -->
+  <div class="mb-10">
+    <h2 class="text-3xl font-bold mb-2">Configuração do Chaveamento</h2>
+    <p class="text-slate-500 dark:text-slate-400">
+      Defina a lógica de progressão das equipes e como os confrontos serão gerados automaticamente.
+    </p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+    <div class="md:col-span-8 space-y-12">
+      <section
+        class="bg-white dark:bg-slate-900 rounded-xl border border-primary/10 shadow-sm overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30"
+        >
+          <h3 class="font-bold text-sm flex items-center gap-2">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold"
+              >1</span
+            >
+            Estratégia de Pareamento (strategyId)
+          </h3>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+            @for (strategy of filteredStrategies(); track $index) {
+              <button
+                class="group relative flex flex-col items-start h-full bg-white dark:bg-slate-900 border-2 p-5 rounded-xl shadow-sm cursor-pointer transition-all hover:-translate-y-[2px] hover:shadow-md hover:shadow-primary/5 active:scale-[0.98]"
+                [ngClass]="
+                  selectedStrategyId() === strategy.id
+                    ? 'border-primary ring-4 ring-primary/5'
+                    : 'border-slate-100 dark:border-slate-800'
+                "
+                (click)="selectStrategy(strategy.id)"
+              >
+                <!-- HEADER -->
+                <div class="flex items-center justify-between w-full mb-4">
+                  <div
+                    class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary text-2xl group-hover:text-white"
+                    >
+                      {{ iconsList[$index] }}
+                    </span>
+                  </div>
+
+                  @if (selectedStrategyId() === strategy.id) {
+                    <div
+                      class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center shadow-md"
+                    >
+                      <span class="material-symbols-outlined text-[16px] font-bold">check</span>
+                    </div>
+                  }
+                </div>
+
+                <!-- TITLE -->
+                <h4 class="text-sm font-bold mb-2 text-slate-800 dark:text-slate-200">
+                  {{ strategy.name }}
+                </h4>
+
+                <!-- DESCRIPTION -->
+                <p class="text-[11px] text-slate-500/90 dark:text-slate-400/90 leading-relaxed">
+                  {{ strategy.description }}
+                </p>
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+      <section class="bg-white dark:bg-slate-900 rounded-xl border border-primary/10 shadow-sm">
+        <div
+          class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30"
+        >
+          <h3 class="font-bold text-sm flex items-center gap-2">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold"
+              >2</span
+            >
+            Configuração Avançada
+          </h3>
+        </div>
+        <div class="p-6">
+          <div
+            class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-100 dark:border-slate-800"
+          >
+            <div class="flex gap-4 items-start">
+              <div class="mt-1">
+                <span class="material-symbols-outlined text-primary">dynamic_feed</span>
+              </div>
+              <div class="max-w-xl">
+                <h4 class="text-sm font-bold">Re-chaveamento Dinâmico (isDynamicReseeding)</h4>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  O sistema reordena os times a cada fase baseada na campanha (Estilo NFL). O melhor
+                  sobrevivente sempre enfrenta o pior sobrevivente.
+                </p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input
+                class="sr-only peer"
+                type="checkbox"
+                [checked]="isDynamicReseeding()"
+                [disabled]="selectedBracketModel() !== 'SEQUENTIAL'"
+              />
+              <div
+                class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+              ></div>
+            </label>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Direita (~25%) -->
+    <div class="md:col-span-4">
+      <section
+        class="bg-white dark:bg-slate-900 rounded-xl border border-primary/10 shadow-sm h-full flex flex-col"
+      >
+        <div
+          class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30"
+        >
+          <h3 class="font-bold text-sm flex items-center gap-2">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold"
+              >3</span
+            >
+            Seleção de Modelo de Chave (bracketModel)
+          </h3>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+            >Obrigatório</span
+          >
+        </div>
+        <div class="p-6 space-y-6 flex-grow">
+          <div>
+            <label
+              for="strategy"
+              class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3"
+              >Lógica de Confronto</label
+            >
+            <div class="space-y-3">
+              @for (model of bracketModelsList(); track model.id) {
+                <div class="relative group">
+                  <input
+                    class="sr-only peer"
+                    [id]="model.id"
+                    name="bracketModel"
+                    type="radio"
+                    [value]="model.id"
+                    [checked]="selectedBracketModel() === model.id"
+                    (change)="selectBracketModel(model.id)"
+                    [disabled]="isCrossStrategy() && model.id !== 'FIXED_BALANCED'"
+                  />
+                  <label
+                    class="flex items-start gap-3 p-3 border-2 border-slate-100 dark:border-slate-800 rounded-lg cursor-pointer peer-checked:border-primary peer-checked:bg-primary/5 transition-all"
+                    [for]="model.id"
+                  >
+                    <div
+                      class="w-8 h-8 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10"
+                    >
+                      <span class="material-symbols-outlined text-sm text-slate-500">
+                        {{ model.icon }}
+                      </span>
+                    </div>
+
+                    <div>
+                      <p class="text-xs font-bold leading-none mb-1">{{ model.name }}</p>
+                      <p class="text-[10px] text-slate-500 leading-tight">
+                        {{ model.description }}
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              }
+            </div>
+
+            @if (isCrossStrategy()) {
+              <div class="text-[10px] text-amber-600 mt-2">
+                O cruzamento de grupos exige uma árvore fixa para preservar os confrontos.
+              </div>
+            }
+          </div>
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            <label
+              for="seed"
+              class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3"
+              >Critério de Desempate (Seeding)</label
+            >
+            <div class="flex flex-wrap gap-2">
+              @for (tiebreaker of championshipTieBreakers(); track $index) {
+                <div
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300"
+                >
+                  <span
+                    class="text-[10px] opacity-60 font-bold bg-slate-200 dark:bg-slate-700 w-4 h-4 rounded-full flex items-center justify-center"
+                    >{{ $index + 1 }}</span
+                  >
+                  {{ tiebreaker.name }}
+                </div>
+              }
+              @if (championshipTieBreakers().length === 0) {
+                <p class="text-xs text-slate-500 italic">Nenhum critério definido.</p>
+              }
+            </div>
+          </div>
+          <div class="mt-auto bg-primary/5 rounded-lg p-3 border border-primary/10">
+            <p class="text-[10px] leading-relaxed text-slate-600 dark:text-slate-400 italic">
+              A estratégia de pareamento define como os slots iniciais da árvore serão preenchidos
+              com base nos resultados da fase anterior.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <app-setup-footer-buttons
+      [isValid]="isValid()"
+      (eventClickConfirmButton)="eventClickConfirmButton($event)"
+    />
+  </div>
+</div>

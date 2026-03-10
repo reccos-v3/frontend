@@ -1,16 +1,13 @@
-<div class="space-y-6">
+<div class="space-y-8">
   <!-- Capacidade do Torneio -->
-  <div
-    class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
-  >
-    <app-setup-team-counter
-      title="Capacidade do Torneio"
-      description="Total de participantes inscritos"
-      icon="groups"
-      [value]="totalTeams()"
-      (updateValue)="onUpdateTotalTeams($event)"
-    />
-  </div>
+  <app-setup-team-counter
+    class="block bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-700"
+    title="Capacidade do Torneio"
+    description="Total de participantes inscritos"
+    icon="groups"
+    [value]="totalTeams()"
+    (updateValue)="onUpdateTotalTeams($event)"
+  />
 
   <!-- Configuração de Grupos e Wildcards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -65,6 +62,13 @@
       </div>
     }
   </div>
+
+  <!-- Política de Bye -->
+  <app-setup-bye-policy
+    [selectedPolicy]="byePolicy()"
+    [totalTeams]="totalQualified()"
+    (updatePolicy)="updateByePolicy.emit($event)"
+  />
 
   <!-- Alertas de Validação e Estrutura -->
   <div class="space-y-3">
